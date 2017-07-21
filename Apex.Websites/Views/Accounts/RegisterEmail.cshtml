@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Accounts/_AccountLayout.cshtml";
+    ViewData["Title"] = "Register Email page";
+}
+
+<p class="login-box-msg">Check your email</p>
+<p>We just tried to send you an email with an activation link.</p>
+<p>When you get the email, click the link in the email to activate your account.</p>
+<div class="social-auth-links text-center">
+    <p>- OR -</p>
+    <a href="javascript:;" class="btn btn-block btn-social btn-facebook btn-flat">
+        <i class="fa fa-facebook"></i> Sign up using Facebook
+    </a>
+    <a href="javascript:;" class="btn btn-block btn-social btn-google btn-flat">
+        <i class="fa fa-google-plus"></i> Sign up using Google+
+    </a>
+</div>
+<a asp-controller="Accounts" asp-action="SignIn" class="text-center">I already have a membership</a>

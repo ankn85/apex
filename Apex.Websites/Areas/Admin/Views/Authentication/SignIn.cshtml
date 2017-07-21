@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Authentication/_AuthenticationLayout.cshtml";
+    ViewData["Title"] = "Sign In";
+}
+
+@model Apex.Admin.ViewModels.Authentication.SignInViewModel
+
+<p class="login-box-msg">Sign in to start your session</p>
+<form asp-controller="authentication" asp-action="signin" asp-anti-forgery="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form" novalidate>
+    <div asp-validation-summary="@ValidationSummary.ModelOnly" class="text-danger"></div>
+    <div class="form-group has-feedback">
+        <input type="text" class="form-control" placeholder="Email" asp-for="Email">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group has-feedback">
+        <input type="password" class="form-control" placeholder="Password" asp-for="Password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-xs-8">&nbsp;</div>
+        <div class="col-xs-4">
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+        </div>
+    </div>
+</form>
+<a asp-controller="authentication" asp-action="forgotpassword" class="text-center">I forgot my password</a><br>

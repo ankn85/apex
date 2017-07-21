@@ -1,0 +1,105 @@
+﻿@using Apex.Services.Extensions
+@using Apex.Admin.Resources
+@{
+    ViewData["Title"] = "Log";
+    ViewData["TitleSmall"] = "Version 2.4.0";
+
+    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
+        new CrumbViewModel("Home", string.Empty, "fa-dashboard"),
+        new CrumbViewModel("System", string.Empty, "fa-cog"),
+        new CrumbViewModel("Log", Url.Action("index", "log"), "fa-database")
+    });
+}
+@section styles {
+    <link rel="stylesheet" href="~/styles/admin/plugins.min.css">
+}
+@section scripts {
+    <script src="~/scripts/admin/plugins.min.js"></script>
+    <script src="~/scripts/admin/log.min.js"></script>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <form class="form-horizontal" action="javascript:;" role="form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fromDate" class="col-md-4 control-label">@LogText.FromDate</label>
+                                <div class="col-md-8">
+                                    <div class="input-group input-group-sm date">
+                                        <input type="text" class="form-control" id="fromDate" value="@DateTime.UtcNow.AddDays(-7).ToDateString()" />
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="toDate" class="col-md-4 control-label">@LogText.ToDate</label>
+                                <div class="col-md-8">
+                                    <div class="input-group input-group-sm date">
+                                        <input type="text" class="form-control" id="toDate" value="@DateTime.UtcNow.ToDateString()" />
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="level" class="col-md-4 control-label">@LogText.Level</label>
+                                <div class="col-md-8">
+                                    <select class="form-control input-sm"
+                                            id="level" asp-items="@((IEnumerable<SelectListItem>)ViewData["LogLevels"])"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <button type="button" class="btn btn-sm btn-flat btn-primary" id="btnSearch">@LogText.Search</button>
+                                    <button type="button" class="btn btn-sm btn-flat btn-danger" data-toggle="modal" data-target="#modal-delete-selected">@LogText.DeleteSelected</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="box-body">
+                <table id="tableLog" class="table table-hover" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="checkbox-all" />
+                            </th>
+                            <th>@LogText.Level</th>
+                            <th>@LogText.Message</th>
+                            <th>@LogText.Logger</th>
+                            <th>@LogText.Logged</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="modal fade" id="modal-delete-selected">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">@LogText.DeleteModalTitle</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>@LogText.DeleteModalContent</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">@LogText.Close</button>
+                            <button type="button" class="btn btn-flat btn-primary" data-dismiss="modal" id="btnDelete">@LogText.Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

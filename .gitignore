@@ -243,4 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-src/ESchool.API/Logs/internal-nlog.txt
+Apex.Websites/Logs/
+Apex.Websites/wwwroot/

@@ -1,0 +1,85 @@
+﻿[
+  /* 
+  ********** admin: Common **********
+  */
+  {
+    "outputFileName": "wwwroot/styles/admin/common.min.css",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+      "wwwroot/lib/font-awesome/css/font-awesome.min.css",
+      "wwwroot/lib/ionicons/css/ionicons.min.css",
+      "wwwroot/lib/AdminLTE-2.4.0-rc/dist/css/AdminLTE.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/scripts/admin/common.min.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery/dist/jquery.min.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.min.js",
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.min.js",
+      "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+    ]
+  },
+
+  /*
+  ********** admin: Admin **********
+  */
+  {
+    "outputFileName": "wwwroot/styles/admin/admin.min.css",
+    "inputFiles": [
+      "wwwroot/lib/AdminLTE-2.4.0-rc/dist/css/skins/skin-blue-light.min.css",
+      "Areas/Admin/Styles/admin.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/scripts/admin/admin.min.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery-slimscroll/jquery.slimscroll.min.js",
+      "wwwroot/lib/fastclick/lib/fastclick.js",
+      "wwwroot/lib/AdminLTE-2.4.0-rc/dist/js/adminlte.min.js",
+      "wwwroot/lib/AdminLTE-2.4.0-rc/dist/js/app.min.js"
+    ]
+  },
+
+  /* 
+  //********** admin: Plugins **********
+  */
+  {
+    "outputFileName": "wwwroot/styles/admin/plugins.min.css",
+    "inputFiles": [
+      "wwwroot/lib/select2/dist/css/select2.min.css",
+      "wwwroot/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+      "wwwroot/lib/datatables.net-bs/css/dataTables.bootstrap.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/scripts/admin/plugins.min.js",
+    "inputFiles": [
+      "wwwroot/lib/select2/dist/js/select2.full.min.js",
+      "wwwroot/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+      "wwwroot/lib/datatables.net/js/jquery.dataTables.min.js",
+      "wwwroot/lib/datatables.net-bs/js/dataTables.bootstrap.min.js",
+      "Areas/Admin/Scripts/plugins.wrapper.js"
+    ]
+  },
+
+  /* 
+  //********** admin: Log **********
+  */
+  {
+    "outputFileName": "wwwroot/scripts/admin/log.min.js",
+    "inputFiles": [
+      "Areas/Admin/Scripts/log.js"
+    ]
+  },
+
+  /* 
+  //********** admin: Email Account **********
+  */
+  {
+    "outputFileName": "wwwroot/scripts/admin/email-account.min.js",
+    "inputFiles": [
+      "Areas/Admin/Scripts/email-account.js"
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+﻿using System.Collections.Generic;
+using Apex.Data.Mapping.Accounts;
+using Apex.Data.Mapping.Emails;
+using Apex.Data.Mapping.Logs;
+using Apex.Data.Mapping.Settings;
+using Microsoft.EntityFrameworkCore;
+
+namespace Apex.Data.Mapping
+{
+    public sealed class ObjectEntityMapper : IEntityMapper
+    {
+        public IEnumerable<IEntityMap> Mappings
+        {
+            get
+            {
+                return new List<IEntityMap>()
+                {
+                    new LogMap(),
+                    new SettingMap(),
+                    new EmailAccountMap(),
+                    new QueuedEmailMap(),
+                    new PermissionRecordMap(),
+                    new PermissionRecordRoleMap(),
+
+                    //new GroupMap(),
+                    //new QTagMap(),
+                    //new QuestionMap(),
+                    //new AnswerMap(),
+                    //new ExamPaperMap(),
+                    //new QuestionExamPaperMap(),
+                    //new StudentMap(),
+                    //new ExamMap(),
+                    //new StudentExamMap(),
+                    //new StudentExamPaperResultMap()
+                };
+            }
+        }
+
+        public void MapEntities(ModelBuilder modelBuilder)
+        {
+            foreach (IEntityMap map in Mappings)
+            {
+                map.Map(modelBuilder);
+            }
+        }
+    }
+}
