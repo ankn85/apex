@@ -1,87 +1,7 @@
 ﻿(function ($) {
     "use strict";
-    function renderCheckboxCell(data, type, full, meta) {
-        return '<input type="checkbox" value="' + data.id + '">';
-    }
 
-    function renderDetailCell(data, type, full, meta) {
-        return '<a href="javascript:;" class="fa fa-commenting-o"></a>';
-    }
-
-    function initialize() {
-        var $level = $("#level");
-
-        var drWrapper = new DatePickerWrapper();
-        drWrapper.initDateRange("#fromDate", "#toDate", { startDate: "-3m", endDate: "0d" });
-
-        var options = {
-            ajax: {
-                url: "/admin/log/search",
-                data: function (data) {
-                    data.FromDate = drWrapper.getFromDate();
-                    data.ToDate = drWrapper.getToDate();
-                    data.Level = $level.val();
-                }
-            },
-            columns: [
-                { data: null, orderable: false, searchable: false, targets: 0, render: renderCheckboxCell },
-                { data: "level", orderable: true, searchable: false },
-                { data: "message", orderable: false, searchable: false },
-                { data: "logger", orderable: false, searchable: false },
-                { data: "logged", orderable: true, searchable: false },
-                { data: null, orderable: false, searchable: false, targets: -1, class: "detail-control", render: renderDetailCell }
-            ],
-            order: [[4, "desc"]]
-        };
-
-        var logWrapper = new DataTablesWrapper();
-        logWrapper.initialize("#tableLog", options, true);
-
-        $("#btnSearch").on("click", function () {
-            logWrapper.refresh();
-        });
-
-        $("#btnDelete").on("click", function () {
-            var checkedItems = logWrapper.getCheckedItems();
-
-            if (checkedItems.length !== 0) {
-                var jqxhr = $.post(
-                    "/admin/log/delete",
-                    { ids: checkedItems },
-                    function (data, status, xhr) {
-                        if (xhr.status === 200) {
-                            logWrapper.refresh();
-                        }
-                    },
-                    "json");
-
-                jqxhr.always(function () { });
-            }
-        });
-
-
-
-
-        // Add event listener for opening and closing details
-        $('#tableLog tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = logWrapper.$dataTable.row(tr);
-
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-            }
-        });
-    }
-
-
-    function format(d) {
+    function detailFunction(data) {
         /*return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
             '<tr>' +
             '<td>Full name:</td>' +
@@ -96,8 +16,58 @@
             '<td>And any further details here (images etc)...</td>' +
             '</tr>' +
             '</table>';*/
-        return '<p><span class="text-bold">Logger:</span> ' + d.logger + '</p>' +
-            '<p>Exception: ' + d.exception + '</p>';
+        return '<p><span class="text-bold">' + resources.callsite + ':</span> ' + data.callsite + '</p>' +
+            '<p class="border-top"><span class="text-bold">' + resources.exception + ':</span> ' + data.exception + '</p>';
+    }
+
+    function initialize() {
+        var $level = $("#level");
+
+        var drWrapper = new DatePickerWrapper({ startDate: "-3m", endDate: "0d" });
+        drWrapper.render("#fromDate", "#toDate");
+
+        var options = {
+            ajax: {
+                url: "/admin/log/search",
+                data: function (data) {
+                    data.FromDate = drWrapper.getFromDate();
+                    data.ToDate = drWrapper.getToDate();
+                    data.Level = $level.val();
+                }
+            },
+            columns: [
+                { title: resources.level, data: "level", orderable: true, searchable: false },
+                { title: resources.message, data: "message", orderable: false, searchable: false },
+                { title: resources.logger, data: "logger", orderable: false, searchable: false },
+                { title: resources.logged, data: "logged", orderable: true, searchable: false }
+            ],
+            order: [[4, "desc"]]
+        };
+
+        var dtWrapper = new DataTablesWrapper(options);
+        dtWrapper.render("logTable", detailFunction, false, false, true);
+
+        $("#btnSearch").on("click", function () {
+            dtWrapper.refresh();
+        });
+
+        $("#btnDelete").on("click", function () {
+            var checkedItems = dtWrapper.getCheckedItems();
+
+            if (checkedItems.length !== 0) {
+                var jqxhr = $.post(
+                    "/admin/log/delete",
+                    { ids: checkedItems },
+                    function (data, status, xhr) {
+                        if (xhr.status === 200) {
+                            dtWrapper.refresh();
+                        }
+                    },
+                    "json");
+
+                jqxhr.always(function () { });
+            }
+        });
     }
 
     initialize();

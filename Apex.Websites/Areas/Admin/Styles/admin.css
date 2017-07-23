@@ -108,3 +108,7 @@
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     background-color: #f8eb95;
 }
+
+.table .border-top {
+    border: 1px solid #ccc;
+}

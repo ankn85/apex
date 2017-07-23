@@ -1,4 +1,6 @@
-﻿function DataTablesWrapper() {
+﻿function DataTablesWrapper(id, options) {
+    this.options = options;
+
     this.getDefaultOptions = function () {
         return {
             processing: true,
@@ -28,21 +30,96 @@
         };
     };
 
-    this.initialize = function (id, options, supportCheckbox) {
-        options.ajax.method = options.ajax.method || "POST";
+    this.render = function (id, detailFunction, updateFunction, delFunction, checkbox) {
+        this.options.ajax.method = this.options.ajax.method || "POST";
+
+        if (updateFunction) {
+            var isUrl = typeof updateFunction === "string";
+
+            this.options.columns.push({
+                title: "",
+                data: null,
+                orderable: false,
+                searchable: false,
+                targets: -2,
+                render: function (data, type, full, meta) {
+                    var href = isUrl ? updateFunction + "?id=" + data.id : "javascript:;";
+                    return '<a href="' + href + '" class="fa fa-pencil-square-o"></a>';
+                },
+                className: "update-control"
+            });
+        }
+
+        if (delFunction) {
+            this.options.columns.push({
+                title: "",
+                data: null,
+                orderable: false,
+                searchable: false,
+                targets: -3,
+                render: function (data, type, full, meta) {
+                    return '<a href="javascript:;" class="fa fa-trash-o"></a>';
+                },
+                className: "delete-control"
+            });
+        }
+
+        if (checkbox) {
+            this.options.columns.unshift({
+                title: '<input type="checkbox" id="checkbox-all" />',
+                data: null,
+                orderable: false,
+                searchable: false,
+                targets: 0,
+                render: function (data, type, full, meta) {
+                    return '<input type="checkbox" value="' + data.id + '">';
+                },
+                className: "checkbox-control"
+            });
+        }
+
+        if (detailFunction) {
+            this.options.columns.push({
+                title: "",
+                data: null,
+                orderable: false,
+                searchable: false,
+                targets: -1,
+                render: function (data, type, full, meta) {
+                    return '<a href="javascript:;" class="fa fa-commenting-o"></a>';
+                },
+                className: "detail-control"
+            });
+        }
 
         var mergedOptions = this.getDefaultOptions();
-        $.extend(mergedOptions, options);
+        $.extend(mergedOptions, this.options);
 
         var table = $(id);
         var dataTable = table.DataTable(mergedOptions);
 
-        if (supportCheckbox) {
-            var self = this;
+        var self = this;
 
-            dataTable.on("draw", function () {
+        dataTable.on("draw", function () {
+            if (detailFunction) {
+                table.find("td.detail-control").on("click", function () {
+                    var tr = $(this).closest("tr");
+                    var row = dataTable.row(tr);
+
+                    if (row.child.isShown()) {
+                        row.child.hide();
+                        tr.removeClass("shown");
+                    }
+                    else {
+                        row.child(detailFunction).show();
+                        tr.addClass("shown");
+                    }
+                });
+            }
+
+            if (checkbox) {
                 var checkboxAll = table.find("#checkbox-all").prop("checked", false);
-                var checkboxItems = table.find('tbody input[type="checkbox"]');
+                var checkboxItems = table.find('td.checkbox-control input[type="checkbox"]');
 
                 checkboxAll.on("change", function () {
                     if (this.checked) {
@@ -59,7 +136,7 @@
 
                 checkboxItems.on("change", function () {
                     if (this.checked) {
-                        if (checkboxItems.length === table.find('tbody input[type="checkbox"]:checked').length) {
+                        if (checkboxItems.length === table.find('td.checkbox-control input[type="checkbox"]:checked').length) {
                             checkboxAll.prop("checked", true);
                         }
                     }
@@ -69,9 +146,10 @@
                 });
 
                 self.$checkboxItems = checkboxItems;
-            });
-        }
+            }
+        });
 
+        this.options = mergedOptions;
         this.$dataTable = dataTable;
     };
 
@@ -94,7 +172,9 @@
     };
 }
 
-function DatePickerWrapper() {
+function DatePickerWrapper(options) {
+    this.options = options;
+
     this.getDefaultOptions = function () {
         return {
             format: "mm/dd/yyyy",
@@ -103,40 +183,32 @@ function DatePickerWrapper() {
         };
     };
 
-    this.initDatePicker = function (id, options) {
-        var mergedOptions = this.getDefaultOptions();
-        $.extend(mergedOptions, options);
-
-        var datePicker = $(id).datepicker(mergedOptions);
-
-        this.$datePicker = datePicker;
-    };
-
-    this.initDateRange = function (fromDateId, toDateId, options) {
+    this.render = function (fromDateId, toDateId) {
         var mergedOptions = this.getDefaultOptions();
         $.extend(mergedOptions, options);
 
         var fromDate = $(fromDateId).datepicker(mergedOptions);
-        var toDate = $(toDateId).datepicker(mergedOptions);
 
-        fromDate.on("changeDate", function (e) {
-            if (e.date.valueOf() > toDate.datepicker("getDate").valueOf()) {
-                toDate.datepicker("setDate", e.date);
-            }
-        });
+        if (toDateId) {
+            var toDate = $(toDateId).datepicker(mergedOptions);
 
-        toDate.on("changeDate", function (e) {
-            if (e.date.valueOf() < fromDate.datepicker("getDate").valueOf()) {
-                fromDate.datepicker("setDate", e.date);
-            }
-        });
+            fromDate.on("changeDate", function (e) {
+                if (e.date.valueOf() > toDate.datepicker("getDate").valueOf()) {
+                    toDate.datepicker("setDate", e.date);
+                }
+            });
 
+            toDate.on("changeDate", function (e) {
+                if (e.date.valueOf() < fromDate.datepicker("getDate").valueOf()) {
+                    fromDate.datepicker("setDate", e.date);
+                }
+            });
+
+            this.$toDate = toDate;
+        }
+
+        this.options = mergedOptions;
         this.$fromDate = fromDate;
-        this.$toDate = toDate;
-    };
-
-    this.getDate = function () {
-        return this.$datePicker.datepicker("getDate");
     };
 
     this.getFromDate = function () {
@@ -145,5 +217,9 @@ function DatePickerWrapper() {
 
     this.getToDate = function () {
         return this.$toDate.datepicker("getDate");
+    };
+
+    this.getDate = function () {
+        return this.getFromDate();
     };
 }

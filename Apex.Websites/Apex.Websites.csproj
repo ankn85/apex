@@ -48,8 +48,11 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="Logs\" />
+    <Folder Include="wwwroot\lib\" />
     <Folder Include="wwwroot\scripts\admin\" />
     <Folder Include="wwwroot\scripts\admin\" />
+    <Folder Include="wwwroot\scripts\admin\" />
+    <Folder Include="wwwroot\styles\admin\" />
     <Folder Include="wwwroot\styles\admin\" />
     <Folder Include="wwwroot\styles\admin\" />
   </ItemGroup>

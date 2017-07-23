@@ -9,12 +9,24 @@
         new CrumbViewModel("System", string.Empty, "fa-cog"),
         new CrumbViewModel("Log", Url.Action("index", "log"), "fa-database")
     });
+
+    var current = DateTime.UtcNow;
 }
 @section styles {
     <link rel="stylesheet" href="~/styles/admin/plugins.min.css">
 }
 @section scripts {
     <script src="~/scripts/admin/plugins.min.js"></script>
+    <script type="text/javascript">
+        var resources = {
+            level: "@LogText.Level",
+            message: "@LogText.Message",
+            logger: "@LogText.Logger",
+            logged: "@LogText.Logged",
+            callsite: "@LogText.Callsite",
+            exception: "@LogText.Exception"
+        };
+    </script>
     <script src="~/scripts/admin/log.min.js"></script>
 }
 <div class="row">
@@ -25,10 +37,10 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="fromDate" class="col-md-4 control-label">@LogText.FromDate</label>
+                                <label for="fromDate" class="col-md-4 control-label">@CommonText.FromDate</label>
                                 <div class="col-md-8">
                                     <div class="input-group input-group-sm date">
-                                        <input type="text" class="form-control" id="fromDate" value="@DateTime.UtcNow.AddDays(-7).ToDateString()" />
+                                        <input type="text" class="form-control" id="fromDate" value="@current.AddDays(-7).ToDateString()" />
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
@@ -36,10 +48,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="toDate" class="col-md-4 control-label">@LogText.ToDate</label>
+                                <label for="toDate" class="col-md-4 control-label">@CommonText.ToDate</label>
                                 <div class="col-md-8">
                                     <div class="input-group input-group-sm date">
-                                        <input type="text" class="form-control" id="toDate" value="@DateTime.UtcNow.ToDateString()" />
+                                        <input type="text" class="form-control" id="toDate" value="@current.ToDateString()" />
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
@@ -50,13 +62,13 @@
                                 <label for="level" class="col-md-4 control-label">@LogText.Level</label>
                                 <div class="col-md-8">
                                     <select class="form-control input-sm"
-                                            id="level" asp-items="@((IEnumerable<SelectListItem>)ViewData["LogLevels"])"></select>
+                                            id="level" asp-items="@(ViewData["LogLevels"])"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-4 col-md-8">
-                                    <button type="button" class="btn btn-sm btn-flat btn-primary" id="btnSearch">@LogText.Search</button>
-                                    <button type="button" class="btn btn-sm btn-flat btn-danger" data-toggle="modal" data-target="#modal-delete-selected">@LogText.DeleteSelected</button>
+                                    <button type="button" class="btn btn-sm btn-flat btn-primary" id="btnSearch">@CommonText.Search</button>
+                                    <button type="button" class="btn btn-sm btn-flat btn-danger" data-toggle="modal" data-target="#modal-delete-selected">@CommonText.DeleteSelected</button>
                                 </div>
                             </div>
                         </div>
@@ -64,41 +76,11 @@
                 </form>
             </div>
             <div class="box-body">
-                <table id="tableLog" class="table table-hover" width="100%">
-                    <thead>
-                        <tr>
-                            <th>
-                                <input type="checkbox" id="checkbox-all" />
-                            </th>
-                            <th>@LogText.Level</th>
-                            <th>@LogText.Message</th>
-                            <th>@LogText.Logger</th>
-                            <th>@LogText.Logged</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
+                <table id="logTable" class="table table-hover" width="100%">
                 </table>
             </div>
-
-            <div class="modal fade" id="modal-delete-selected">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title">@LogText.DeleteModalTitle</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>@LogText.DeleteModalContent</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">@LogText.Close</button>
-                            <button type="button" class="btn btn-flat btn-primary" data-dismiss="modal" id="btnDelete">@LogText.Delete</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="box-footer">
+                @{ Html.RenderPartial("~/Areas/Admin/Views/Shared/_ModalConfirm.cshtml"); }
             </div>
         </div>
     </div>

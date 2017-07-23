@@ -117,52 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="All" xml:space="preserve">
-    <value>All</value>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
-  <data name="Callsite" xml:space="preserve">
-    <value>Callsite</value>
-  </data>
-  <data name="Debug" xml:space="preserve">
-    <value>Debug</value>
-  </data>
-  <data name="DeleteModalContent" xml:space="preserve">
-    <value>Are you sure you want to delete selected logs?</value>
-  </data>
-  <data name="DeleteModalTitle" xml:space="preserve">
-    <value>Delete Confirm?</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="DeleteSelected" xml:space="preserve">
     <value>Delete (Selected)</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
+  <data name="FromDate" xml:space="preserve">
+    <value>From Date</value>
   </data>
-  <data name="Exception" xml:space="preserve">
-    <value>Exception</value>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
-  <data name="Fatal" xml:space="preserve">
-    <value>Fatal</value>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
   </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
-  </data>
-  <data name="Level" xml:space="preserve">
-    <value>Level</value>
-  </data>
-  <data name="Logged" xml:space="preserve">
-    <value>Logged</value>
-  </data>
-  <data name="Logger" xml:space="preserve">
-    <value>Logger</value>
-  </data>
-  <data name="Message" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="Trace" xml:space="preserve">
-    <value>Trace</value>
-  </data>
-  <data name="Warn" xml:space="preserve">
-    <value>Warn</value>
+  <data name="ToDate" xml:space="preserve">
+    <value>To Date</value>
   </data>
 </root>

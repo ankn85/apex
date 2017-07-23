@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Apex.Admin.Resources;
 using Apex.Admin.ViewModels.DataTables;
 using Apex.Admin.ViewModels.Logs;
 using Apex.Services.Logs;
