@@ -45,7 +45,7 @@
         };
 
         var dtWrapper = new DataTablesWrapper(options);
-        dtWrapper.render("logTable", detailFunction, false, false, true);
+        dtWrapper.render("logTable", detailFunction, false, false);
 
         $("#btnSearch").on("click", function () {
             dtWrapper.refresh();

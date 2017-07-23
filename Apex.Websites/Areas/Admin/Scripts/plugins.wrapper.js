@@ -1,4 +1,4 @@
-﻿function DataTablesWrapper(id, options) {
+﻿function DataTablesWrapper(options) {
     this.options = options;
 
     this.getDefaultOptions = function () {
@@ -30,8 +30,22 @@
         };
     };
 
-    this.render = function (id, detailFunction, updateFunction, delFunction, checkbox) {
+    this.render = function (id, detailFunction, updateFunction, delFunction) {
         this.options.ajax.method = this.options.ajax.method || "POST";
+
+        if (detailFunction) {
+            this.options.columns.push({
+                title: "",
+                data: null,
+                orderable: false,
+                searchable: false,
+                targets: -1,
+                render: function (data, type, full, meta) {
+                    return '<a href="javascript:;" class="fa fa-commenting-o"></a>';
+                },
+                className: "detail-control"
+            });
+        }
 
         if (updateFunction) {
             var isUrl = typeof updateFunction === "string";
@@ -64,33 +78,17 @@
             });
         }
 
-        if (checkbox) {
-            this.options.columns.unshift({
-                title: '<input type="checkbox" id="checkbox-all" />',
-                data: null,
-                orderable: false,
-                searchable: false,
-                targets: 0,
-                render: function (data, type, full, meta) {
-                    return '<input type="checkbox" value="' + data.id + '">';
-                },
-                className: "checkbox-control"
-            });
-        }
-
-        if (detailFunction) {
-            this.options.columns.push({
-                title: "",
-                data: null,
-                orderable: false,
-                searchable: false,
-                targets: -1,
-                render: function (data, type, full, meta) {
-                    return '<a href="javascript:;" class="fa fa-commenting-o"></a>';
-                },
-                className: "detail-control"
-            });
-        }
+        this.options.columns.unshift({
+            title: '<input type="checkbox" id="checkbox-all" />',
+            data: null,
+            orderable: false,
+            searchable: false,
+            targets: 0,
+            render: function (data, type, full, meta) {
+                return '<input type="checkbox" value="' + data.id + '">';
+            },
+            className: "checkbox-control"
+        });
 
         var mergedOptions = this.getDefaultOptions();
         $.extend(mergedOptions, this.options);
@@ -117,36 +115,34 @@
                 });
             }
 
-            if (checkbox) {
-                var checkboxAll = table.find("#checkbox-all").prop("checked", false);
-                var checkboxItems = table.find('td.checkbox-control input[type="checkbox"]');
+            var checkboxAll = table.find("#checkbox-all").prop("checked", false);
+            var checkboxItems = table.find('td.checkbox-control input[type="checkbox"]');
 
-                checkboxAll.on("change", function () {
-                    if (this.checked) {
-                        $.each(checkboxItems, function (index, item) {
-                            item.checked = true;
-                        });
-                    }
-                    else {
-                        $.each(checkboxItems, function (index, item) {
-                            item.checked = false;
-                        });
-                    }
-                });
+            checkboxAll.on("change", function () {
+                if (this.checked) {
+                    $.each(checkboxItems, function (index, item) {
+                        item.checked = true;
+                    });
+                }
+                else {
+                    $.each(checkboxItems, function (index, item) {
+                        item.checked = false;
+                    });
+                }
+            });
 
-                checkboxItems.on("change", function () {
-                    if (this.checked) {
-                        if (checkboxItems.length === table.find('td.checkbox-control input[type="checkbox"]:checked').length) {
-                            checkboxAll.prop("checked", true);
-                        }
+            checkboxItems.on("change", function () {
+                if (this.checked) {
+                    if (checkboxItems.length === table.find('td.checkbox-control input[type="checkbox"]:checked').length) {
+                        checkboxAll.prop("checked", true);
                     }
-                    else if (checkboxAll.is(":checked")) {
-                        checkboxAll.prop("checked", false);
-                    }
-                });
+                }
+                else if (checkboxAll.is(":checked")) {
+                    checkboxAll.prop("checked", false);
+                }
+            });
 
-                self.$checkboxItems = checkboxItems;
-            }
+            self.$checkboxItems = checkboxItems;
         });
 
         this.options = mergedOptions;

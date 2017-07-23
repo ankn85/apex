@@ -1,5 +1,4 @@
 ﻿@using Apex.Services.Extensions
-@using Apex.Admin.Resources
 @{
     ViewData["Title"] = "Log";
     ViewData["TitleSmall"] = "Version 2.4.0";
@@ -19,12 +18,12 @@
     <script src="~/scripts/admin/plugins.min.js"></script>
     <script type="text/javascript">
         var resources = {
-            level: "@LogText.Level",
-            message: "@LogText.Message",
-            logger: "@LogText.Logger",
-            logged: "@LogText.Logged",
-            callsite: "@LogText.Callsite",
-            exception: "@LogText.Exception"
+            level: "Level",
+            message: "Message",
+            logger: "Logger",
+            logged: "Logged",
+            callsite: "Callsite",
+            exception: "Exception"
         };
     </script>
     <script src="~/scripts/admin/log.min.js"></script>
@@ -37,7 +36,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="fromDate" class="col-md-4 control-label">@CommonText.FromDate</label>
+                                <label for="fromDate" class="col-md-4 control-label">From Date</label>
                                 <div class="col-md-8">
                                     <div class="input-group input-group-sm date">
                                         <input type="text" class="form-control" id="fromDate" value="@current.AddDays(-7).ToDateString()" />
@@ -48,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="toDate" class="col-md-4 control-label">@CommonText.ToDate</label>
+                                <label for="toDate" class="col-md-4 control-label">To Date</label>
                                 <div class="col-md-8">
                                     <div class="input-group input-group-sm date">
                                         <input type="text" class="form-control" id="toDate" value="@current.ToDateString()" />
@@ -59,16 +58,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="level" class="col-md-4 control-label">@LogText.Level</label>
+                                <label for="level" class="col-md-4 control-label">Level</label>
                                 <div class="col-md-8">
                                     <select class="form-control input-sm"
-                                            id="level" asp-items="@(ViewData["LogLevels"])"></select>
+                                            id="level" asp-items="@((IEnumerable<SelectListItem>)ViewData["LogLevels"])"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-4 col-md-8">
-                                    <button type="button" class="btn btn-sm btn-flat btn-primary" id="btnSearch">@CommonText.Search</button>
-                                    <button type="button" class="btn btn-sm btn-flat btn-danger" data-toggle="modal" data-target="#modal-delete-selected">@CommonText.DeleteSelected</button>
+                                    <button type="button" class="btn btn-sm btn-flat btn-primary" id="btnSearch">Search</button>
+                                    <button type="button" class="btn btn-sm btn-flat btn-danger" data-toggle="modal" data-target="#modal-delete-selected">Delete (Selected)</button>
                                 </div>
                             </div>
                         </div>
@@ -78,9 +77,6 @@
             <div class="box-body">
                 <table id="logTable" class="table table-hover" width="100%">
                 </table>
-            </div>
-            <div class="box-footer">
-                @{ Html.RenderPartial("~/Areas/Admin/Views/Shared/_ModalConfirm.cshtml"); }
             </div>
         </div>
     </div>

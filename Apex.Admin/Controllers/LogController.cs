@@ -59,13 +59,13 @@ namespace Apex.Admin.Controllers
         {
             IEnumerable<SelectListItem> models = new List<SelectListItem>
             {
-                new SelectListItem { Value = string.Empty, Text = LogText.All, Selected = true },
-                new SelectListItem { Value = LogText.Fatal, Text = LogText.Fatal },
-                new SelectListItem { Value = LogText.Error, Text = LogText.Error },
-                new SelectListItem { Value = LogText.Warn, Text = LogText.Warn },
-                new SelectListItem { Value = LogText.Info, Text = LogText.Info },
-                new SelectListItem { Value = LogText.Debug, Text = LogText.Debug },
-                new SelectListItem { Value = LogText.Trace, Text = LogText.Trace }
+                new SelectListItem { Value = string.Empty, Text = "All", Selected = true },
+                new SelectListItem { Value = "Fatal", Text = "Fatal" },
+                new SelectListItem { Value = "Error", Text = "Error" },
+                new SelectListItem { Value = "Warn", Text = "Warn" },
+                new SelectListItem { Value = "Info", Text = "Info" },
+                new SelectListItem { Value = "Debug", Text = "Debug" },
+                new SelectListItem { Value = "Trace", Text = "Trace" }
             };
 
             ViewData["LogLevels"] = models;
