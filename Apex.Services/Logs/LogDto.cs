@@ -17,7 +17,7 @@ namespace Apex.Services.Logs
         {
             Id = id;
             Application = application;
-            Logged = $"{logged.ToPrettyDate()}<br/>{logged.ToDateTimeString()}";
+            Logged = $"{logged.ToPrettyDate()}<div>{logged.ToDateTimeString()}</div>";
             Level = level;
             Message = message;
             Logger = logger;

@@ -126,15 +126,6 @@
   <data name="Debug" xml:space="preserve">
     <value>Debug</value>
   </data>
-  <data name="DeleteModalContent" xml:space="preserve">
-    <value>Are you sure you want to delete selected logs?</value>
-  </data>
-  <data name="DeleteModalTitle" xml:space="preserve">
-    <value>Delete Confirm?</value>
-  </data>
-  <data name="DeleteSelected" xml:space="preserve">
-    <value>Delete (Selected)</value>
-  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>

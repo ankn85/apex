@@ -19,11 +19,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\LogText.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LogText.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\CommonText.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\LogText.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LogText.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

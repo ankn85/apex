@@ -59,7 +59,9 @@
       "wwwroot/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
       "wwwroot/lib/datatables.net/js/jquery.dataTables.min.js",
       "wwwroot/lib/datatables.net-bs/js/dataTables.bootstrap.min.js",
-      "Areas/Admin/Scripts/plugins.wrapper.js"
+      "wwwroot/lib/bootbox/bootbox.js",
+      "Areas/Admin/Scripts/datepicker-wrapper.js",
+      "Areas/Admin/Scripts/datatables-wrapper.js"
     ]
   },
 

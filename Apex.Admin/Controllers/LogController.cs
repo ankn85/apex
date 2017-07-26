@@ -46,9 +46,9 @@ namespace Apex.Admin.Controllers
         {
             if (ids != null && ids.Length > 0)
             {
-                await _logService.DeleteAsync(ids);
+                var effectedRows = await _logService.DeleteAsync(ids);
 
-                return Ok();
+                return Ok(effectedRows);
             }
 
             return BadRequestApiError("LogId", "'Log Ids' should not be empty.");
