@@ -34,7 +34,7 @@
             <section class="content-header">
                 <h1>
                     @ViewData["Title"]
-                    <small>@ViewData["TitleSmall"]</small>
+                    <small>@Html.Raw(ViewData["TitleSmall"])</small>
                 </h1>
                 @if (ViewData["Breadcrumb"] != null)
                 {
