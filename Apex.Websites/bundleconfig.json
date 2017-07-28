@@ -6,7 +6,7 @@
     "outputFileName": "wwwroot/assets/styles/admin/common.min.css",
     "inputFiles": [
       "bower_components/bootstrap/dist/css/bootstrap.min.css",
-      "bower_components/font-awesome/css/font-awesome.min.css"
+      "wwwroot/assets/styles/fonts/font-awesome.min.css"
     ]
   },
   {
