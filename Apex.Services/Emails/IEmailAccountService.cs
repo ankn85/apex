@@ -9,7 +9,7 @@ namespace Apex.Services.Emails
     {
         Task<EmailAccount> GetAsync(int id);
 
-        Task<IPagedList<EmailAccountDto>> GetListAsync(
+        Task<IPagedList<EmailAccount>> GetListAsync(
             string sortColumnName,
             SortDirection sortDirection);
 
@@ -20,5 +20,7 @@ namespace Apex.Services.Emails
         Task<int> UpdateAsync(EmailAccount entity);
 
         Task<int> DeleteAsync(int id);
+
+        Task<int> DeleteAsync(int[] ids);
     }
 }

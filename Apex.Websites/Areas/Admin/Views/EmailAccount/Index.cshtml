@@ -3,36 +3,34 @@
     ViewData["TitleSmall"] = "Version 2.4.0";
 
     ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Home", string.Empty, "fa-dashboard"),
-        new CrumbViewModel("System", string.Empty, "fa-cog"),
-        new CrumbViewModel("Email Account", Url.Action("index", "emailaccount"), "fa-envelope-open")
+        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new CrumbViewModel("Email Account", string.Empty, "fa-envelope")
     });
 }
 @section styles {
     <link rel="stylesheet" href="~/styles/admin/plugins.min.css">
 }
 @section scripts {
-    <script src="~/scripts/admin/plugins.min.js"></script>
-    <script src="~/scripts/admin/email-account.min.js"></script>
+    <script type="text/javascript">
+            var resources = {
+                email: "Email",
+                displayName: "Display Name",
+                enableSsl: "EnableSsl",
+                useDefaultCredentials: "Use Default Credentials",
+                defaultEmailAccount: "Default Email Account",
+                host: "Host",
+                port: "Port",
+                userName: "User Name"
+            };
+    </script>
+    <script src="~/assets/scripts/admin/datatables.min.js" asp-append-version="true"></script>
+    <script src="~/assets/scripts/admin/emailAccount.list.min.js" asp-append-version="true"></script>
 }
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
             <div class="box-body">
-                <table id="tableEmailAccount" class="table table-bordered table-striped table-hover" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Display Name</th>
-                            <th>Host</th>
-                            <th>Port</th>
-                            <th>Enable SSL</th>
-                            <th>Is Default Email Account</th>
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <table id="jDataTable" class="table table-hover" width="100%"></table>
             </div>
         </div>
     </div>

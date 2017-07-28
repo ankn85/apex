@@ -88,14 +88,7 @@
         @{ await Html.RenderPartialAsync("~/Areas/Admin/Views/Shared/ViewComponents/_ControlSidebar.cshtml"); }
     </div>
 
-    <environment names="Development">
-        <script src="~/scripts/admin/common.min.js"></script>
-        <script src="~/scripts/admin/admin.min.js"></script>
-    </environment>
-    <environment names="Staging,Production">
-        @*<script src="" asp-append-version="true"></script>*@
-    </environment>
-
+    <script src="~/assets/scripts/admin/common.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

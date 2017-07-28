@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Apex.Admin.Controllers
 {
-    public class ManageAccountsController : AdminController
+    public class ManageAccountController : AdminController
     {
     }
 }

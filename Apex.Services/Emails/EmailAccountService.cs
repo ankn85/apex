@@ -30,7 +30,7 @@ namespace Apex.Services.Emails
             return await EmailAccounts.FindAsync(id);
         }
 
-        public async Task<IPagedList<EmailAccountDto>> GetListAsync(
+        public async Task<IPagedList<EmailAccount>> GetListAsync(
             string sortColumnName,
             SortDirection sortDirection)
         {
@@ -39,12 +39,12 @@ namespace Apex.Services.Emails
 
             if (totalRecords == 0)
             {
-                return new PagedList<EmailAccountDto>(page, size);
+                return new PagedList<EmailAccount>(page, size);
             }
 
             int totalRecordsFiltered = totalRecords;
 
-            return new PagedList<EmailAccountDto>(
+            return new PagedList<EmailAccount>(
                 GetPagedEmailAccounts(EmailAccounts.AsNoTracking(), sortColumnName, sortDirection),
                 totalRecords,
                 totalRecordsFiltered,
@@ -111,6 +111,23 @@ namespace Apex.Services.Emails
             return await CommitAsync();
         }
 
+        public async Task<int> DeleteAsync(int[] ids)
+        {
+            var dbSet = EmailAccounts;
+            var emailAccounts = dbSet.Where(l => ids.Contains(l.Id));
+
+            if (!emailAccounts.Any())
+            {
+                throw new ApiException(
+                    $"EmailAccounts not found. Ids = {string.Join(",", ids)}",
+                    ApiErrorCode.NotFound);
+            }
+
+            dbSet.RemoveRange(emailAccounts);
+
+            return await CommitAsync();
+        }
+
         private DbSet<EmailAccount> EmailAccounts
         {
             get
@@ -119,19 +136,16 @@ namespace Apex.Services.Emails
             }
         }
 
-        private IEnumerable<EmailAccountDto> GetPagedEmailAccounts(
+        private IEnumerable<EmailAccount> GetPagedEmailAccounts(
             IQueryable<EmailAccount> emailAccounts,
             string sortColumnName,
             SortDirection sortDirection)
         {
             PropertyInfo property = GetProperty<EmailAccount>(sortColumnName);
 
-            var sortEmailAccounts = sortDirection == SortDirection.Ascending ?
+            return sortDirection == SortDirection.Ascending ?
                 emailAccounts.OrderBy(property.GetValue) :
                 emailAccounts.OrderByDescending(property.GetValue);
-
-            return sortEmailAccounts
-                .Select(ea => new EmailAccountDto(ea.Id, ea.Email, ea.DisplayName, ea.Host, ea.Port, ea.EnableSsl, ea.UseDefaultCredentials, ea.IsDefaultEmailAccount));
         }
     }
 }

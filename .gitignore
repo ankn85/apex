@@ -243,6 +243,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-Apex.Websites/Logs/
-Apex.Websites/wwwroot/
 Apex.Data/Migrations/
+Apex.Websites/Logs/
+Apex.Websites/bower_components/
+Apex.Websites/wwwroot/

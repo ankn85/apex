@@ -1,4 +1,6 @@
-﻿function DataTablesWrapper(options, tableId, crudOptions) {
+﻿"use strict";
+
+function DataTablesWrapper(options, tableId, crudOptions) {
     var self = this;
     var defaultOpts = {
         processing: true,

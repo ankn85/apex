@@ -5,6 +5,10 @@
 
 @model Apex.Admin.ViewModels.Authentication.SignInViewModel
 
+@section scripts {
+    <script src="~/assets/scripts/admin/auth.min.js"></script>
+}
+
 <p class="login-box-msg">Sign in to start your session</p>
 <form asp-controller="authentication" asp-action="signin" asp-anti-forgery="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form" novalidate>
     <div asp-validation-summary="@ValidationSummary.ModelOnly" class="text-danger"></div>
@@ -19,10 +23,9 @@
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
     <div class="row">
-        <div class="col-xs-7">&nbsp;</div>
-        <div class="col-xs-5">
-            <button type="submit" class="btn btn-block btn-flat btn-primary">
-                <i class="fa fa-sign-in"></i>&nbsp;Sign In</button>
+        <div class="col-xs-8">&nbsp;</div>
+        <div class="col-xs-4">
+            <button type="submit" class="btn btn-block btn-flat btn-primary">Sign In</button>
         </div>
     </div>
 </form>

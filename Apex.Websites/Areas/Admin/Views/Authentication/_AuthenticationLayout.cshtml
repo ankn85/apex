@@ -1,6 +1,5 @@
 ﻿@{
     Layout = null;
-    string adminLTE = "AdminLTE-2.4.0-rc";
 }
 <!DOCTYPE html>
 <html>
@@ -36,13 +35,6 @@
             @RenderBody()
         </div>
     </div>
-
-    <environment names="Development">
-        <script src="~/scripts/admin/common.min.js"></script>
-    </environment>
-    <environment names="Staging,Production">
-        @*<script src="" asp-append-version="true"></script>*@
-    </environment>
 
     @RenderSection("scripts", required: false)
 </body>

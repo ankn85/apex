@@ -1,4 +1,6 @@
-﻿function DatePickerWrapper(options, fromDateId, toDateId) {
+﻿"use strict";
+
+function DatePickerWrapper(options, fromDateId, toDateId) {
     var self = this;
     var defaultOpts = {
         format: "mm/dd/yyyy",

@@ -40,7 +40,7 @@
                 { title: resources.level, data: "level", orderable: true, searchable: false },
                 { title: resources.message, data: "message", orderable: false, searchable: false },
                 { title: resources.logger, data: "logger", orderable: false, searchable: false },
-                { title: resources.logged, data: "logged", orderable: true, searchable: false }
+                { title: resources.logged, data: "logged", orderable: true, searchable: false, className: "pretty-date" }
             ],
             order: [[4, "desc"]]
         };

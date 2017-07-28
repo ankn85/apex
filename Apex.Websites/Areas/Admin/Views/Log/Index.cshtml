@@ -4,9 +4,8 @@
     ViewData["TitleSmall"] = "Version 2.4.0";
 
     ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Home", string.Empty, "fa-dashboard"),
-        new CrumbViewModel("System", string.Empty, "fa-cog"),
-        new CrumbViewModel("Log", Url.Action("index", "log"), "fa-database")
+        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new CrumbViewModel("Log", string.Empty, "fa-database")
     });
 
     var current = DateTime.UtcNow;
@@ -25,8 +24,9 @@
             exception: "Exception"
         };
     </script>
-    <script src="~/scripts/admin/plugins.min.js"></script>
-    <script src="~/scripts/admin/log.min.js"></script>
+    <script src="~/assets/scripts/admin/plugins.min.js" asp-append-version="true"></script>
+    <script src="~/assets/scripts/admin/datatables.min.js" asp-append-version="true"></script>
+    <script src="~/assets/scripts/admin/log.list.min.js" asp-append-version="true"></script>
 }
 <div class="row">
     <div class="col-md-12">

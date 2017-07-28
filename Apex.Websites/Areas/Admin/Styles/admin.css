@@ -109,7 +109,12 @@
     background-color: #f8eb95;
 }
 
+.table .pretty-date {
+    width: 70px;
+}
+
 .table .read-control {
+    color: #3c8dbc;
     cursor: pointer;
 }
 
