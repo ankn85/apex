@@ -2625,9 +2625,9 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="Logs\" />
+    <Folder Include="Logs\" />
     <Folder Include="wwwroot\assets\scripts\admin\" />
-    <Folder Include="wwwroot\scripts\admin\logs\" />
-    <Folder Include="wwwroot\scripts\admin\emailAccounts\" />
+    <Folder Include="wwwroot\assets\styles\admin\" />
     <Folder Include="wwwroot\styles\admin\" />
     <Folder Include="wwwroot\styles\admin\" />
     <Folder Include="wwwroot\styles\admin\" />

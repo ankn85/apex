@@ -1,4 +1,38 @@
 ﻿[
+  /*
+  //********** Stylesheets **********
+  */
+  {
+    "outputFileName": "wwwroot/assets/styles/admin/common.min.css",
+    "inputFiles": [
+      "bower_components/bootstrap/dist/css/bootstrap.min.css",
+      "bower_components/font-awesome/css/font-awesome.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/styles/admin/datatables.min.css",
+    "inputFiles": [
+      "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/styles/admin/plugins.min.css",
+    "inputFiles": [
+      "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+      "bower_components/select2/dist/css/select2.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/styles/admin/admin.min.css",
+    "inputFiles": [
+      "bower_components/AdminLTE-2.4.0-rc/dist/css/AdminLTE.min.css",
+      "bower_components/AdminLTE-2.4.0-rc/dist/css/skins/skin-blue-light.min.css",
+      "Areas/Admin/Styles/admin.css"
+    ]
+  },
+  /*
+  //********** Javascripts **********
+  */
   {
     "outputFileName": "wwwroot/assets/scripts/admin/common.min.js",
     "inputFiles": [
@@ -58,42 +92,4 @@
       "Areas/Admin/Scripts/emailAccount.list.js"
     ]
   }
-
-
-
-  ///*
-  //********** admin: Common **********
-  //*/
-  //{
-  //  "outputFileName": "wwwroot/styles/admin/common.min.css",
-  //  "inputFiles": [
-  //    "wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
-  //    "wwwroot/lib/font-awesome/css/font-awesome.min.css",
-  //    "wwwroot/lib/ionicons/css/ionicons.min.css",
-  //    "wwwroot/lib/AdminLTE-2.4.0-rc/dist/css/AdminLTE.min.css"
-  //  ]
-  //},
-
-  ///*
-  //********** admin: Admin **********
-  //*/
-  //{
-  //  "outputFileName": "wwwroot/styles/admin/admin.min.css",
-  //  "inputFiles": [
-  //    "wwwroot/lib/AdminLTE-2.4.0-rc/dist/css/skins/skin-blue-light.min.css",
-  //    "Areas/Admin/Styles/admin.css"
-  //  ]
-  //},
-
-  ///*
-  ////********** admin: Plugins **********
-  //*/
-  //{
-  //  "outputFileName": "wwwroot/styles/admin/plugins.min.css",
-  //  "inputFiles": [
-  //    "wwwroot/lib/select2/dist/css/select2.min.css",
-  //    "wwwroot/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
-  //    "wwwroot/lib/datatables.net-bs/css/dataTables.bootstrap.min.css"
-  //  ]
-  //}
 ]

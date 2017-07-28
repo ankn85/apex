@@ -4,8 +4,7 @@ namespace Apex.Admin.ViewModels.Authentication
 {
     public sealed class ForgotPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required, EmailAddress]
         public string Email { get; set; }
     }
 }

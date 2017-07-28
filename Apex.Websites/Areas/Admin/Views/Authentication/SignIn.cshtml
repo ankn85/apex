@@ -10,21 +10,20 @@
 }
 
 <p class="login-box-msg">Sign in to start your session</p>
-<form asp-controller="authentication" asp-action="signin" asp-anti-forgery="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form" novalidate>
-    <div asp-validation-summary="@ValidationSummary.ModelOnly" class="text-danger"></div>
+<form asp-controller="authentication" asp-action="signin" asp-anti-forgery="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" novalidate>
+    <div asp-validation-summary="@ValidationSummary.ModelOnly" class="text-red"></div>
     <div class="form-group has-feedback">
-        <input type="text" class="form-control" placeholder="Email" asp-for="Email">
+        <input asp-for="Email" class="form-control" placeholder="Email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <span asp-validation-for="Email" class="text-red"></span>
     </div>
     <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password" asp-for="Password">
+        <input asp-for="Password" class="form-control" placeholder="Password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-        <span asp-validation-for="Password" class="text-danger"></span>
+        <span asp-validation-for="Password" class="text-red"></span>
     </div>
     <div class="row">
-        <div class="col-xs-8">&nbsp;</div>
-        <div class="col-xs-4">
+        <div class="col-xs-offset-8 col-xs-4">
             <button type="submit" class="btn btn-block btn-flat btn-primary">Sign In</button>
         </div>
     </div>

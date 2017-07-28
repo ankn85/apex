@@ -5,8 +5,7 @@ namespace Apex.Admin.ViewModels.Authentication
 {
     public sealed class ResetPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required, EmailAddress]
         public string Email { get; set; }
 
         [Required]
