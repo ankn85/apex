@@ -5,28 +5,28 @@
   {
     "outputFileName": "wwwroot/assets/styles/admin/common.min.css",
     "inputFiles": [
-      "bower_components/bootstrap/dist/css/bootstrap.min.css",
-      "wwwroot/assets/styles/fonts/font-awesome.min.css"
+      "wwwroot/lib/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css",
+      "wwwroot/lib/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css"
     ]
   },
   {
     "outputFileName": "wwwroot/assets/styles/admin/datatables.min.css",
     "inputFiles": [
-      "bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"
+      "wwwroot/lib/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"
     ]
   },
   {
     "outputFileName": "wwwroot/assets/styles/admin/plugins.min.css",
     "inputFiles": [
-      "bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
-      "bower_components/select2/dist/css/select2.min.css"
+      "wwwroot/lib/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+      "wwwroot/lib/AdminLTE/bower_components/select2/dist/css/select2.min.css"
     ]
   },
   {
     "outputFileName": "wwwroot/assets/styles/admin/admin.min.css",
     "inputFiles": [
-      "bower_components/AdminLTE-2.4.0-rc/dist/css/AdminLTE.min.css",
-      "bower_components/AdminLTE-2.4.0-rc/dist/css/skins/skin-blue-light.min.css",
+      "wwwroot/lib/AdminLTE/dist/css/AdminLTE.min.css",
+      "wwwroot/lib/AdminLTE/dist/css/skins/skin-blue-light.min.css",
       "Areas/Admin/Styles/admin.css"
     ]
   },
@@ -36,27 +36,27 @@
   {
     "outputFileName": "wwwroot/assets/scripts/admin/common.min.js",
     "inputFiles": [
-      "bower_components/jquery/dist/jquery.min.js",
-      "bower_components/bootstrap/dist/js/bootstrap.min.js",
-      "bower_components/fastclick/lib/fastclick.js",
-      "bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
-      "bower_components/AdminLTE-2.4.0-rc/dist/js/adminlte.min.js",
-      "bower_components/AdminLTE-2.4.0-rc/dist/js/demo.js"
+      "wwwroot/lib/AdminLTE/bower_components/jquery/dist/jquery.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/fastclick/lib/fastclick.js",
+      "wwwroot/lib/AdminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
+      "wwwroot/lib/AdminLTE//dist/js/adminlte.min.js",
+      "wwwroot/lib/AdminLTE//dist/js/demo.js"
     ]
   },
   {
     "outputFileName": "wwwroot/assets/scripts/admin/jquery.val.min.js",
     "inputFiles": [
-      "bower_components/jquery-validation/dist/jquery.validate.min.js",
-      "bower_components/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+      "wwwroot/lib/AdminLTE/bower_components/jquery-validation/dist/jquery.validate.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
     ]
   },
   {
     "outputFileName": "wwwroot/assets/scripts/admin/datatables.min.js",
     "inputFiles": [
-      "bower_components/bootbox/bootbox.js",
-      "bower_components/datatables.net/js/jquery.dataTables.min.js",
-      "bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/bootbox/bootbox.js",
+      "wwwroot/lib/AdminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js",
       "Areas/Admin/Scripts/datatables.wrapper.js",
       "Areas/Admin/Scripts/datatables.utils.js"
     ]
@@ -64,8 +64,8 @@
   {
     "outputFileName": "wwwroot/assets/scripts/admin/plugins.min.js",
     "inputFiles": [
-      "bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
-      "bower_components/select2/dist/js/select2.full.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/select2/dist/js/select2.full.min.js",
       "Areas/Admin/Scripts/datepicker.wrapper.js"
     ]
   },
@@ -75,9 +75,9 @@
   {
     "outputFileName": "wwwroot/assets/scripts/admin/auth.min.js",
     "inputFiles": [
-      "bower_components/jquery/dist/jquery.min.js",
-      "bower_components/jquery-validation/dist/jquery.validate.min.js",
-      "bower_components/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+      "wwwroot/lib/AdminLTE/bower_components/jquery/dist/jquery.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/jquery-validation/dist/jquery.validate.min.js",
+      "wwwroot/lib/AdminLTE/bower_components/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
     ]
   },
   {

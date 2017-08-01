@@ -22,16 +22,6 @@
     <None Remove="wwwroot\images\**" />
     <None Remove="wwwroot\js\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="wwwroot\assets\styles\fonts\font-awesome.min.css" />
-    <Content Include="wwwroot\assets\styles\fonts\fontawesome-webfont.eot" />
-    <Content Include="wwwroot\assets\styles\fonts\fontawesome-webfont.svg" />
-    <Content Include="wwwroot\assets\styles\fonts\fontawesome-webfont.ttf" />
-    <Content Include="wwwroot\assets\styles\fonts\fontawesome-webfont.woff" />
-    <Content Include="wwwroot\assets\styles\fonts\fontawesome-webfont.woff2" />
-    <Content Include="wwwroot\assets\styles\fonts\FontAwesome.otf" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
@@ -57,6 +47,8 @@
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\assets\scripts\admin\" />
     <Folder Include="wwwroot\assets\scripts\admin\" />
+    <Folder Include="wwwroot\assets\scripts\admin\" />
+    <Folder Include="wwwroot\assets\styles\admin\" />
     <Folder Include="wwwroot\assets\styles\admin\" />
   </ItemGroup>
   <ItemGroup>

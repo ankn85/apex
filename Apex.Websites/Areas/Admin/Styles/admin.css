@@ -116,8 +116,18 @@
 .table .read-control {
     color: #3c8dbc;
     cursor: pointer;
+    width: 20px;
+}
+
+.table .update-control {
+    width: 20px;
 }
 
 .table .border-top {
     border-top: 1px solid #f4f4f4;
+}
+
+.validation-summary-errors ol, ul {
+    margin: 0;
+    padding-left: 15px;
 }

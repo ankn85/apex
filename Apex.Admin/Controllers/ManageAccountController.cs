@@ -60,9 +60,14 @@ namespace Apex.Admin.Controllers
             if (ModelState.IsValid)
             {
                 ApplicationUser entity = ParseApplicationUser(model);
-                await _accountService.CreateAsync(entity, model.Password, model.Locked, model.Roles);
+                var result = await _accountService.CreateAsync(entity, model.Password, model.Locked, model.Roles);
 
-                return RedirectToAction(nameof(Index));
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                AddErrorsToModelState(result);
             }
 
             await PopularRoleNames();
@@ -124,6 +129,15 @@ namespace Apex.Admin.Controllers
             var roles = await _roleService.GetListAsync();
 
             ViewData["Roles"] = roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name });
+        }
+
+        [NonAction]
+        private void AddErrorsToModelState(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
         }
 
         [NonAction]
