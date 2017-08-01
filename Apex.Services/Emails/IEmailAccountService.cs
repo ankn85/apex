@@ -7,7 +7,7 @@ namespace Apex.Services.Emails
 {
     public interface IEmailAccountService
     {
-        Task<EmailAccount> GetAsync(int id);
+        Task<EmailAccount> FindAsync(int id);
 
         Task<IPagedList<EmailAccount>> GetListAsync(
             string sortColumnName,

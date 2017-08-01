@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Apex.Data.Entities.Logs;
 using Apex.Data.Paginations;
 using Apex.Services.Enums;
+using Apex.Services.Models.Logs;
 
 namespace Apex.Services.Logs
 {
@@ -18,6 +19,8 @@ namespace Apex.Services.Logs
             SortDirection sortDirection,
             int page, 
             int size);
+
+        Task<int> DeleteAsync(int id);
 
         Task<int> DeleteAsync(int[] ids);
 	}

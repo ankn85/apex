@@ -91,5 +91,11 @@
     "inputFiles": [
       "Areas/Admin/Scripts/emailAccount.list.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/scripts/admin/account.list.min.js",
+    "inputFiles": [
+      "Areas/Admin/Scripts/account.list.js"
+    ]
   }
 ]

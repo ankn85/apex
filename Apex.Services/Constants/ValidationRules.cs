@@ -8,5 +8,6 @@ namespace Apex.Services.Constants
         public static readonly DateTime MaxDate = new DateTime(2115, 1, 1);
 
         public const int MinPasswordLength = 6;
+        public const int MaxFailedAccessAttemptsToLockout = 5;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Apex.Data;
 using Apex.Data.Entities.Emails;
@@ -25,31 +23,29 @@ namespace Apex.Services.Emails
             _memoryCacheService = memoryCacheService;
         }
 
-        public async Task<EmailAccount> GetAsync(int id)
+        public async Task<EmailAccount> FindAsync(int id)
         {
-            return await EmailAccounts.FindAsync(id);
+            return await Table<EmailAccount>().FindAsync(id);
         }
 
         public async Task<IPagedList<EmailAccount>> GetListAsync(
             string sortColumnName,
             SortDirection sortDirection)
         {
-            int totalRecords = await EmailAccounts.CountAsync();
-            int page = 0, size = 0;
+            var query = Table<EmailAccount>().AsNoTracking();
+            int totalRecords = await query.CountAsync();
 
             if (totalRecords == 0)
             {
-                return new PagedList<EmailAccount>(page, size);
+                return PagedList<EmailAccount>.Empty();
             }
 
             int totalRecordsFiltered = totalRecords;
 
-            return new PagedList<EmailAccount>(
-                GetPagedEmailAccounts(EmailAccounts.AsNoTracking(), sortColumnName, sortDirection),
+            return PagedList<EmailAccount>.Create(
+                GetSortList(query, sortColumnName, sortDirection),
                 totalRecords,
-                totalRecordsFiltered,
-                page,
-                size);
+                totalRecordsFiltered);
         }
 
         public async Task<EmailAccount> GetDefaultAsync()
@@ -58,14 +54,14 @@ namespace Apex.Services.Emails
                 MemoryCacheKeys.DefaultEmailAccountKey,
                 () =>
                 {
-                    return EmailAccounts.AsNoTracking()
+                    return Table<EmailAccount>().AsNoTracking()
                         .FirstOrDefaultAsync(ea => ea.IsDefaultEmailAccount);
                 });
         }
 
         public async Task<EmailAccount> CreateAsync(EmailAccount entity)
         {
-            await EmailAccounts.AddAsync(entity);
+            await Table<EmailAccount>().AddAsync(entity);
             await CommitAsync();
 
             return entity;
@@ -73,7 +69,7 @@ namespace Apex.Services.Emails
 
         public async Task<int> UpdateAsync(EmailAccount entity)
         {
-            EmailAccount updatedEntity = await EmailAccounts.FindAsync(entity.Id);
+            EmailAccount updatedEntity = await Table<EmailAccount>().FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
@@ -97,7 +93,8 @@ namespace Apex.Services.Emails
 
         public async Task<int> DeleteAsync(int id)
         {
-            EmailAccount entity = await EmailAccounts.FindAsync(id);
+            var dbSet = Table<EmailAccount>();
+            EmailAccount entity = await dbSet.FindAsync(id);
 
             if (entity == null)
             {
@@ -106,46 +103,26 @@ namespace Apex.Services.Emails
                     ApiErrorCode.NotFound);
             }
 
-            EmailAccounts.Remove(entity);
+            dbSet.Remove(entity);
 
             return await CommitAsync();
         }
 
         public async Task<int> DeleteAsync(int[] ids)
         {
-            var dbSet = EmailAccounts;
-            var emailAccounts = dbSet.Where(l => ids.Contains(l.Id));
+            var dbSet = Table<EmailAccount>();
+            var entities = dbSet.Where(l => ids.Contains(l.Id));
 
-            if (!emailAccounts.Any())
+            if (!entities.Any())
             {
                 throw new ApiException(
                     $"EmailAccounts not found. Ids = {string.Join(",", ids)}",
                     ApiErrorCode.NotFound);
             }
 
-            dbSet.RemoveRange(emailAccounts);
+            dbSet.RemoveRange(entities);
 
             return await CommitAsync();
-        }
-
-        private DbSet<EmailAccount> EmailAccounts
-        {
-            get
-            {
-                return _dbContext.Set<EmailAccount>();
-            }
-        }
-
-        private IEnumerable<EmailAccount> GetPagedEmailAccounts(
-            IQueryable<EmailAccount> emailAccounts,
-            string sortColumnName,
-            SortDirection sortDirection)
-        {
-            PropertyInfo property = GetProperty<EmailAccount>(sortColumnName);
-
-            return sortDirection == SortDirection.Ascending ?
-                emailAccounts.OrderBy(property.GetValue) :
-                emailAccounts.OrderByDescending(property.GetValue);
         }
     }
 }

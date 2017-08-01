@@ -44,14 +44,18 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
-            if (ids != null && ids.Length > 0)
-            {
-                var effectedRows = await _logService.DeleteAsync(ids);
+            int idsCount = ids != null ? ids.Length : 0;
 
-                return Ok(effectedRows);
+            if (idsCount == 0)
+            {
+                return BadRequestApiError("LogId", "'Log Ids' should not be empty.");
             }
 
-            return BadRequestApiError("LogId", "'Log Ids' should not be empty.");
+            int effectedRows = idsCount == 1 ?
+                await _logService.DeleteAsync(ids[0]) :
+                await _logService.DeleteAsync(ids);
+
+            return Ok(effectedRows);
         }
 
         [NonAction]

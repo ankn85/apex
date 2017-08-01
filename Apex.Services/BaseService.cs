@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Apex.Data;
+using Apex.Data.Entities;
+using Apex.Services.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Apex.Services
 {
@@ -20,12 +24,44 @@ namespace Apex.Services
             return await _dbContext.SaveChangesAsync();
         }
 
-        protected PropertyInfo GetProperty<T>(string name) where T : class
+        protected DbSet<T> Table<T>() where T : BaseEntity
         {
-            PropertyInfo[] properties = typeof(T).GetProperties();
+            return _dbContext.Set<T>();
+        }
 
-            return properties.FirstOrDefault(p =>
-                p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        protected IEnumerable<T> GetSortList<T>(
+            IQueryable<T> source,
+            string sortColumnName,
+            SortDirection sortDirection) where T : class
+        {
+            PropertyInfo property = GetProperty<T>(sortColumnName);
+
+            if (property == null)
+            {
+                return source;
+            }
+
+            return sortDirection == SortDirection.Ascending ?
+                source.OrderBy(property.GetValue) :
+                source.OrderByDescending(property.GetValue);
+        }
+
+        protected IEnumerable<T> GetSortAndPagedList<T>(
+            IQueryable<T> source,
+            string sortColumnName,
+            SortDirection sortDirection,
+            int page,
+            int size) where T : class
+        {
+            return GetSortList(source, sortColumnName, sortDirection)
+                .Skip(page)
+                .Take(size);
+        }
+
+        private PropertyInfo GetProperty<T>(string name) where T : class
+        {
+            return typeof(T).GetProperties()
+                .FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

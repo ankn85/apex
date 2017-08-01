@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Account";
+
+    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
+        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new CrumbViewModel("Account", string.Empty, "fa-users")
+    });
+}
+@section styles {
+    <link rel="stylesheet" href="~/assets/styles/admin/plugins.min.css">
+    <link rel="stylesheet" href="~/assets/styles/admin/datatables.min.css">
+}
+@section scripts {
+    <script type="text/javascript">
+        var resources = {
+            email: "Email",
+            name: "Name",
+            roles: "Roles",
+            emailConfirmed: "Email Confirmed",
+            locked: "Locked",
+            accessFailedCount: "Access Failed Count",
+            twoFactorEnabled: "Two Factor Enabled",
+            phoneNumberConfirmed: "Phone Number Confirmed",
+            phoneNumber: "Phone Number"
+        };
+    </script>
+    <script src="~/assets/scripts/admin/plugins.min.js" asp-append-version="true"></script>
+    <script src="~/assets/scripts/admin/datatables.min.js" asp-append-version="true"></script>
+    <script src="~/assets/scripts/admin/account.list.min.js" asp-append-version="true"></script>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <form class="form-horizontal" action="javascript:;">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email" class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-9">
+                                <input id="email" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="roles" class="col-sm-3 control-label">Roles</label>
+                            <div class="col-sm-9">
+                                <select id="roles" class="form-control" multiple="multiple"
+                                        asp-items="@((IEnumerable<SelectListItem>)ViewData["Roles"])"></select>
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="locked"> Locked
+                                    </label>
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button type="button" class="btn btn-flat btn-primary" id="btnSearch">
+                                    <i class="fa fa-search"></i> Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="box-body">
+                <table id="jDataTable" class="table table-hover" width="100%"></table>
+            </div>
+        </div>
+    </div>
+</div>

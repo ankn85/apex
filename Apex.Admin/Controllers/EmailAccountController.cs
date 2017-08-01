@@ -53,7 +53,7 @@ namespace Apex.Admin.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            EmailAccount entity = await _emailAccountService.GetAsync(id);
+            EmailAccount entity = await _emailAccountService.FindAsync(id);
 
             if (entity == null)
             {
@@ -82,14 +82,18 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
-            if (ids != null && ids.Length > 0)
-            {
-                var effectedRows = await _emailAccountService.DeleteAsync(ids);
+            int idsCount = ids != null ? ids.Length : 0;
 
-                return Ok(effectedRows);
+            if (idsCount == 0)
+            {
+                return BadRequestApiError("EmailAccountId", "'EmailAccount Ids' should not be empty.");
             }
 
-            return BadRequestApiError("EmailAccountId", "'EmailAccount Ids' should not be empty.");
+            int effectedRows = idsCount == 1 ?
+                await _emailAccountService.DeleteAsync(ids[0]) :
+                await _emailAccountService.DeleteAsync(ids);
+
+            return Ok(effectedRows);
         }
 
         [NonAction]

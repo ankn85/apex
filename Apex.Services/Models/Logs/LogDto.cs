@@ -1,7 +1,7 @@
 ﻿using System;
 using Apex.Services.Extensions;
 
-namespace Apex.Services.Logs
+namespace Apex.Services.Models.Logs
 {
     public sealed class LogDto
     {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Text;
+using Apex.Admin.Controllers;
+using Apex.Admin.Extensions;
 using Apex.Services.Enums;
 using Apex.Services.Models;
 using Microsoft.AspNetCore.Http;
@@ -29,14 +31,24 @@ namespace Apex.Admin.Filters
             Exception exception = context.Exception;
             AssignGlobalParameters(exception);
 
-            WriteLog(context.HttpContext, exception, (int)_statusCode);
+            HttpContext httpContext = context.HttpContext;
+            WriteLog(httpContext, exception, (int)_statusCode);
 
-            HttpResponse response = context.HttpContext.Response;
+            HttpResponse response = httpContext.Response;
             response.StatusCode = (int)_statusCode;
-            response.ContentType = "application/json";
 
             context.ExceptionHandled = true;
-            context.Result = new JsonResult(new ApiError(_errorCode, _errorMessage));
+
+            if (httpContext.Request.IsAjaxRequest())
+            {
+                response.ContentType = "application/json";
+                context.Result = new JsonResult(new ApiError(_errorCode, _errorMessage));
+            }
+            else
+            {
+                response.ContentType = "text/HTML";
+                context.Result = new RedirectToActionResult(nameof(ErrorController.InternalServerError), "Error", null);
+            }
         }
 
         private void AssignGlobalParameters(Exception exception)

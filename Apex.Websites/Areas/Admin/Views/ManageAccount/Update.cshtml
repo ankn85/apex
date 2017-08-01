@@ -1,0 +1,81 @@
+﻿@model Apex.Admin.ViewModels.Accounts.AccountViewModel
+@{
+    ViewData["Title"] = "Account";
+    ViewData["TitleSmall"] = "<a href=\"/admin/manageaccount\"><i class=\"fa fa-arrow-circle-left\"></i> Back to Account list</a>";
+
+    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
+        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new CrumbViewModel("Account", Url.Action("index", "manageaccount"), "fa-users"),
+        new CrumbViewModel("Create", string.Empty, "fa-plus")
+    });
+}
+@section styles {
+    <link rel="stylesheet" href="~/assets/styles/admin/plugins.min.css">
+}
+@section scripts {
+    <script src="~/assets/scripts/admin/plugins.min.js"></script>
+    <script src="~/assets/scripts/admin/jquery.val.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#Roles").select2();
+        });
+    </script>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <form class="form-horizontal" asp-controller="manageaccount" asp-action="create" asp-anti-forgery="true" method="post" novalidate>
+                <div class="box-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <div asp-validation-summary="@ValidationSummary.ModelOnly" class="text-red"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-red"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-red"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Roles" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
+                                <select id="Roles" class="form-control" multiple="multiple"
+                                        asp-items="@((IEnumerable<SelectListItem>)ViewData["Roles"])"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="Locked" /> Locked
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button type="submit" class="btn btn-flat btn-primary">
+                                    <i class="fa fa-plus"></i> Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

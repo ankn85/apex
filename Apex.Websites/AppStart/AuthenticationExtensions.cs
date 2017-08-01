@@ -36,7 +36,7 @@ namespace Apex.Websites.AppStart
                 LockoutOptions lockoutOpts = opts.Lockout;
                 lockoutOpts.AllowedForNewUsers = true;
                 lockoutOpts.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                lockoutOpts.MaxFailedAccessAttempts = 5;
+                lockoutOpts.MaxFailedAccessAttempts = ValidationRules.MaxFailedAccessAttemptsToLockout;
 
                 // Cookie settings.
                 var cookieOpts = opts.Cookies.ApplicationCookie;

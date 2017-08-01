@@ -11,6 +11,7 @@ namespace Apex.Admin.ViewModels.Emails
         [Required, EmailAddress]
         public string Email { get; set; }
 
+        [Display(Name = "Display Name")]
         public string DisplayName { get; set; }
 
         [Required]

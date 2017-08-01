@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Apex.Data;
 using Apex.Data.Entities.Logs;
@@ -9,6 +7,7 @@ using Apex.Data.Paginations;
 using Apex.Services.Enums;
 using Apex.Services.Extensions;
 using Apex.Services.Models;
+using Apex.Services.Models.Logs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Apex.Services.Logs
@@ -22,7 +21,7 @@ namespace Apex.Services.Logs
 
         public async Task<Log> FindAsync(int id)
         {
-            return await Logs.FindAsync(id);
+            return await Table<Log>().FindAsync(id);
         }
 
         public async Task<IPagedList<LogDto>> GetListAsync(
@@ -34,87 +33,92 @@ namespace Apex.Services.Logs
             int page,
             int size)
         {
-            int totalRecords = await Logs.CountAsync();
+            var query = Table<Log>().AsNoTracking();
+            int totalRecords = await query.CountAsync();
 
             if (totalRecords == 0)
             {
-                return new PagedList<LogDto>(page, size);
+                return PagedList<LogDto>.Empty();
             }
 
-            var filterLogs = GetFilterLogs(fromDate, toDate, level);
-            int totalRecordsFiltered = await filterLogs.CountAsync();
+            query = GetFilterList(query, fromDate, toDate, level);
+            int totalRecordsFiltered = await query.CountAsync();
 
             if (totalRecordsFiltered == 0)
             {
-                return new PagedList<LogDto>(totalRecords, page, size);
+                return PagedList<LogDto>.Empty(totalRecords);
             }
 
-            return new PagedList<LogDto>(
-                GetSortAndPagedLogs(filterLogs, sortColumnName, sortDirection, page, size),
+            return PagedList<LogDto>.Create(
+                GetSortAndPagedList(query, sortColumnName, sortDirection, page, size).Select(l => ToLogDto(l)),
                 totalRecords,
-                totalRecordsFiltered,
-                page,
-                size);
+                totalRecordsFiltered);
+        }
+
+        public async Task<int> DeleteAsync(int id)
+        {
+            var dbSet = Table<Log>();
+            Log entity = await dbSet.FindAsync(id);
+
+            if (entity == null)
+            {
+                throw new ApiException(
+                    $"{nameof(Log)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
+            }
+
+            dbSet.Remove(entity);
+
+            return await CommitAsync();
         }
 
         public async Task<int> DeleteAsync(int[] ids)
         {
-            var dbSet = Logs;
-            var logs = dbSet.Where(l => ids.Contains(l.Id));
+            var dbSet = Table<Log>();
+            var entities = dbSet.Where(l => ids.Contains(l.Id));
 
-            if (!logs.Any())
+            if (!entities.Any())
             {
                 throw new ApiException(
                     $"Logs not found. Ids = {string.Join(",", ids)}",
                     ApiErrorCode.NotFound);
             }
 
-            dbSet.RemoveRange(logs);
+            dbSet.RemoveRange(entities);
 
             return await CommitAsync();
         }
 
-        private DbSet<Log> Logs
-        {
-            get
-            {
-                return _dbContext.Set<Log>();
-            }
-        }
-
-        private IQueryable<Log> GetFilterLogs(DateTime fromDate, DateTime toDate, string level)
+        private IQueryable<Log> GetFilterList(
+            IQueryable<Log> source,
+            DateTime fromDate,
+            DateTime toDate,
+            string level)
         {
             DateTime startDate = fromDate.StartOfDay();
             DateTime endDate = toDate.EndOfDay();
 
-            var logs = Logs.AsNoTracking()
-                .Where(l => startDate <= l.Logged && l.Logged <= endDate);
+            source = source.Where(l => startDate <= l.Logged && l.Logged <= endDate);
 
             if (!string.IsNullOrEmpty(level))
             {
-                logs = logs.Where(l => l.Level.Equals(level, StringComparison.OrdinalIgnoreCase));
+                source = source.Where(l => l.Level.Equals(level, StringComparison.OrdinalIgnoreCase));
             }
 
-            return logs;
+            return source;
         }
 
-        private IEnumerable<LogDto> GetSortAndPagedLogs(
-            IQueryable<Log> logs,
-            string sortColumnName,
-            SortDirection sortDirection,
-            int page,
-            int size)
+        private LogDto ToLogDto(Log entity)
         {
-            PropertyInfo property = GetProperty<Log>(sortColumnName);
-
-            var sortLogs = sortDirection == SortDirection.Ascending ?
-                logs.OrderBy(property.GetValue) :
-                logs.OrderByDescending(property.GetValue);
-
-            return sortLogs
-                .Skip(page)
-                .Take(size)
-                .Select(l => new LogDto(l.Id, l.Application, l.Logged, l.Level, l.Message, l.Logger, l.Callsite, l.Exception));
+            return new LogDto(
+                entity.Id,
+                entity.Application,
+                entity.Logged,
+                entity.Level,
+                entity.Message,
+                entity.Logger,
+                entity.Callsite,
+                entity.Exception);
         }
     }
 }

@@ -1,29 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Apex.Data.Paginations
 {
     public sealed class PagedList<T> : List<T>, IPagedList<T>
     {
-        public PagedList(int page, int size)
-            : this(Enumerable.Empty<T>(), 0, 0, page, size)
+        private PagedList(IEnumerable<T> source, int totalRecords, int totalRecordsFiltered)
         {
-        }
-
-        public PagedList(int totalRecords, int page, int size)
-            : this(Enumerable.Empty<T>(), totalRecords, 0, page, size)
-        {
-        }
-
-        public PagedList(IEnumerable<T> source, int totalRecords, int totalRecordsFiltered, int page, int size)
-        {
-            Page = page;
-            Size = size;
+            //Page = page;
+            //Size = size;
             TotalRecords = totalRecords;
             TotalRecordsFiltered = totalRecordsFiltered;
 
-            TotalPages = (int)Math.Ceiling(TotalRecords / (double)Size);
+            //TotalPages = (int)Math.Ceiling(TotalRecords / (double)Size);
 
             if (TotalRecordsFiltered > 0)
             {
@@ -31,14 +20,29 @@ namespace Apex.Data.Paginations
             }
         }
 
-        public int Page { get; }
+        //public int Page { get; }
 
-		public int Size { get; }
+		//public int Size { get; }
 
 		public int TotalRecords { get; }
 
         public int TotalRecordsFiltered { get; }
 
-        public int TotalPages { get; }
+        //public int TotalPages { get; }
+
+        public static IPagedList<T> Empty()
+        {
+            return new PagedList<T>(Enumerable.Empty<T>(), 0, 0);
+        }
+
+        public static IPagedList<T> Empty(int totalRecords)
+        {
+            return new PagedList<T>(Enumerable.Empty<T>(), totalRecords, 0);
+        }
+
+        public static IPagedList<T> Create(IEnumerable<T> source, int totalRecords, int totalRecordsFiltered)
+        {
+            return new PagedList<T>(source, totalRecords, totalRecordsFiltered);
+        }
     }
 }

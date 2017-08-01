@@ -17,13 +17,11 @@
     }
 
     function initialize() {
-        var $level = $("#level");
-
         var drOptions = { startDate: "-3m", endDate: "0d" };
         var drWrapper = new DatePickerWrapper(drOptions, "#fromDate", "#toDate");
         drWrapper.render();
 
-        $level.select2({
+        var $level = $("#level").select2({
             minimumResultsForSearch: Infinity
         });
 
