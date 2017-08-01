@@ -79,7 +79,9 @@ namespace Apex.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            AccountViewModel model = ParseAccountViewModel(entity);
 
+            return View(model);
         }
 
         [HttpPost]
