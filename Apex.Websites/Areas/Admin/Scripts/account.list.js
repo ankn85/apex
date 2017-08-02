@@ -6,7 +6,11 @@
     }
 
     function renderLocked(data, type, full, meta) {
-        return utils.renderStatusCell(data);
+        if (data) {
+            return '<span class="label label-danger">Locked</span>';
+        }
+
+        return '<span class="label label-success">Active</span>';
     }
 
     function detailFunction(data) {
@@ -17,19 +21,24 @@
             data.accessFailedCount,
             "</p>",
             '<p class="border-top"><span class="text-bold">',
-            resources.twoFactorEnabled,
+            resources.gender,
             ":</span> ",
-            data.twoFactorEnabled,
+            data.gender,
             "</p>",
             '<p class="border-top"><span class="text-bold">',
-            resources.phoneNumberConfirmed,
+            resources.birthday,
             ":</span> ",
-            data.phoneNumberConfirmed,
+            data.birthday,
             "</p>",
             '<p class="border-top"><span class="text-bold">',
             resources.phoneNumber,
             ":</span> ",
             data.phoneNumber,
+            "</p>",
+            '<p class="border-top"><span class="text-bold">',
+            resources.address,
+            ":</span> ",
+            data.address,
             "</p>"
         ].join("");
     }
@@ -48,10 +57,10 @@
             },
             columns: [
                 { title: resources.email, data: "email", orderable: true, searchable: false },
-                { title: resources.name, data: "name", orderable: false, searchable: false },
+                { title: resources.fullName, data: "fullName", orderable: false, searchable: false },
                 { title: resources.roles, data: "roles", orderable: false, searchable: false },
                 { title: resources.emailConfirmed, data: "emailConfirmed", orderable: false, searchable: false, render: renderEmailConfirmed, className: "text-center" },
-                { title: resources.locked, data: "locked", orderable: false, searchable: false, render: renderLocked, className: "text-center" }
+                { title: resources.status, data: "locked", orderable: false, searchable: false, render: renderLocked, className: "text-center" }
             ],
             order: [[1, "asc"]]
         };

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Apex.Admin.ViewModels.Accounts;
 using Apex.Admin.ViewModels.DataTables;
 using Apex.Data.Entities.Accounts;
 using Apex.Services.Accounts;
+using Apex.Services.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,7 +28,7 @@ namespace Apex.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await PopularRoleIds();
+            await PopularRoles(false);
 
             return View();
         }
@@ -49,7 +51,7 @@ namespace Apex.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-            await PopularRoleNames();
+            await PopularRoles();
 
             return View(new AccountViewModel());
         }
@@ -70,7 +72,7 @@ namespace Apex.Admin.Controllers
                 AddErrorsToModelState(result);
             }
 
-            await PopularRoleNames();
+            await PopularRoles();
 
             return View(model);
         }
@@ -84,7 +86,10 @@ namespace Apex.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            AccountViewModel model = ParseAccountViewModel(entity);
+            IList<string> roleNames = await _accountService.GetRolesAsync(entity);
+            AccountViewModel model = ParseAccountViewModel(entity, roleNames);
+
+            await PopularRoles();
 
             return View(model);
         }
@@ -116,19 +121,15 @@ namespace Apex.Admin.Controllers
         }
 
         [NonAction]
-        private async Task PopularRoleIds()
+        private async Task PopularRoles(bool valueIsName = true)
         {
             var roles = await _roleService.GetListAsync();
 
-            ViewData["Roles"] = roles.Select(r => new SelectListItem { Value = r.Id.ToString(), Text = r.Name });
-        }
+            IEnumerable<SelectListItem> selectListItems = valueIsName
+                ? roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name })
+                : roles.Select(r => new SelectListItem { Value = r.Id.ToString(), Text = r.Name });
 
-        [NonAction]
-        private async Task PopularRoleNames()
-        {
-            var roles = await _roleService.GetListAsync();
-
-            ViewData["Roles"] = roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name });
+            ViewData["Roles"] = selectListItems;
         }
 
         [NonAction]
@@ -150,18 +151,30 @@ namespace Apex.Admin.Controllers
                 Id = model.Id,
                 UserName = email,
                 Email = email,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName = model.FullName.Trim(),
+                Gender = model.Gender.TrimNull(),
+                Birthday = model.Birthday,
+                PhoneNumber = model.PhoneNumber.TrimNull(),
+                Address = model.Address.TrimNull()
             };
         }
 
         [NonAction]
-        private AccountViewModel ParseAccountViewModel(ApplicationUser entity)
+        private AccountViewModel ParseAccountViewModel(ApplicationUser entity, IList<string> roleNames)
         {
             return new AccountViewModel
             {
                 Id = entity.Id,
                 Email = entity.Email,
-                Locked = entity.LockoutEnd != null && entity.LockoutEnd.Value > DateTimeOffset.UtcNow
+                Password = string.Empty,
+                FullName = entity.FullName,
+                Gender = entity.Gender,
+                Birthday = entity.Birthday,
+                PhoneNumber = entity.PhoneNumber,
+                Address = entity.Address,
+                Locked = entity.LockoutEnd != null && entity.LockoutEnd.Value > DateTimeOffset.UtcNow,
+                Roles = roleNames
             };
         }
     }

@@ -33,7 +33,7 @@ namespace Apex.Services.Accounts
 
         public async Task<IPagedList<ApplicationUserDto>> GetListAsync(
             string email,
-            int[] roleIds,
+            IList<int> roleIds,
             string sortColumnName,
             SortDirection sortDirection,
             int page,
@@ -63,7 +63,12 @@ namespace Apex.Services.Accounts
                 totalRecordsFiltered);
         }
 
-        public async Task<IdentityResult> CreateAsync(ApplicationUser entity, string password, bool locked, string[] roleNames)
+        public async Task<IList<string>> GetRolesAsync(ApplicationUser entity)
+        {
+            return await _userManager.GetRolesAsync(entity);
+        }
+
+        public async Task<IdentityResult> CreateAsync(ApplicationUser entity, string password, bool locked, IList<string> roleNames)
         {
             var result = await _userManager.CreateAsync(entity, password);
 
@@ -74,7 +79,7 @@ namespace Apex.Services.Accounts
                 result = await LockAccount(lockedEntity);
             }
 
-            if (result.Succeeded && roleNames != null && roleNames.Length != 0)
+            if (result.Succeeded && roleNames != null && roleNames.Count != 0)
             {
                 result = await _userManager.AddToRolesAsync(entity, roleNames);
             }
@@ -82,7 +87,7 @@ namespace Apex.Services.Accounts
             return result;
         }
 
-        public async Task<IdentityResult> UpdateAsync(ApplicationUser entity, bool locked, string[] roleNames)
+        public async Task<IdentityResult> UpdateAsync(ApplicationUser entity, bool locked, IList<string> roleNames)
         {
             ApplicationUser updatedEntity = await _userManager.FindByIdAsync(entity.Id.ToString());
 
@@ -93,7 +98,14 @@ namespace Apex.Services.Accounts
                     ApiErrorCode.NotFound);
             }
 
-            IdentityResult result;
+            updatedEntity.FullName = entity.FullName;
+            updatedEntity.Gender = entity.Gender;
+            updatedEntity.Birthday = entity.Birthday;
+            updatedEntity.PhoneNumber = entity.PhoneNumber;
+            updatedEntity.Address = entity.Address;
+
+            IdentityResult result = await _userManager.UpdateAsync(updatedEntity);
+
             var isLockedOut = await _userManager.IsLockedOutAsync(updatedEntity);
 
             if (locked && !isLockedOut)
@@ -108,7 +120,7 @@ namespace Apex.Services.Accounts
             // Assign Roles.
             var currentRoles = await _userManager.GetRolesAsync(updatedEntity);
             
-            if (roleNames == null || roleNames.Length == 0)
+            if (roleNames == null || roleNames.Count == 0)
             {
                 result = await _userManager.RemoveFromRolesAsync(updatedEntity, currentRoles);
             }
@@ -173,7 +185,7 @@ namespace Apex.Services.Accounts
         private IQueryable<ApplicationUser> GetFilterList(
             IQueryable<ApplicationUser> source,
             string email,
-            int[] roleIds)
+            IList<int> roleIds)
         {
             source = source.Include(u => u.Roles);
 
@@ -184,7 +196,7 @@ namespace Apex.Services.Accounts
                 source = source.Where(u => u.NormalizedEmail.Contains(email));
             }
 
-            if (roleIds != null && roleIds.Length > 0)
+            if (roleIds != null && roleIds.Count > 0)
             {
                 source = source.Where(u => u.Roles.Any(r => roleIds.Contains(r.RoleId)));
             }
@@ -221,15 +233,16 @@ namespace Apex.Services.Accounts
             return new ApplicationUserDto(
                 entity.Id,
                 entity.Email,
-                string.Empty,
-                entity.Roles.Select(r => r.RoleId),
                 entity.EmailConfirmed,
+                entity.AccessFailedCount,
+                entity.Roles.Select(r => r.RoleId),
                 entity.LockoutEnabled,
                 entity.LockoutEnd,
-                entity.AccessFailedCount,
-                entity.TwoFactorEnabled,
-                entity.PhoneNumberConfirmed,
+                entity.FullName,
+                entity.Gender,
+                entity.Birthday,
                 entity.PhoneNumber,
+                entity.Address,
                 roleHash);
         }
 

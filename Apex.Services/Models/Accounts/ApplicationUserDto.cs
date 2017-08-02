@@ -9,22 +9,23 @@ namespace Apex.Services.Models.Accounts
         public ApplicationUserDto(
             int id,
             string email,
-            string name,
-            IEnumerable<int> roles,
             bool emailConfirmed,
+            int accessFailedCount,
+            IEnumerable<int> roles,
             bool lockoutEnabled,
             DateTimeOffset? lockoutEnd,
-            int accessFailedCount,
-            bool twoFactorEnabled,
-            bool phoneNumberConfirmed,
+            string fullName,
+            string gender,
+            DateTime? birthday,
             string phoneNumber,
+            string address,
             IDictionary<int, string> roleHash)
         {
             Id = id;
             Email = email;
-            Name = name;
-            Roles = string.Join(", ", roles.Select(r => roleHash[r]));
             EmailConfirmed = emailConfirmed;
+            AccessFailedCount = accessFailedCount;
+            Roles = string.Join(", ", roles.Select(r => roleHash[r]));
 
             if (lockoutEnabled && lockoutEnd.HasValue)
             {
@@ -35,30 +36,33 @@ namespace Apex.Services.Models.Accounts
                 Locked = false;
             }
 
-            AccessFailedCount = accessFailedCount;
-            TwoFactorEnabled = twoFactorEnabled;
-            PhoneNumberConfirmed = phoneNumberConfirmed;
+            FullName = fullName;
+            Gender = gender;
+            Birthday = birthday;
             PhoneNumber = phoneNumber;
+            Address = address;
         }
 
         public int Id { get; set; }
 
         public string Email { get; }
 
-        public string Name { get; }
-
-        public string Roles { get; }
-
         public bool EmailConfirmed { get; }
-
-        public bool Locked { get; }
 
         public int AccessFailedCount { get; }
 
-        public bool TwoFactorEnabled { get; }
+        public string Roles { get; }
 
-        public bool PhoneNumberConfirmed { get; }
+        public bool Locked { get; }
+
+        public string FullName { get; }
+
+        public string Gender { get; }
+
+        public DateTime? Birthday { get; }
 
         public string PhoneNumber { get; }
+
+        public string Address { get; set; }
     }
 }

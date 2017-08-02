@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Apex.Data.Entities.Logs;
 using Apex.Data.Paginations;
@@ -13,8 +14,8 @@ namespace Apex.Services.Logs
 
         Task<IPagedList<LogDto>> GetListAsync(
             DateTime fromDate, 
-            DateTime toDate, 
-            string level,
+            DateTime toDate,
+            IList<string> levels,
             string sortColumnName,
             SortDirection sortDirection,
             int page, 

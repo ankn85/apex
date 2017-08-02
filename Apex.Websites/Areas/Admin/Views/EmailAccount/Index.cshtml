@@ -11,26 +11,22 @@
 }
 @section scripts {
     <script type="text/javascript">
-            var resources = {
-                email: "Email",
-                displayName: "Display Name",
-                enableSsl: "EnableSsl",
-                useDefaultCredentials: "Use Default Credentials",
-                defaultEmailAccount: "Default Email Account",
-                host: "Host",
-                port: "Port",
-                userName: "User Name"
-            };
+        var resources = {
+            email: "Email",
+            displayName: "Display Name",
+            enableSsl: "EnableSsl",
+            useDefaultCredentials: "Use Default Credentials",
+            defaultEmailAccount: "Default Email Account",
+            host: "Host",
+            port: "Port",
+            userName: "User Name"
+        };
     </script>
     <script src="~/assets/scripts/admin/datatables.min.js" asp-append-version="true"></script>
     <script src="~/assets/scripts/admin/emailAccount.list.min.js" asp-append-version="true"></script>
 }
-<div class="row">
-    <div class="col-md-12">
-        <div class="box box-solid">
-            <div class="box-body">
-                <table id="jDataTable" class="table table-hover" width="100%"></table>
-            </div>
-        </div>
+<div class="box box-solid">
+    <div class="box-body">
+        <table id="jDataTable" class="table table-hover" width="100%"></table>
     </div>
 </div>

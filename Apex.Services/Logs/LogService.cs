@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Apex.Data;
@@ -27,7 +28,7 @@ namespace Apex.Services.Logs
         public async Task<IPagedList<LogDto>> GetListAsync(
             DateTime fromDate,
             DateTime toDate,
-            string level,
+            IList<string> levels,
             string sortColumnName,
             SortDirection sortDirection,
             int page,
@@ -41,7 +42,7 @@ namespace Apex.Services.Logs
                 return PagedList<LogDto>.Empty();
             }
 
-            query = GetFilterList(query, fromDate, toDate, level);
+            query = GetFilterList(query, fromDate, toDate, levels);
             int totalRecordsFiltered = await query.CountAsync();
 
             if (totalRecordsFiltered == 0)
@@ -93,16 +94,16 @@ namespace Apex.Services.Logs
             IQueryable<Log> source,
             DateTime fromDate,
             DateTime toDate,
-            string level)
+            IList<string> levels)
         {
             DateTime startDate = fromDate.StartOfDay();
             DateTime endDate = toDate.EndOfDay();
 
             source = source.Where(l => startDate <= l.Logged && l.Logged <= endDate);
 
-            if (!string.IsNullOrEmpty(level))
+            if (levels != null && levels.Count > 0)
             {
-                source = source.Where(l => l.Level.Equals(level, StringComparison.OrdinalIgnoreCase));
+                source = source.Where(l => levels.Contains(l.Level));
             }
 
             return source;

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Apex.Data.Entities.Accounts;
 using Apex.Data.Paginations;
 using Apex.Services.Enums;
@@ -13,15 +15,17 @@ namespace Apex.Services.Accounts
 
         Task<IPagedList<ApplicationUserDto>> GetListAsync(
             string email,
-            int[] roleIds,
+            IList<int> roleIds,
             string sortColumnName,
             SortDirection sortDirection,
             int page,
             int size);
 
-        Task<IdentityResult> CreateAsync(ApplicationUser entity, string password, bool locked, string[] roleNames);
+        Task<IList<string>> GetRolesAsync(ApplicationUser entity);
 
-        Task<IdentityResult> UpdateAsync(ApplicationUser entity, bool locked, string[] roleNames);
+        Task<IdentityResult> CreateAsync(ApplicationUser entity, string password, bool locked, IList<string> roleNames);
+
+        Task<IdentityResult> UpdateAsync(ApplicationUser entity, bool locked, IList<string> roleNames);
 
         Task<IdentityResult> DeleteAsync(int id);
     }

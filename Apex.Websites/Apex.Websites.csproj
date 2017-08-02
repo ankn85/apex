@@ -6,6 +6,7 @@
 
   <PropertyGroup>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
+    <UserSecretsId>875cf20c-c157-4023-8020-4406fba5034e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,9 +46,12 @@
     <Folder Include="Logs\" />
     <Folder Include="Logs\" />
     <Folder Include="Logs\" />
+    <Folder Include="wwwroot\assets\lib\" />
     <Folder Include="wwwroot\assets\scripts\admin\" />
     <Folder Include="wwwroot\assets\scripts\admin\" />
     <Folder Include="wwwroot\assets\scripts\admin\" />
+    <Folder Include="wwwroot\assets\scripts\admin\" />
+    <Folder Include="wwwroot\assets\styles\admin\" />
     <Folder Include="wwwroot\assets\styles\admin\" />
     <Folder Include="wwwroot\assets\styles\admin\" />
   </ItemGroup>

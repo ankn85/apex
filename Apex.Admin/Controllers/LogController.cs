@@ -32,7 +32,7 @@ namespace Apex.Admin.Controllers
             var logs = await _logService.GetListAsync(
                 model.FromDate,
                 model.ToDate,
-                model.Level,
+                model.Levels,
                 model.SortColumnName,
                 model.SortDirection,
                 model.Start,
@@ -63,7 +63,6 @@ namespace Apex.Admin.Controllers
         {
             IEnumerable<SelectListItem> models = new List<SelectListItem>
             {
-                new SelectListItem { Value = string.Empty, Text = "All", Selected = true },
                 new SelectListItem { Value = "Fatal", Text = "Fatal" },
                 new SelectListItem { Value = "Error", Text = "Error" },
                 new SelectListItem { Value = "Warn", Text = "Warn" },
@@ -72,7 +71,7 @@ namespace Apex.Admin.Controllers
                 new SelectListItem { Value = "Trace", Text = "Trace" }
             };
 
-            ViewData["LogLevels"] = models;
+            ViewData["Levels"] = models;
         }
     }
 }

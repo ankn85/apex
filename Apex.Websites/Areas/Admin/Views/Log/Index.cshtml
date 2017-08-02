@@ -28,53 +28,50 @@
     <script src="~/assets/scripts/admin/datatables.min.js" asp-append-version="true"></script>
     <script src="~/assets/scripts/admin/log.list.min.js" asp-append-version="true"></script>
 }
-<div class="row">
-    <div class="col-md-12">
-        <div class="box box-solid">
-            <div class="box-header with-border">
-                <form class="form-horizontal" action="javascript:;">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="fromDate" class="col-sm-3 control-label">From Date</label>
-                            <div class="col-sm-9">
-                                <div class="input-group date" id="fromDate">
-                                    <input type="text" class="form-control" value="@current.AddDays(-7).ToDateString()" />
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="toDate" class="col-sm-3 control-label">To Date</label>
-                            <div class="col-sm-9">
-                                <div class="input-group date" id="toDate">
-                                    <input type="text" class="form-control" value="@current.ToDateString()" />
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="level" class="col-sm-3 control-label">Level</label>
-                            <div class="col-sm-9">
-                                <select class="form-control"
-                                        id="level" asp-items="@((IEnumerable<SelectListItem>)ViewData["LogLevels"])"></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-9">
-                                <button type="button" class="btn btn-flat btn-primary" id="btnSearch">
-                                    <i class="fa fa-search"></i> Search</button>
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <form class="form-horizontal" action="javascript:;">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="fromDate" class="col-sm-3 control-label">From Date</label>
+                    <div class="col-sm-9">
+                        <div class="input-group date" id="fromDate">
+                            <input type="text" class="form-control" value="@current.AddDays(-7).ToDateString()" />
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="form-group">
+                    <label for="toDate" class="col-sm-3 control-label">To Date</label>
+                    <div class="col-sm-9">
+                        <div class="input-group date" id="toDate">
+                            <input type="text" class="form-control" value="@current.ToDateString()" />
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="levels" class="col-sm-3 control-label">Levels</label>
+                    <div class="col-sm-9">
+                        <select id="levels" class="form-control" multiple="multiple" style="width: 100%"
+                                asp-items="@((IEnumerable<SelectListItem>)ViewData["Levels"])"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="button" class="btn btn-flat btn-primary" id="btnSearch">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="box-body">
-                <table id="jDataTable" class="table table-hover" width="100%"></table>
-            </div>
-        </div>
+        </form>
+    </div>
+    <div class="box-body">
+        <table id="jDataTable" class="table table-hover" width="100%"></table>
     </div>
 </div>

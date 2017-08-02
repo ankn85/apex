@@ -21,9 +21,7 @@
         var drWrapper = new DatePickerWrapper(drOptions, "#fromDate", "#toDate");
         drWrapper.render();
 
-        var $level = $("#level").select2({
-            minimumResultsForSearch: Infinity
-        });
+        var $levels = $("#levels").select2();
 
         var dtOptions = {
             ajax: {
@@ -31,7 +29,7 @@
                 data: function (data) {
                     data.FromDate = drWrapper.getFromDate();
                     data.ToDate = drWrapper.getToDate();
-                    data.Level = $level.val();
+                    data.Levels = $levels.val();
                 }
             },
             columns: [
