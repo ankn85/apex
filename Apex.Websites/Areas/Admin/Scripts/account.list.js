@@ -16,11 +16,6 @@
     function detailFunction(data) {
         return [
             '<p><span class="text-bold">',
-            resources.accessFailedCount,
-            ":</span> ",
-            data.accessFailedCount,
-            "</p>",
-            '<p class="border-top"><span class="text-bold">',
             resources.gender,
             ":</span> ",
             data.gender,
@@ -39,6 +34,11 @@
             resources.address,
             ":</span> ",
             data.address,
+            "</p>",
+            '<p class="border-top"><span class="text-bold">',
+            resources.accessFailedCount,
+            ":</span> ",
+            data.accessFailedCount,
             "</p>"
         ].join("");
     }

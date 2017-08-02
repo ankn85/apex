@@ -18,11 +18,14 @@
     <script type="text/javascript">
         $(function () {
             $("#Roles").select2();
+            var drOptions = { startDate: "-100y", endDate: "0d" };
+            var drWrapper = new DatePickerWrapper(drOptions, "#birthday");
+            drWrapper.render();
         });
     </script>
 }
 <div class="box box-solid">
-    <form class="form-horizontal" asp-controller="manageaccount" asp-action="create" asp-anti-forgery="true" method="post" novalidate>
+    <form class="form-horizontal" asp-controller="manageaccount" asp-action="update" asp-anti-forgery="true" method="post" novalidate>
         <div class="box-body">
             <div class="col-md-6">
                 <div class="form-group">
@@ -40,12 +43,7 @@
                 <div class="form-group">
                     <label asp-for="Password" class="col-sm-3 control-label"></label>
                     <div class="col-sm-9">
-                        <div class="input-group">
-                            <input asp-for="Password" class="form-control" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-flat btn-primary">Change Password</button>
-                            </span>
-                        </div>
+                        <input asp-for="Password" class="form-control" />
                         <span asp-validation-for="Password" class="text-red"></span>
                     </div>
                 </div>
@@ -54,6 +52,47 @@
                     <div class="col-sm-9">
                         <select asp-for="Roles" class="form-control" multiple="multiple" style="width: 100%"
                                 asp-items="@((IEnumerable<SelectListItem>)ViewData["Roles"])"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FullName" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="FullName" class="form-control" />
+                        <span asp-validation-for="FullName" class="text-red"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Gender" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="radio">
+                            <label><input type="radio" name="Gender" value="Male"> Male</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="Gender" value="Female"> Female</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Birthday" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <div class="input-group date" id="birthday">
+                            <input type="text" class="form-control" name="Birthday" />
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="PhoneNumber" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Address" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
