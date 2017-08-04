@@ -1,46 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Apex.Data.Entities.Accounts;
+using Apex.Services.Enums;
 
 namespace Apex.Services.Models.Accounts
 {
     public sealed class ApplicationUserDto
     {
-        public ApplicationUserDto(
-            int id,
-            string email,
-            bool emailConfirmed,
-            int accessFailedCount,
-            IEnumerable<int> roles,
-            bool lockoutEnabled,
-            DateTimeOffset? lockoutEnd,
-            string fullName,
-            string gender,
-            DateTime? birthday,
-            string phoneNumber,
-            string address,
-            IDictionary<int, string> roleHash)
+        public ApplicationUserDto(ApplicationUser entity, IDictionary<int, string> roleHash)
         {
-            Id = id;
-            Email = email;
-            EmailConfirmed = emailConfirmed;
-            AccessFailedCount = accessFailedCount;
-            Roles = string.Join(", ", roles.Select(r => roleHash[r]));
+            Id = entity.Id;
+            Email = entity.Email;
+            EmailConfirmed = entity.EmailConfirmed;
+            AccessFailedCount = entity.AccessFailedCount;
+            Roles = string.Join(", ", entity.Roles.Select(r => roleHash[r.RoleId]));
 
-            if (lockoutEnabled && lockoutEnd.HasValue)
+            if (entity.LockoutEnabled && entity.LockoutEnd.HasValue)
             {
-                Locked = lockoutEnd.Value >= DateTimeOffset.UtcNow;
+                Locked = entity.LockoutEnd.Value >= DateTimeOffset.UtcNow;
             }
             else
             {
                 Locked = false;
             }
 
-            FullName = fullName;
-            Gender = gender;
-            Birthday = birthday;
-            PhoneNumber = phoneNumber;
-            Address = address;
+            FullName = entity.FullName;
+            Gender = ((Gender)entity.Gender).ToString();
+            Birthday = entity.Birthday;
+            PhoneNumber = entity.PhoneNumber;
+            Address = entity.Address;
         }
 
         public int Id { get; set; }

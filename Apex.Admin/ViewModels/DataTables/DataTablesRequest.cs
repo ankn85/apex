@@ -1,5 +1,5 @@
 ﻿using System;
-using Apex.Services.Enums;
+using Apex.Data.Sorts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 

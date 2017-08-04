@@ -40,7 +40,7 @@
             },
             columns: [
                 { title: resources.email, data: "email", orderable: true, searchable: false },
-                { title: resources.displayName, data: "displayName", orderable: false, searchable: false },
+                { title: resources.displayName, data: "displayName", orderable: false, searchable: false, defaultContent: "" },
                 { title: resources.enableSsl, data: "enableSsl", orderable: false, searchable: false, render: renderEnableSsl, className: "text-center" },
                 { title: resources.useDefaultCredentials, data: "useDefaultCredentials", orderable: false, searchable: false, render: renderUseDefaultCredentials, className: "text-center" },
                 { title: resources.defaultEmailAccount, data: "isDefaultEmailAccount", orderable: false, searchable: false, render: renderDefaultEmailAccount, className: "text-center" }

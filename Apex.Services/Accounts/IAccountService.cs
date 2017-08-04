@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Apex.Data.Entities.Accounts;
 using Apex.Data.Paginations;
-using Apex.Services.Enums;
+using Apex.Data.Sorts;
 using Apex.Services.Models.Accounts;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,8 +14,9 @@ namespace Apex.Services.Accounts
         Task<ApplicationUser> FindAsync(int id);
 
         Task<IPagedList<ApplicationUserDto>> GetListAsync(
+            IQueryable<ApplicationUser> source,
             string email,
-            IList<int> roleIds,
+            int[] roleIds,
             string sortColumnName,
             SortDirection sortDirection,
             int page,
@@ -23,10 +24,6 @@ namespace Apex.Services.Accounts
 
         Task<IList<string>> GetRolesAsync(ApplicationUser entity);
 
-        Task<IdentityResult> CreateAsync(ApplicationUser entity, string password, bool locked, IList<string> roleNames);
-
-        Task<IdentityResult> UpdateAsync(ApplicationUser entity, bool locked, IList<string> roleNames);
-
-        Task<IdentityResult> DeleteAsync(int id);
+        Task<IdentityResult> ResetPasswordAsync(ApplicationUser entity, string password);
     }
 }

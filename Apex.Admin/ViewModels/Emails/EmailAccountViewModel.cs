@@ -1,10 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Apex.Data.Entities.Emails;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Apex.Admin.ViewModels.Emails
 {
     public sealed class EmailAccountViewModel
     {
+        public EmailAccountViewModel()
+        {
+        }
+
+        public EmailAccountViewModel(EmailAccount entity)
+        {
+            Id = entity.Id;
+            Email = entity.Email;
+            DisplayName = entity.DisplayName;
+            Host = entity.Host;
+            Port = entity.Port;
+            UserName = entity.UserName;
+            Password = entity.Password;
+            EnableSsl = entity.EnableSsl;
+            UseDefaultCredentials = entity.UseDefaultCredentials;
+            IsDefaultEmailAccount = entity.IsDefaultEmailAccount;
+        }
+
         [HiddenInput]
         public int Id { get; set; }
 

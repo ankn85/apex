@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Apex.Admin.ViewModels.DataTables;
 using Apex.Admin.ViewModels.Emails;
 using Apex.Data.Entities.Emails;
@@ -53,16 +55,14 @@ namespace Apex.Admin.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            EmailAccount entity = await _emailAccountService.FindAsync(id);
+            EmailAccount entity = await _emailAccountService.FindAsync<EmailAccount>(id);
 
             if (entity == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            EmailAccountViewModel model = ParseEmailAccountViewModel(entity);
-
-            return View("CreateOrUpdate", model);
+            return View("CreateOrUpdate", new EmailAccountViewModel(entity));
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -70,8 +70,15 @@ namespace Apex.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                EmailAccount entity = ParseEmailAccount(model);
-                await _emailAccountService.UpdateAsync(entity);
+                EmailAccount entity = await _emailAccountService.FindAsync<EmailAccount>(model.Id);
+
+                if (entity == null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                entity = ParseEmailAccount(model, entity);
+                await _emailAccountService.CommitAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -82,54 +89,33 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
-            int idsCount = ids != null ? ids.Length : 0;
+            IEnumerable<EmailAccount> entities = await _emailAccountService.FindAsync<EmailAccount>(ids);
 
-            if (idsCount == 0)
+            if (!entities.Any())
             {
-                return BadRequestApiError("EmailAccountId", "'EmailAccount Ids' should not be empty.");
+                return BadRequestApiError("Id", "'EmailAccount Ids' should not be empty.");
             }
 
-            int effectedRows = idsCount == 1 ?
-                await _emailAccountService.DeleteAsync(ids[0]) :
-                await _emailAccountService.DeleteAsync(ids);
+            int effectedRows = await _emailAccountService.DeleteAsync(entities);
 
             return Ok(effectedRows);
         }
 
-        [NonAction]
-        private EmailAccount ParseEmailAccount(EmailAccountViewModel model)
+        private EmailAccount ParseEmailAccount(EmailAccountViewModel model, EmailAccount entity = null)
         {
-            return new EmailAccount
-            {
-                Id = model.Id,
-                Email = model.Email.Trim(),
-                DisplayName = model.DisplayName.TrimNull(),
-                Host = model.Host.Trim(),
-                Port = model.Port,
-                UserName = model.UserName.Trim(),
-                Password = model.Password.Trim(),
-                EnableSsl = model.EnableSsl,
-                UseDefaultCredentials = model.UseDefaultCredentials,
-                IsDefaultEmailAccount = model.IsDefaultEmailAccount
-            };
-        }
+            entity = entity ?? new EmailAccount();
 
-        [NonAction]
-        private EmailAccountViewModel ParseEmailAccountViewModel(EmailAccount entity)
-        {
-            return new EmailAccountViewModel
-            {
-                Id = entity.Id,
-                Email = entity.Email,
-                DisplayName = entity.DisplayName,
-                Host = entity.Host,
-                Port = entity.Port,
-                UserName = entity.UserName,
-                Password = entity.Password,
-                EnableSsl = entity.EnableSsl,
-                UseDefaultCredentials = entity.UseDefaultCredentials,
-                IsDefaultEmailAccount = entity.IsDefaultEmailAccount
-            };
+            entity.Email = model.Email.Trim();
+            entity.DisplayName = model.DisplayName.TrimNull();
+            entity.Host = model.Host.Trim();
+            entity.Port = model.Port;
+            entity.UserName = model.UserName.Trim();
+            entity.Password = model.Password;
+            entity.EnableSsl = model.EnableSsl;
+            entity.UseDefaultCredentials = model.UseDefaultCredentials;
+            entity.IsDefaultEmailAccount = model.IsDefaultEmailAccount;
+
+            return entity;
         }
     }
 }

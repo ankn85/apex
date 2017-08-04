@@ -265,13 +265,11 @@ namespace Apex.Admin.Controllers
 
         #region Helpers
 
-        [NonAction]
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        [NonAction]
         private void AddErrorsToModelState(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -280,7 +278,6 @@ namespace Apex.Admin.Controllers
             }
         }
 
-        [NonAction]
         private IActionResult RedirectToLocal(string returnUrl = null)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -291,7 +288,6 @@ namespace Apex.Admin.Controllers
             return RedirectToAction(nameof(DashboardController.Index), "Dashboard");
         }
 
-        [NonAction]
         private async Task SendEmailAsync(string email, string subject, string message)
         {
             await _queuedEmailService.CreateAsync(email, subject, message);

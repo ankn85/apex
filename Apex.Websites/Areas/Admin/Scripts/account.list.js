@@ -1,10 +1,6 @@
 ﻿(function ($, utils) {
     "use strict";
 
-    function renderEmailConfirmed(data, type, full, meta) {
-        return utils.renderStatusCell(data);
-    }
-
     function renderLocked(data, type, full, meta) {
         if (data) {
             return '<span class="label label-danger">Locked</span>';
@@ -26,14 +22,14 @@
             data.birthday,
             "</p>",
             '<p class="border-top"><span class="text-bold">',
-            resources.phoneNumber,
-            ":</span> ",
-            data.phoneNumber,
-            "</p>",
-            '<p class="border-top"><span class="text-bold">',
             resources.address,
             ":</span> ",
             data.address,
+            "</p>",
+            '<p class="border-top"><span class="text-bold">',
+            resources.emailConfirmed,
+            ":</span> ",
+            data.emailConfirmed,
             "</p>",
             '<p class="border-top"><span class="text-bold">',
             resources.accessFailedCount,
@@ -59,7 +55,7 @@
                 { title: resources.email, data: "email", orderable: true, searchable: false },
                 { title: resources.fullName, data: "fullName", orderable: false, searchable: false },
                 { title: resources.roles, data: "roles", orderable: false, searchable: false },
-                { title: resources.emailConfirmed, data: "emailConfirmed", orderable: false, searchable: false, render: renderEmailConfirmed, className: "text-center" },
+                { title: resources.phoneNumber, data: "phoneNumber", orderable: false, searchable: false, defaultContent: "" },
                 { title: resources.status, data: "locked", orderable: false, searchable: false, render: renderLocked, className: "text-center" }
             ],
             order: [[1, "asc"]]

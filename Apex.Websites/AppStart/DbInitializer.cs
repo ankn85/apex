@@ -56,10 +56,7 @@ namespace Apex.Websites.AppStart
                     UserName = email,
                     Email = email,
                     EmailConfirmed = true,
-                    FullName = "Logan Weapon X",
-                    Gender = "Male",
-                    Birthday = new DateTime(1974, 11, 1),
-                    Address = "Marvel Comics"
+                    FullName = "System Administrator"
                 };
 
                 var result = await userManager.CreateAsync(user, password);

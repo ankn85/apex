@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Apex.Data;
 using Apex.Data.Entities;
-using Apex.Services.Enums;
+using Apex.Data.Sorts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Apex.Services
@@ -19,7 +17,51 @@ namespace Apex.Services
             _dbContext = dbContext;
         }
 
-        public async Task<int> CommitAsync()
+        #region CRUD
+
+        public virtual async Task<T> FindAsync<T>(int id) where T : BaseEntity
+        {
+            if (id <= 0)
+            {
+                return null;
+            }
+
+            return await Table<T>().FindAsync(id);
+        }
+
+        public async Task<IList<T>> FindAsync<T>(int[] ids) where T : BaseEntity
+        {
+            if (ids == null || ids.Length == 0)
+            {
+                return new List<T>();
+            }
+
+            return await Table<T>().Where(e => ids.Contains(e.Id)).ToListAsync();
+        }
+
+        public virtual async Task<T> CreateAsync<T>(T entity) where T : BaseEntity
+        {
+            await Table<T>().AddAsync(entity);
+            await CommitAsync();
+
+            return entity;
+        }
+
+        public virtual async Task<int> DeleteAsync<T>(T entity) where T : BaseEntity
+        {
+            Table<T>().Remove(entity);
+
+            return await CommitAsync();
+        }
+
+        public virtual async Task<int> DeleteAsync<T>(IEnumerable<T> entities) where T : BaseEntity
+        {
+            Table<T>().RemoveRange(entities);
+
+            return await CommitAsync();
+        }
+
+        public virtual async Task<int> CommitAsync()
         {
             return await _dbContext.SaveChangesAsync();
         }
@@ -29,21 +71,16 @@ namespace Apex.Services
             return _dbContext.Set<T>();
         }
 
+        #endregion
+
         protected IEnumerable<T> GetSortList<T>(
             IQueryable<T> source,
             string sortColumnName,
-            SortDirection sortDirection) where T : class
+            SortDirection sortDirection) where T : BaseEntity
         {
-            PropertyInfo property = GetProperty<T>(sortColumnName);
-
-            if (property == null)
-            {
-                return source;
-            }
-
             return sortDirection == SortDirection.Ascending ?
-                source.OrderBy(property.GetValue) :
-                source.OrderByDescending(property.GetValue);
+                source.OrderBy(sortColumnName) :
+                source.OrderByDescending(sortColumnName);
         }
 
         protected IEnumerable<T> GetSortAndPagedList<T>(
@@ -51,17 +88,11 @@ namespace Apex.Services
             string sortColumnName,
             SortDirection sortDirection,
             int page,
-            int size) where T : class
+            int size) where T : BaseEntity
         {
             return GetSortList(source, sortColumnName, sortDirection)
                 .Skip(page)
                 .Take(size);
-        }
-
-        private PropertyInfo GetProperty<T>(string name) where T : class
-        {
-            return typeof(T).GetProperties()
-                .FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

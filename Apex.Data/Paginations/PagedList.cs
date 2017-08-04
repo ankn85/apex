@@ -7,12 +7,8 @@ namespace Apex.Data.Paginations
     {
         private PagedList(IEnumerable<T> source, int totalRecords, int totalRecordsFiltered)
         {
-            //Page = page;
-            //Size = size;
             TotalRecords = totalRecords;
             TotalRecordsFiltered = totalRecordsFiltered;
-
-            //TotalPages = (int)Math.Ceiling(TotalRecords / (double)Size);
 
             if (TotalRecordsFiltered > 0)
             {
@@ -20,15 +16,9 @@ namespace Apex.Data.Paginations
             }
         }
 
-        //public int Page { get; }
-
-		//public int Size { get; }
-
 		public int TotalRecords { get; }
 
         public int TotalRecordsFiltered { get; }
-
-        //public int TotalPages { get; }
 
         public static IPagedList<T> Empty()
         {

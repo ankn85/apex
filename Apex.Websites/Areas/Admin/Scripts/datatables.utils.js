@@ -11,4 +11,18 @@ DataTablesUtils.prototype.renderStatusCell = function (status) {
     return '<i class="fa fa-times text-red"></i>';
 };
 
+DataTablesUtils.prototype.truncateText = function (text, maxLength) {
+    if (!maxLength || text.length <= maxLength) {
+        return text;
+    }
+
+    return [
+        '<span title="',
+        text,
+        '">',
+        text.substr(0, maxLength - 3),
+        "...</span>"
+    ].join("");
+};
+
 var dtUtils = new DataTablesUtils();

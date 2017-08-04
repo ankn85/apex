@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Apex.Admin.ViewModels.DataTables;
 using Microsoft.AspNetCore.Http;
 
@@ -11,7 +10,7 @@ namespace Apex.Admin.ViewModels.Logs
 
         public DateTime ToDate { get; set; }
 
-        public IList<string> Levels { get; set; }
+        public string[] Levels { get; set; }
 
         public override void ParseFormData(IFormCollection formData)
         {

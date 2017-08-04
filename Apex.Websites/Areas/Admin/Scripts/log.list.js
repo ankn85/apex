@@ -1,5 +1,9 @@
-﻿(function ($) {
+﻿(function ($, utils) {
     "use strict";
+
+    function renderLogger(data, type, full, meta) {
+        return utils.truncateText(data, 50);
+    }
 
     function detailFunction(data) {
         return [
@@ -35,7 +39,7 @@
             columns: [
                 { title: resources.level, data: "level", orderable: true, searchable: false },
                 { title: resources.message, data: "message", orderable: false, searchable: false },
-                { title: resources.logger, data: "logger", orderable: false, searchable: false },
+                { title: resources.logger, data: "logger", orderable: false, searchable: false, render: renderLogger },
                 { title: resources.logged, data: "logged", orderable: true, searchable: false, className: "pretty-date" }
             ],
             order: [[4, "desc"]]
@@ -55,4 +59,4 @@
     }
 
     initialize();
-})(jQuery);
+})(jQuery, dtUtils);

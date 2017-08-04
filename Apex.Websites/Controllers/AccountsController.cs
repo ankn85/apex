@@ -432,13 +432,11 @@ namespace Apex.Websites.Controllers
 
         #region Helpers
 
-        [NonAction]
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        [NonAction]
         private void AddErrorsToModelState(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -447,7 +445,6 @@ namespace Apex.Websites.Controllers
             }
         }
 
-        [NonAction]
         private IActionResult RedirectToLocal(string returnUrl = null)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -458,7 +455,6 @@ namespace Apex.Websites.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        [NonAction]
         private async Task SendEmailAsync(string email, string subject, string message)
         {
             await _queuedEmailService.CreateAsync(email, subject, message);

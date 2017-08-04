@@ -1,28 +1,20 @@
-﻿using System;
+﻿using Apex.Data.Entities.Logs;
 using Apex.Services.Extensions;
 
 namespace Apex.Services.Models.Logs
 {
     public sealed class LogDto
     {
-        public LogDto(
-            int id,
-            string application,
-            DateTime logged,
-            string level,
-            string message,
-            string logger,
-            string callsite,
-            string exception)
+        public LogDto(Log entity)
         {
-            Id = id;
-            Application = application;
-            Logged = $"{logged.ToPrettyDate()}<div>{logged.ToDateTimeString()}</div>";
-            Level = level;
-            Message = message;
-            Logger = logger;
-            Callsite = callsite;
-            Exception = exception;
+            Id = entity.Id;
+            Application = entity.Application;
+            Logged = $"{entity.Logged.ToPrettyDate()}<div>{entity.Logged.ToDateTimeString()}</div>";
+            Level = entity.Level;
+            Message = entity.Message;
+            Logger = entity.Logger;
+            Callsite = entity.Callsite;
+            Exception = entity.Exception;
         }
 
         public int Id { get; }

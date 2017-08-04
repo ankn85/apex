@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Apex.Admin.ViewModels.DataTables;
 using Apex.Admin.ViewModels.Logs;
+using Apex.Data.Entities.Logs;
 using Apex.Services.Logs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,7 +21,7 @@ namespace Apex.Admin.Controllers
 
         public IActionResult Index()
         {
-            PopularLogLevels();
+            PopularLevels();
 
             return View();
         }
@@ -44,34 +46,31 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
-            int idsCount = ids != null ? ids.Length : 0;
+            IEnumerable<Log> entities = await _logService.FindAsync<Log>(ids);
 
-            if (idsCount == 0)
+            if (!entities.Any())
             {
-                return BadRequestApiError("LogId", "'Log Ids' should not be empty.");
+                return BadRequestApiError("Id", "'Log Ids' should not be empty.");
             }
 
-            int effectedRows = idsCount == 1 ?
-                await _logService.DeleteAsync(ids[0]) :
-                await _logService.DeleteAsync(ids);
+            int effectedRows = await _logService.DeleteAsync(entities);
 
             return Ok(effectedRows);
         }
 
-        [NonAction]
-        private void PopularLogLevels()
+        private void PopularLevels()
         {
-            IEnumerable<SelectListItem> models = new List<SelectListItem>
+            IEnumerable<SelectListItem> levels = new List<SelectListItem>
             {
                 new SelectListItem { Value = "Fatal", Text = "Fatal" },
-                new SelectListItem { Value = "Error", Text = "Error" },
+                new SelectListItem { Value = "Error", Text = "Error", Selected = true },
                 new SelectListItem { Value = "Warn", Text = "Warn" },
                 new SelectListItem { Value = "Info", Text = "Info" },
                 new SelectListItem { Value = "Debug", Text = "Debug" },
                 new SelectListItem { Value = "Trace", Text = "Trace" }
             };
 
-            ViewData["Levels"] = models;
+            ViewData["Levels"] = levels;
         }
     }
 }

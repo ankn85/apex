@@ -1,28 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Apex.Data.Entities.Logs;
 using Apex.Data.Paginations;
-using Apex.Services.Enums;
+using Apex.Data.Sorts;
 using Apex.Services.Models.Logs;
 
 namespace Apex.Services.Logs
 {
     public interface ILogService : IService
     {
-        Task<Log> FindAsync(int id);
-
         Task<IPagedList<LogDto>> GetListAsync(
             DateTime fromDate, 
             DateTime toDate,
-            IList<string> levels,
+            string[] levels,
             string sortColumnName,
             SortDirection sortDirection,
             int page, 
             int size);
-
-        Task<int> DeleteAsync(int id);
-
-        Task<int> DeleteAsync(int[] ids);
 	}
 }

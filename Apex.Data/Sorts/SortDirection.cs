@@ -1,4 +1,4 @@
-﻿namespace Apex.Services.Enums
+﻿namespace Apex.Data.Sorts
 {
     public enum SortDirection
     {
