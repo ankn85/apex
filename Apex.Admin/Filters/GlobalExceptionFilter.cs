@@ -3,7 +3,6 @@ using System.Net;
 using System.Text;
 using Apex.Admin.Controllers;
 using Apex.Admin.Extensions;
-using Apex.Services.Enums;
 using Apex.Services.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +16,6 @@ namespace Apex.Admin.Filters
     {
         private readonly ILogger<GlobalExceptionFilter> _logger;
 
-        private ApiErrorCode _errorCode = ApiErrorCode.InternalServerError;
-        private string _errorMessage = null;
-        private HttpStatusCode _statusCode = HttpStatusCode.InternalServerError;
-
         public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger)
         {
             _logger = logger;
@@ -29,20 +24,20 @@ namespace Apex.Admin.Filters
         public void OnException(ExceptionContext context)
         {
             Exception exception = context.Exception;
-            AssignGlobalParameters(exception);
+            ApiError apiError = GetApiError(exception);
 
             HttpContext httpContext = context.HttpContext;
-            WriteLog(httpContext, exception, (int)_statusCode);
+            WriteLog(httpContext, exception, apiError.StatusCode);
 
             HttpResponse response = httpContext.Response;
-            response.StatusCode = (int)_statusCode;
+            response.StatusCode = apiError.StatusCode;
 
             context.ExceptionHandled = true;
 
             if (httpContext.Request.IsAjaxRequest())
             {
                 response.ContentType = "application/json";
-                context.Result = new JsonResult(new ApiError(_errorCode, _errorMessage));
+                context.Result = new JsonResult(apiError);
             }
             else
             {
@@ -51,45 +46,27 @@ namespace Apex.Admin.Filters
             }
         }
 
-        private void AssignGlobalParameters(Exception exception)
+        private ApiError GetApiError(Exception exception)
         {
             Type exceptionType = exception.GetType();
 
             if (exceptionType == typeof(ApiException))
             {
                 ApiException apiException = (ApiException)exception;
-                _errorCode = apiException.ErrorCode;
-                _errorMessage = apiException.Message;
 
-                if (_errorCode == ApiErrorCode.NotFound)
-                {
-                    _statusCode = HttpStatusCode.NotFound;
-                }
-                else if (_errorCode == ApiErrorCode.DuplicateEntity ||
-                    _errorCode == ApiErrorCode.RandomExamPaperError)
-                {
-                    _statusCode = HttpStatusCode.BadRequest;
-                }
+                return new ApiError(apiException.StatusCode, apiException.Message);
             }
-            else if (exceptionType == typeof(UnauthorizedAccessException))
-            {
-                _errorCode = ApiErrorCode.Unauthorized;
-                _errorMessage = "Unauthorized Access.";
-                _statusCode = HttpStatusCode.Unauthorized;
-            }
-            else
-            {
-                Exception innerException = exceptionType == typeof(DbUpdateException) ?
-                    exception.InnerException :
-                    exception;
 
-                _errorCode = ApiErrorCode.InternalServerError;
-#if !DEBUG
-                _errorMessage = "An unhandled error occurred.";                
-#else
-                _errorMessage = innerException.Message;
-#endif
+            if (exceptionType == typeof(UnauthorizedAccessException))
+            {
+                return new ApiError(HttpStatusCode.Unauthorized, "Unauthorized Access.");
             }
+
+            Exception innerException = exceptionType == typeof(DbUpdateException) ?
+                exception.InnerException :
+                exception;
+
+            return new ApiError(HttpStatusCode.InternalServerError, "An unhandled error occurred.");
         }
 
         private void WriteLog(HttpContext httpContext, Exception exception, int eventId)

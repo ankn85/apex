@@ -117,21 +117,16 @@ namespace Apex.Services.Accounts
             else
             {
                 var allRoles = await _roleService.GetListAsync();
-                var rolesNotExists = roleNames.Except(allRoles.Select(r => r.Name));
+                var rolesExists = roleNames.Intersect(allRoles.Select(r => r.Name));
 
-                if (rolesNotExists.Any())
+                if (rolesExists.Any())
                 {
-                    //throw new ApiException(
-                    //    $"Roles '{string.Join(",", rolesNotExists)}' does not exist in the system.",
-                    //    ApiErrorCode.NotFound);
-                    return IdentityResult.Success;
-                }
+                    result = await _userManager.RemoveFromRolesAsync(entity, currentRoles);
 
-                result = await _userManager.RemoveFromRolesAsync(entity, currentRoles);
-
-                if (result.Succeeded)
-                {
-                    result = await _userManager.AddToRolesAsync(entity, roleNames);
+                    if (result.Succeeded)
+                    {
+                        result = await _userManager.AddToRolesAsync(entity, rolesExists);
+                    }
                 }
             }
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using Apex.Services.Enums;
+using System.Net;
 
 namespace Apex.Services.Models
 {
@@ -7,20 +7,20 @@ namespace Apex.Services.Models
     {
         public ApiException(
             string message,
-            ApiErrorCode errorCode = ApiErrorCode.InternalServerError)
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
             : base(message)
         {
-            ErrorCode = errorCode;
+            StatusCode = statusCode;
         }
 
         public ApiException(
             Exception exception,
-            ApiErrorCode errorCode = ApiErrorCode.InternalServerError)
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
             : base(exception.Message)
         {
-            ErrorCode = errorCode;
+            StatusCode = statusCode;
         }
 
-        public ApiErrorCode ErrorCode { get; }
+        public HttpStatusCode StatusCode { get; }
     }
 }

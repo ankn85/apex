@@ -92,14 +92,13 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
+            int effectedRows = 0;
             IEnumerable<EmailAccount> entities = await _emailAccountService.FindAsync(ids);
 
-            if (!entities.Any())
+            if (entities.Any())
             {
-                return BadRequestApiError("Id", "'EmailAccount Ids' should not be empty.");
+                effectedRows = await _emailAccountService.DeleteAsync(entities);
             }
-
-            int effectedRows = await _emailAccountService.DeleteAsync(entities);
 
             return Ok(effectedRows);
         }

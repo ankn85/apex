@@ -14,12 +14,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Apex.Admin.Controllers
 {
-    public class CustomerController : AdminController
+    public class UserController : AdminController
     {
         private readonly IRoleService _roleService;
         private readonly IAccountService _accountService;
 
-        public CustomerController(
+        public UserController(
             IRoleService roleService,
             IAccountService accountService)
         {
@@ -156,14 +156,12 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
-            int? idsCount = ids?.Length;
+            int effectedRows = 0;
 
-            if (idsCount == null)
+            if (ids != null && ids.Length > 0)
             {
-                return BadRequestApiError("Id", "'ApplicationUser Ids' should not be empty.");
+                effectedRows = await _accountService.DeleteAsync(ids);
             }
-
-            int effectedRows = await _accountService.DeleteAsync(ids);
 
             return Ok(effectedRows);
         }

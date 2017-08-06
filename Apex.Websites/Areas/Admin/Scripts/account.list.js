@@ -45,7 +45,7 @@
 
         var dtOptions = {
             ajax: {
-                url: "/admin/customer/search",
+                url: "/admin/user/search",
                 data: function (data) {
                     data.Email = $email.val();
                     data.RoleIds = $roles.val();
@@ -62,10 +62,10 @@
         };
 
         var crudOptions = {
-            create: "/admin/customer/create",
+            create: "/admin/user/create",
             read: detailFunction,
-            update: "/admin/customer/update",
-            delete: "/admin/customer/delete"
+            update: "/admin/user/update",
+            delete: "/admin/user/delete"
         };
 
         var jdtWrapper = new DataTablesWrapper(dtOptions, "#jDataTable", crudOptions);

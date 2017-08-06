@@ -142,12 +142,12 @@ namespace Apex.Services.Emails
         {
             QueuedEmail updatedEntity = await QueuedEmails.FindAsync(id);
 
-            if (updatedEntity == null)
-            {
-                throw new ApiException(
-                    $"{nameof(QueuedEmail)} not found. Id = {id}",
-                    ApiErrorCode.NotFound);
-            }
+            //if (updatedEntity == null)
+            //{
+            //    throw new ApiException(
+            //        $"{nameof(QueuedEmail)} not found. Id = {id}",
+            //        ApiErrorCode.NotFound);
+            //}
 
             updatedEntity.SentTries = sentTries;
             updatedEntity.SentOnUtc = sentOnUtc;

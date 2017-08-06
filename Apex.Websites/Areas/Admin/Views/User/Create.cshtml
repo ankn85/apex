@@ -1,11 +1,11 @@
 ﻿@model Apex.Admin.ViewModels.Accounts.AccountCreateViewModel
 @{
-    ViewData["Title"] = "Customer";
-    ViewData["TitleSmall"] = "<a href=\"/admin/customer\"><i class=\"fa fa-arrow-circle-left\"></i> Back to Account list</a>";
+    ViewData["Title"] = "User";
+    ViewData["TitleSmall"] = "<a href=\"/admin/user\"><i class=\"fa fa-arrow-circle-left\"></i> Back to Account list</a>";
 
     ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
         new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new CrumbViewModel("Account", Url.Action("index", "customer"), "fa-users"),
+        new CrumbViewModel("Account", Url.Action("index", "user"), "fa-users"),
         new CrumbViewModel("Create", string.Empty, "fa-plus")
     });
 }
@@ -25,7 +25,7 @@
     </script>
 }
 <div class="box box-solid">
-    <form class="form-horizontal" asp-controller="customer" asp-action="create" asp-anti-forgery="true" method="post" novalidate>
+    <form class="form-horizontal" asp-controller="user" asp-action="create" asp-anti-forgery="true" method="post" novalidate>
         <div class="box-body">
             <div class="col-md-6">
                 <div class="form-group">

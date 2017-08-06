@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Apex.Services.Enums;
+using System.Net;
 using Apex.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,7 @@ namespace Apex.Admin.Controllers
                 new ValidationError(source, message)
             };
 
-            return BadRequest(new ApiError(ApiErrorCode.ValidateViewModelFail, errors));
+            return BadRequest(new ApiError(HttpStatusCode.BadRequest, errors));
         }
     }
 }

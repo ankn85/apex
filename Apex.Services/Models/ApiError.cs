@@ -1,31 +1,31 @@
 ﻿using System.Collections.Generic;
-using Apex.Services.Enums;
+using System.Net;
 
 namespace Apex.Services.Models
 {
     public sealed class ApiError
     {
-        public ApiError(ApiErrorCode errorCode, string errorMessage)
-            : this(errorCode, errorMessage, null)
+        public ApiError(HttpStatusCode statusCode, string errorMessage)
+            : this(statusCode, errorMessage, null)
         {
         }
 
-        public ApiError(ApiErrorCode errorCode, IEnumerable<ValidationError> validationErrors)
-            : this(errorCode, null, validationErrors)
+        public ApiError(HttpStatusCode statusCode, IEnumerable<ValidationError> validationErrors)
+            : this(statusCode, null, validationErrors)
         {
         }
 
         private ApiError(
-            ApiErrorCode errorCode,
+            HttpStatusCode statusCode,
             string errorMessage,
             IEnumerable<ValidationError> validationErrors)
         {
-            ErrorCode = (int)errorCode;
+            StatusCode = (int)statusCode;
             ErrorMessage = errorMessage;
             ValidationErrors = validationErrors;
         }
 
-        public int ErrorCode { get; }
+        public int StatusCode { get; }
 
         public string ErrorMessage { get; }
 
