@@ -18,11 +18,6 @@ namespace Apex.Services.Emails
         {
         }
 
-        //public async Task<QueuedEmail> GetAsync(int id)
-        //{
-        //    return await QueuedEmails.FindAsync(id);
-        //}
-
         public async Task<IPagedList<QueuedEmail>> GetListAsync(
             DateTime? createdFromUtc,
             DateTime? createdToUtc,
@@ -33,70 +28,39 @@ namespace Apex.Services.Emails
             int page,
             int size)
         {
-            var query = QueuedEmails
+            var query = Table
                 .Include(qe => qe.EmailAccount)
                 .AsNoTracking();
 
-            if (createdFromUtc.HasValue)
+            int totalRecords = await query.CountAsync();
+
+            if (totalRecords == 0)
             {
-                var startDate = createdFromUtc.Value.StartOfDay();
-                query = query.Where(qe => qe.CreatedOnUtc >= startDate);
+                return PagedList<QueuedEmail>.Empty();
             }
 
-            if (createdToUtc.HasValue)
+            query = GetFilterList(
+                query,
+                createdFromUtc,
+                createdToUtc,
+                loadNotSentItemsOnly,
+                loadOnlyItemsToBeSent,
+                maxSendTries,
+                loadNewest);
+            int totalRecordsFiltered = await query.CountAsync();
+
+            if (totalRecordsFiltered == 0)
             {
-                var endDate = createdToUtc.Value.EndOfDay();
-                query = query.Where(qe => qe.CreatedOnUtc <= endDate);
+                return PagedList<QueuedEmail>.Empty(totalRecords);
             }
 
-            if (loadNotSentItemsOnly)
-            {
-                query = query.Where(qe => !qe.SentOnUtc.HasValue);
-            }
+            var pagedList = query.Skip(page).Take(size);
 
-            if (loadOnlyItemsToBeSent)
-            {
-                DateTime nowUtc = DateTime.UtcNow;
-                query = query.Where(qe => !qe.DontSendBeforeDateUtc.HasValue || qe.DontSendBeforeDateUtc.Value <= nowUtc);
-            }
-
-            query = query.Where(qe => qe.SentTries < maxSendTries);
-
-            query = loadNewest ?
-                query.OrderByDescending(qe => qe.CreatedOnUtc) :
-                query.OrderByDescending(qe => qe.Priority).ThenBy(qe => qe.CreatedOnUtc);
-
-            //return await query.GetListAsync(page, size);
-            throw new Exception();
+            return PagedList<QueuedEmail>.Create(pagedList, totalRecords, totalRecordsFiltered);
         }
 
-        public async Task<QueuedEmail> CreateAsync(QueuedEmail entity)
+        public async Task<QueuedEmail> CreateAsync(string email, string subject, string message, EmailAccount emailAccount)
         {
-            await QueuedEmails.AddAsync(entity);
-            await CommitAsync();
-
-            return entity;
-        }
-
-        //public async Task<IList<QueuedEmail>> CreateAsync(IList<QueuedEmail> entities)
-        //{
-        //    await QueuedEmails.AddRangeAsync(entities);
-        //    await CommitAsync();
-
-        //    return entities;
-        //}
-
-        public async Task<QueuedEmail> CreateAsync(string email, string subject, string message, int emailAccountId = 0)
-        {
-            EmailAccount emailAccount = emailAccountId == 0 ?
-                await EmailAccounts.AsNoTracking().FirstOrDefaultAsync(ea => ea.IsDefaultEmailAccount) :
-                await EmailAccounts.FindAsync(emailAccountId);
-
-            if (emailAccount == null)
-            {
-                throw new Exception($"[{nameof(QueuedEmailService)} » {nameof(CreateAsync)}] Default Email Account is null.");
-            }
-
             QueuedEmail queuedEmail = new QueuedEmail
             {
                 From = emailAccount.Email,
@@ -112,42 +76,14 @@ namespace Apex.Services.Emails
             return await CreateAsync(queuedEmail);
         }
 
-        //public async Task<int> UpdateAsync(QueuedEmail entity)
-        //{
-        //    QueuedEmail updatedEntity = await QueuedEmails.FindAsync(entity.Id);
-
-        //    if (updatedEntity == null)
-        //    {
-        //        throw new EntityNotFoundException(entity.Id, nameof(QueuedEmail));
-        //    }
-
-        //    updatedEntity.EmailAccountId = entity.EmailAccountId;
-        //    updatedEntity.Priority = entity.Priority;
-        //    updatedEntity.From = entity.From;
-        //    updatedEntity.FromName = entity.FromName;
-        //    updatedEntity.To = entity.To;
-        //    updatedEntity.ToName = entity.ToName;
-        //    updatedEntity.ReplyTo = entity.ReplyTo;
-        //    updatedEntity.ReplyToName = entity.ReplyToName;
-        //    updatedEntity.CC = entity.CC;
-        //    updatedEntity.BCC = entity.BCC;
-        //    updatedEntity.Subject = entity.Subject;
-        //    updatedEntity.Body = entity.Body;
-        //    updatedEntity.DontSendBeforeDateUtc = entity.DontSendBeforeDateUtc;
-
-        //    return await CommitAsync();
-        //}
-
         public async Task<int> UpdateAsync(int id, int sentTries, DateTime? sentOnUtc, string failedReason)
         {
-            QueuedEmail updatedEntity = await QueuedEmails.FindAsync(id);
+            QueuedEmail updatedEntity = await FindAsync(id);
 
-            //if (updatedEntity == null)
-            //{
-            //    throw new ApiException(
-            //        $"{nameof(QueuedEmail)} not found. Id = {id}",
-            //        ApiErrorCode.NotFound);
-            //}
+            if (updatedEntity == null)
+            {
+                throw new ApiException($"{nameof(QueuedEmailService)} » {nameof(UpdateAsync)}] Queued Email not found. Id = {id}");
+            }
 
             updatedEntity.SentTries = sentTries;
             updatedEntity.SentOnUtc = sentOnUtc;
@@ -156,49 +92,45 @@ namespace Apex.Services.Emails
             return await CommitAsync();
         }
 
-        //public async Task<int> DeleteAsync(int id)
-        //{
-        //    QueuedEmail entity = await QueuedEmails.FindAsync(id);
-
-        //    if (entity == null)
-        //    {
-        //        throw new EntityNotFoundException(id, nameof(QueuedEmail));
-        //    }
-
-        //    QueuedEmails.Remove(entity);
-
-        //    return await CommitAsync();
-        //}
-
-        //public async Task<int> DeleteAsync(QueuedEmail entity)
-        //{
-        //    QueuedEmails.Remove(entity);
-
-        //    return await CommitAsync();
-        //}
-
-        //public async Task<int> DeleteAsync(IList<QueuedEmail> entities)
-        //{
-        //    QueuedEmails.RemoveRange(entities);
-
-        //    return await CommitAsync();
-        //}
-
-        //public async Task<int> DeleteAll()
-        //{
-        //    var queuedEmails = QueuedEmails;
-
-        //    QueuedEmails.RemoveRange(queuedEmails);
-
-        //    return await CommitAsync();
-        //}
-
-        private DbSet<QueuedEmail> QueuedEmails
+        private IQueryable<QueuedEmail> GetFilterList(
+            IQueryable<QueuedEmail> source,
+            DateTime? createdFromUtc,
+            DateTime? createdToUtc,
+            bool loadNotSentItemsOnly,
+            bool loadOnlyItemsToBeSent,
+            int maxSendTries,
+            bool loadNewest)
         {
-            get
+            if (createdFromUtc.HasValue)
             {
-                return _dbContext.Set<QueuedEmail>();
+                var startDate = createdFromUtc.Value.StartOfDay();
+                source = source.Where(qe => qe.CreatedOnUtc >= startDate);
             }
+
+            if (createdToUtc.HasValue)
+            {
+                var endDate = createdToUtc.Value.EndOfDay();
+                source = source.Where(qe => qe.CreatedOnUtc <= endDate);
+            }
+
+            if (loadNotSentItemsOnly)
+            {
+                source = source.Where(qe => !qe.SentOnUtc.HasValue);
+            }
+
+            if (loadOnlyItemsToBeSent)
+            {
+                DateTime nowUtc = DateTime.UtcNow;
+                source = source.Where(qe => !qe.DontSendBeforeDateUtc.HasValue || qe.DontSendBeforeDateUtc.Value <= nowUtc);
+            }
+
+            source = source.Where(qe => qe.SentTries < maxSendTries);
+
+            source = loadNewest ?
+                source.OrderByDescending(qe => qe.CreatedOnUtc) :
+                source.OrderByDescending(qe => qe.Priority).ThenBy(qe => qe.CreatedOnUtc);
+
+            return source;
         }
 
         private DbSet<EmailAccount> EmailAccounts

@@ -20,12 +20,14 @@ namespace Apex.Websites.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
 
         private readonly IQueuedEmailService _queuedEmailService;
+        private readonly IEmailAccountService _emailAccountService;
 
         public AccountsController(
             ILogger<AccountsController> logger,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IQueuedEmailService queuedEmailService)
+            IQueuedEmailService queuedEmailService,
+            IEmailAccountService emailAccountService)
         {
             _logger = logger;
 
@@ -33,6 +35,7 @@ namespace Apex.Websites.Controllers
             _signInManager = signInManager;
 
             _queuedEmailService = queuedEmailService;
+            _emailAccountService = emailAccountService;
         }
 
         #region SignIn & SignOut
@@ -457,7 +460,9 @@ namespace Apex.Websites.Controllers
 
         private async Task SendEmailAsync(string email, string subject, string message)
         {
-            await _queuedEmailService.CreateAsync(email, subject, message);
+            var emailAccount = await _emailAccountService.GetDefaultAsync();
+
+            await _queuedEmailService.CreateAsync(email, subject, message, emailAccount);
         }
 
         #endregion
