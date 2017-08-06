@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Apex.Data.Entities.Accounts;
 using Apex.Services.Enums;
+using Apex.Services.Extensions;
 
 namespace Apex.Services.Models.Accounts
 {
@@ -27,7 +28,12 @@ namespace Apex.Services.Models.Accounts
 
             FullName = entity.FullName;
             Gender = ((Gender)entity.Gender).ToString();
-            Birthday = entity.Birthday;
+
+            if (entity.Birthday != null)
+            {
+                Birthday = entity.Birthday.Value.ToDateString();
+            }
+
             PhoneNumber = entity.PhoneNumber;
             Address = entity.Address;
         }
@@ -48,7 +54,7 @@ namespace Apex.Services.Models.Accounts
 
         public string Gender { get; }
 
-        public DateTime? Birthday { get; }
+        public string Birthday { get; }
 
         public string PhoneNumber { get; }
 

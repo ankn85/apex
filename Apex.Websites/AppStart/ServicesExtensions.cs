@@ -34,14 +34,14 @@ namespace Apex.Websites.AppStart
 
             // Emails
             services.AddScoped<IEmailAccountService, EmailAccountService>();
-            services.AddScoped<IQueuedEmailService, QueuedEmailService>();
+            //services.AddScoped<IQueuedEmailService, QueuedEmailService>();
             //services.AddScoped<IEmailSender, MailKitEmailSender>();
 
             // Accounts.
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPermissionProvider, StandardPermissionProvider>();
-            services.AddScoped<IPermissionRecordService, PermissionRecordService>();
+            //services.AddScoped<IPermissionRecordService, PermissionRecordService>();
 
             return services;
         }

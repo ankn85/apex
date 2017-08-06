@@ -5,7 +5,7 @@ using Apex.Data.Sorts;
 
 namespace Apex.Services.Emails
 {
-    public interface IEmailAccountService : IService
+    public interface IEmailAccountService : IService<EmailAccount>
     {
         Task<IPagedList<EmailAccount>> GetListAsync(
             string sortColumnName,

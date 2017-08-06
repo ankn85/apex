@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Apex.Services.Emails
 {
-    public class EmailAccountService : BaseService, IEmailAccountService
+    public class EmailAccountService : BaseService<EmailAccount>, IEmailAccountService
     {
         private readonly IMemoryCacheService _memoryCacheService;
 
@@ -25,7 +25,7 @@ namespace Apex.Services.Emails
             string sortColumnName,
             SortDirection sortDirection)
         {
-            var query = Table<EmailAccount>().AsNoTracking();
+            var query = Table.AsNoTracking();
             int totalRecords = await query.CountAsync();
 
             if (totalRecords == 0)
@@ -36,7 +36,7 @@ namespace Apex.Services.Emails
             int totalRecordsFiltered = totalRecords;
 
             return PagedList<EmailAccount>.Create(
-                GetSortList(query, sortColumnName, sortDirection),
+                query.OrderBy(sortColumnName, sortDirection),
                 totalRecords,
                 totalRecordsFiltered);
         }
@@ -47,7 +47,7 @@ namespace Apex.Services.Emails
                 MemoryCacheKeys.DefaultEmailAccountKey,
                 () =>
                 {
-                    return Table<EmailAccount>().AsNoTracking()
+                    return Table.AsNoTracking()
                         .FirstOrDefaultAsync(ea => ea.IsDefaultEmailAccount);
                 });
         }

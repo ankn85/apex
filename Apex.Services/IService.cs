@@ -4,17 +4,17 @@ using Apex.Data.Entities;
 
 namespace Apex.Services
 {
-    public interface IService
+    public interface IService<T> where T : BaseEntity
     {
-        Task<T> FindAsync<T>(int id) where T : BaseEntity;
+        Task<T> FindAsync(int id);
 
-        Task<IList<T>> FindAsync<T>(int[] ids) where T : BaseEntity;
+        Task<IList<T>> FindAsync(int[] ids);
 
-        Task<T> CreateAsync<T>(T entity) where T : BaseEntity;
+        Task<T> CreateAsync(T entity);
 
-        Task<int> DeleteAsync<T>(T entity) where T : BaseEntity;
+        Task<int> DeleteAsync(T entity);
 
-        Task<int> DeleteAsync<T>(IEnumerable<T> entities) where T : BaseEntity;
+        Task<int> DeleteAsync(IEnumerable<T> entities);
 
         Task<int> CommitAsync();
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Apex.Data.Entities;
 
 namespace Apex.Data.Paginations
 {

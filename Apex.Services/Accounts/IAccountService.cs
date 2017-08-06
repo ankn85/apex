@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Apex.Data.Entities.Accounts;
 using Apex.Data.Paginations;
@@ -14,7 +13,6 @@ namespace Apex.Services.Accounts
         Task<ApplicationUser> FindAsync(int id);
 
         Task<IPagedList<ApplicationUserDto>> GetListAsync(
-            IQueryable<ApplicationUser> source,
             string email,
             int[] roleIds,
             string sortColumnName,
@@ -22,8 +20,25 @@ namespace Apex.Services.Accounts
             int page,
             int size);
 
-        Task<IList<string>> GetRolesAsync(ApplicationUser entity);
+        Task<IdentityResult> CreateAsync(
+            ApplicationUser entity,
+            string password,
+            bool locked,
+            string[] roleNames);
+
+        Task<IdentityResult> UpdateAsync(
+            ApplicationUser entity,
+            bool locked,
+            string[] roleNames);
+
+        Task<int> DeleteAsync(int[] ids);
+
+        Task<IdentityResult> LockAccountAsync(ApplicationUser entity);
+
+        Task<IdentityResult> UnlockAccountAsync(ApplicationUser entity);
 
         Task<IdentityResult> ResetPasswordAsync(ApplicationUser entity, string password);
+
+        Task<IList<string>> GetRolesAsync(ApplicationUser entity);
     }
 }

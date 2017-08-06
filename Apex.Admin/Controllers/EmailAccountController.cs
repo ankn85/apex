@@ -31,7 +31,10 @@ namespace Apex.Admin.Controllers
 
             var emailAccounts = await _emailAccountService.GetListAsync(model.SortColumnName, model.SortDirection);
 
-            return model.CreateResponse(emailAccounts.TotalRecords, emailAccounts.TotalRecordsFiltered, emailAccounts);
+            return model.CreateResponse(
+                emailAccounts.TotalRecords,
+                emailAccounts.TotalRecordsFiltered,
+                emailAccounts);
         }
 
         public IActionResult Create()
@@ -55,7 +58,7 @@ namespace Apex.Admin.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            EmailAccount entity = await _emailAccountService.FindAsync<EmailAccount>(id);
+            EmailAccount entity = await _emailAccountService.FindAsync(id);
 
             if (entity == null)
             {
@@ -70,7 +73,7 @@ namespace Apex.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                EmailAccount entity = await _emailAccountService.FindAsync<EmailAccount>(model.Id);
+                EmailAccount entity = await _emailAccountService.FindAsync(model.Id);
 
                 if (entity == null)
                 {
@@ -89,7 +92,7 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
-            IEnumerable<EmailAccount> entities = await _emailAccountService.FindAsync<EmailAccount>(ids);
+            IEnumerable<EmailAccount> entities = await _emailAccountService.FindAsync(ids);
 
             if (!entities.Any())
             {

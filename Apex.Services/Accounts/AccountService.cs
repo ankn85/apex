@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Apex.Data.Entities.Accounts;
 using Apex.Data.Paginations;
@@ -27,11 +26,15 @@ namespace Apex.Services.Accounts
 
         public async Task<ApplicationUser> FindAsync(int id)
         {
+            if (id <= 0)
+            {
+                return null;
+            }
+
             return await _userManager.FindByIdAsync(id.ToString());
         }
 
         public async Task<IPagedList<ApplicationUserDto>> GetListAsync(
-            IQueryable<ApplicationUser> source,
             string email,
             int[] roleIds,
             string sortColumnName,
@@ -39,7 +42,7 @@ namespace Apex.Services.Accounts
             int page,
             int size)
         {
-            var query = source.AsNoTracking();
+            var query = _userManager.Users.AsNoTracking();
             int totalRecords = await query.CountAsync();
 
             if (totalRecords == 0)
@@ -55,38 +58,142 @@ namespace Apex.Services.Accounts
                 return PagedList<ApplicationUserDto>.Empty(totalRecords);
             }
 
-            var roleHash = await GetRoleHash();
+            var roleHash = await GetRolesHash();
+            var pagedList = query
+                .OrderBy(sortColumnName, sortDirection)
+                .Skip(page)
+                .Take(size)
+                .Select(u => new ApplicationUserDto(u, roleHash));
 
-            return PagedList<ApplicationUserDto>.Create(
-                GetSortAndPagedList(query, sortColumnName, sortDirection, page, size).Select(u => new ApplicationUserDto(u, roleHash)),
-                totalRecords,
-                totalRecordsFiltered);
+            return PagedList<ApplicationUserDto>.Create(pagedList, totalRecords, totalRecordsFiltered);
         }
 
-        public async Task<IList<string>> GetRolesAsync(ApplicationUser entity)
+        public async Task<IdentityResult> CreateAsync(
+            ApplicationUser entity,
+            string password,
+            bool locked,
+            string[] roleNames)
         {
-            return await _userManager.GetRolesAsync(entity);
+            var result = await _userManager.CreateAsync(entity, password);
+
+            if (result.Succeeded && locked)
+            {
+                result = await LockAccountAsync(entity);
+            }
+
+            if (result.Succeeded && roleNames != null && roleNames.Length != 0)
+            {
+                result = await _userManager.AddToRolesAsync(entity, roleNames);
+            }
+
+            return result;
+        }
+
+        public async Task<IdentityResult> UpdateAsync(
+            ApplicationUser entity,
+            bool locked,
+            string[] roleNames)
+        {
+            var result = await _userManager.UpdateAsync(entity);
+
+            var isLockedOut = await _userManager.IsLockedOutAsync(entity);
+
+            if (locked && !isLockedOut)
+            {
+                result = await LockAccountAsync(entity);
+            }
+            else if (!locked && isLockedOut)
+            {
+                result = await UnlockAccountAsync(entity);
+            }
+
+            // Assign Roles.
+            var currentRoles = await _userManager.GetRolesAsync(entity);
+
+            if (roleNames == null || roleNames.Length == 0)
+            {
+                result = await _userManager.RemoveFromRolesAsync(entity, currentRoles);
+            }
+            else
+            {
+                var allRoles = await _roleService.GetListAsync();
+                var rolesNotExists = roleNames.Except(allRoles.Select(r => r.Name));
+
+                if (rolesNotExists.Any())
+                {
+                    //throw new ApiException(
+                    //    $"Roles '{string.Join(",", rolesNotExists)}' does not exist in the system.",
+                    //    ApiErrorCode.NotFound);
+                    return IdentityResult.Success;
+                }
+
+                result = await _userManager.RemoveFromRolesAsync(entity, currentRoles);
+
+                if (result.Succeeded)
+                {
+                    result = await _userManager.AddToRolesAsync(entity, roleNames);
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<int> DeleteAsync(int[] ids)
+        {
+            ApplicationUser entity;
+            IdentityResult result;
+            int effectedRows = 0;
+
+            foreach (int id in ids)
+            {
+                entity = await FindAsync(id);
+
+                if (entity != null)
+                {
+                    result = await _userManager.DeleteAsync(entity);
+
+                    if (result.Succeeded)
+                    {
+                        effectedRows++;
+                    }
+                }
+            }
+
+            return effectedRows;
+        }
+
+        public async Task<IdentityResult> LockAccountAsync(ApplicationUser entity)
+        {
+            return await _userManager.SetLockoutEndDateAsync(entity, DateTimeOffset.MaxValue);
+        }
+
+        public async Task<IdentityResult> UnlockAccountAsync(ApplicationUser entity)
+        {
+            var result = await _userManager.SetLockoutEndDateAsync(entity, null);
+
+            if (result.Succeeded)
+            {
+                result = await _userManager.ResetAccessFailedCountAsync(entity);
+            }
+
+            return result;
         }
 
         public async Task<IdentityResult> ResetPasswordAsync(ApplicationUser entity, string password)
         {
-            //ApplicationUser entity = await FindAsync(id);
-
-            //if (entity == null)
-            //{
-            //    throw new ApiException(
-            //        $"{nameof(ApplicationUser)} not found. Id = {id}",
-            //        ApiErrorCode.NotFound);
-            //}
-
             var result = await _userManager.RemovePasswordAsync(entity);
 
             if (result.Succeeded)
             {
                 result = await _userManager.AddPasswordAsync(entity, password);
             }
-            
+
             return result;
+        }
+
+        public async Task<IList<string>> GetRolesAsync(ApplicationUser entity)
+        {
+            return await _userManager.GetRolesAsync(entity);
         }
 
         private IQueryable<ApplicationUser> GetFilterList(
@@ -111,24 +218,7 @@ namespace Apex.Services.Accounts
             return source;
         }
 
-        private IEnumerable<ApplicationUser> GetSortAndPagedList(
-            IQueryable<ApplicationUser> source,
-            string sortColumnName,
-            SortDirection sortDirection,
-            int page,
-            int size)
-        {
-            PropertyInfo property = typeof(ApplicationUser).GetProperties()
-                .FirstOrDefault(p => p.Name.Equals(sortColumnName, StringComparison.OrdinalIgnoreCase));
-
-            var sortList = sortDirection == SortDirection.Ascending ?
-                source.OrderBy(property.GetValue) :
-                source.OrderByDescending(property.GetValue);
-
-            return sortList.Skip(page).Take(size);
-        }
-
-        private async Task<IDictionary<int, string>> GetRoleHash()
+        private async Task<IDictionary<int, string>> GetRolesHash()
         {
             var roles = await _roleService.GetListAsync();
 

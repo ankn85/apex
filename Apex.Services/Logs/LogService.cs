@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Apex.Services.Logs
 {
-    public class LogService : BaseService, ILogService
+    public class LogService : BaseService<Log>, ILogService
     {
         public LogService(ObjectDbContext dbContext)
             : base(dbContext)
@@ -27,7 +27,7 @@ namespace Apex.Services.Logs
             int page,
             int size)
         {
-            var query = Table<Log>().AsNoTracking();
+            var query = Table.AsNoTracking();
             int totalRecords = await query.CountAsync();
 
             if (totalRecords == 0)
@@ -43,10 +43,13 @@ namespace Apex.Services.Logs
                 return PagedList<LogDto>.Empty(totalRecords);
             }
 
-            return PagedList<LogDto>.Create(
-                GetSortAndPagedList(query, sortColumnName, sortDirection, page, size).Select(l => new LogDto(l)),
-                totalRecords,
-                totalRecordsFiltered);
+            var pagedList = query
+                .OrderBy(sortColumnName, sortDirection)
+                .Skip(page)
+                .Take(size)
+                .Select(l => new LogDto(l));
+
+            return PagedList<LogDto>.Create(pagedList, totalRecords, totalRecordsFiltered);
         }
 
         private IQueryable<Log> GetFilterList(

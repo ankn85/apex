@@ -46,7 +46,7 @@ namespace Apex.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int[] ids)
         {
-            IEnumerable<Log> entities = await _logService.FindAsync<Log>(ids);
+            IEnumerable<Log> entities = await _logService.FindAsync(ids);
 
             if (!entities.Any())
             {

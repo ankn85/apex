@@ -1,28 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Apex.Data.Entities;
 
 namespace Apex.Data.Sorts
 {
     public static class SortExtensions
     {
-        public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName)
-            where T : BaseEntity
-        {
-            return OrderByPropertyName(source, propertyName, SortDirection.Ascending);
-        }
-
-        public static IQueryable<T> OrderByDescending<T>(this IQueryable<T> source, string propertyName)
-            where T : BaseEntity
-        {
-            return OrderByPropertyName(source, propertyName, SortDirection.Descending);
-        }
-
-        private static IQueryable<T> OrderByPropertyName<T>(
+        public static IQueryable<T> OrderBy<T>(
             this IQueryable<T> source,
             string propertyName,
-            SortDirection sortDirection) where T : BaseEntity
+            SortDirection sortDirection) where T : class
         {
             if (!source.Any() || string.IsNullOrEmpty(propertyName))
             {
@@ -43,7 +30,7 @@ namespace Apex.Data.Sorts
             return sortedSource.AsQueryable();
         }
 
-        private static PropertyInfo GetProperty<T>(string propertyName) where T : BaseEntity
+        private static PropertyInfo GetProperty<T>(string propertyName) where T : class
         {
             return typeof(T).GetProperties()
                 .FirstOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
