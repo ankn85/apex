@@ -34,7 +34,7 @@ namespace Apex.Websites.AppStart
 
             // Emails
             services.AddScoped<IEmailAccountService, EmailAccountService>();
-            //services.AddScoped<IQueuedEmailService, QueuedEmailService>();
+            services.AddScoped<IQueuedEmailService, QueuedEmailService>();
             //services.AddScoped<IEmailSender, MailKitEmailSender>();
 
             // Accounts.

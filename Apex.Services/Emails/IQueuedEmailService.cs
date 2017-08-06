@@ -5,7 +5,7 @@ using Apex.Data.Paginations;
 
 namespace Apex.Services.Emails
 {
-    public interface IQueuedEmailService
+    public interface IQueuedEmailService : IService<QueuedEmail>
     {
         //Task<QueuedEmail> GetAsync(int id);
 
