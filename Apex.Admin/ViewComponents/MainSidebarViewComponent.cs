@@ -24,14 +24,14 @@ namespace Apex.Admin.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            IList<MenuViewModel> menuViewModels = await GetMenusAsync();
+            IList<MenuItem> menuViewModels = await GetMenusAsync();
 
             return View(menuViewModels);
         }
 
-        private async Task<IList<MenuViewModel>> GetMenusAsync()
+        private async Task<IList<MenuItem>> GetMenusAsync()
         {
-            IList<MenuViewModel> menuViewModels = new List<MenuViewModel>();
+            IList<MenuItem> menuViewModels = new List<MenuItem>();
             var user = await GetCurrentUserAsync();
 
             if (user != null)
@@ -66,14 +66,14 @@ namespace Apex.Admin.ViewComponents
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        private void GetMenuViewModels(Menu menu, IList<MenuViewModel> menuViewModels)
+        private void GetMenuViewModels(Menu menu, IList<MenuItem> menuViewModels)
         {
-            MenuViewModel viewModel = new MenuViewModel(menu);
+            MenuItem viewModel = new MenuItem(menu);
             menuViewModels.Add(viewModel);
 
             foreach (var sub in menu.SubMenus)
             {
-                GetMenuViewModels(sub, viewModel.SubMenus);
+                GetMenuViewModels(sub, viewModel.SubMenuItems);
             }
         }
     }

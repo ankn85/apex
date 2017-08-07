@@ -1,4 +1,5 @@
-﻿using Apex.Services.Accounts;
+﻿using Apex.Admin.Models;
+using Apex.Services.Accounts;
 using Apex.Services.Caching;
 using Apex.Services.Emails;
 using Apex.Services.Logs;
@@ -41,6 +42,9 @@ namespace Apex.Websites.AppStart
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IMenuService, MenuService>();
+
+            // Admin Context.
+            services.AddScoped<IAdminContext, AdminContext>();
 
             return services;
         }

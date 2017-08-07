@@ -1,12 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Apex.Admin.Models;
 using Apex.Admin.ViewModels.Authentication;
 using Apex.Data.Entities.Accounts;
+using Apex.Services.Accounts;
 using Apex.Services.Emails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Apex.Admin.Controllers
@@ -19,6 +23,9 @@ namespace Apex.Admin.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
+        private readonly IMenuService _menuService;
+        private readonly IAdminContext _adminContext;
+
         private readonly IQueuedEmailService _queuedEmailService;
         private readonly IEmailAccountService _emailAccountService;
 
@@ -26,6 +33,8 @@ namespace Apex.Admin.Controllers
             ILogger<AuthenticationController> logger,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            IMenuService menuService,
+            IAdminContext adminContext,
             IQueuedEmailService queuedEmailService,
             IEmailAccountService emailAccountService)
         {
@@ -33,6 +42,9 @@ namespace Apex.Admin.Controllers
 
             _userManager = userManager;
             _signInManager = signInManager;
+
+            _menuService = menuService;
+            _adminContext = adminContext;
 
             _queuedEmailService = queuedEmailService;
             _emailAccountService = emailAccountService;
@@ -59,6 +71,8 @@ namespace Apex.Admin.Controllers
 
                 if (result.Succeeded)
                 {
+                    await AssignAdminContext(email);
+
                     return RedirectToLocal(returnUrl);
                 }
 
@@ -265,6 +279,26 @@ namespace Apex.Admin.Controllers
         #endregion
 
         #region Helpers
+
+        private async Task AssignAdminContext(string email)
+        {
+            var user = await GetCurrentUserAsync(email);
+
+            if (user != null)
+            {
+                var menus = await _menuService.GetListAsync(user);
+
+                _adminContext.SetAdminContext(user, menus);
+            }
+        }
+
+        private async Task<ApplicationUser> GetCurrentUserAsync(string email)
+        {
+            return await _userManager.Users
+                .Include(u => u.Roles)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
 
         private void AddErrorsToModelState(IdentityResult result)
         {
