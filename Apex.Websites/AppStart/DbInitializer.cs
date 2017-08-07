@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Apex.Data;
 using Apex.Data.Entities.Accounts;
 using Apex.Data.Entities.Emails;
-using Apex.Services.Accounts;
 using Apex.Services.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +15,13 @@ namespace Apex.Websites.AppStart
         public async Task Initialize(
             ObjectDbContext dbContext,
             RoleManager<ApplicationRole> roleManager,
-            UserManager<ApplicationUser> userManager,
-            IPermissionProvider permissionProvider)
+            UserManager<ApplicationUser> userManager)
         {
             await dbContext.Database.EnsureCreatedAsync();
 
             await SeedIdentityAsync(roleManager, userManager);
 
-            await SeedPermissionRecordsAsync(dbContext, permissionProvider, roleManager);
+            await SeedMenusAsync(dbContext, roleManager);
 
             await SeedEmailAccountsAsync(dbContext);
         }
@@ -68,35 +66,150 @@ namespace Apex.Websites.AppStart
             }
         }
 
-        private async Task SeedPermissionRecordsAsync(
+        private async Task SeedMenusAsync(
             ObjectDbContext dbContext,
-            IPermissionProvider permissionProvider,
             RoleManager<ApplicationRole> roleManager)
         {
-            var permissionRecordDbSet = dbContext.Set<PermissionRecord>();
+            var menuDbSet = dbContext.Set<Menu>();
 
-            if (!await permissionRecordDbSet.AnyAsync())
+            if (!await menuDbSet.AnyAsync())
             {
-                string roleName = "Administrators";
-                var role = await roleManager.FindByNameAsync(roleName);
+                string adminRole = "Administrators";
+                ApplicationRole role = await roleManager.FindByNameAsync(adminRole);
 
                 if (role != null)
                 {
-                    var permissionRecords = permissionProvider.GetPermissionRecords();
+                    DateTime utcNow = DateTime.UtcNow;
 
-                    foreach (var item in permissionRecords)
+                    IEnumerable<Menu> menus = new List<Menu>
                     {
-                        await permissionRecordDbSet.AddAsync(new PermissionRecord
+                        new Menu
                         {
-                            Name = item.Name,
-                            SystemName = item.SystemName,
-                            Category = item.Category,
-                            PermissionRecordRoles = new List<PermissionRecordRole>
+                            Title = "Dashboard",
+                            Description = "Dashboard",
+                            Url = "/admin/dashboard",
+                            Icon = "fa fa-dashboard",
+                            Priority = 1,
+                            RoleMenus = new List<ApplicationRoleMenu>
                             {
-                                new PermissionRecordRole { ApplicationRoleId = role.Id, Permission = (int)Permission.Full }
+                                new ApplicationRoleMenu
+                                {
+                                    Role = role,
+                                    Permission = (int)Permission.Full,
+                                    CreatedOnUtc = utcNow
+                                }
                             }
-                        });
-                    }
+                        },
+                        new Menu
+                        {
+                            Title = "Users & Roles",
+                            Description = "Users & Roles",
+                            Icon = "fa fa-users",
+                            Priority = 10,
+                            RoleMenus = new List<ApplicationRoleMenu>
+                            {
+                                new ApplicationRoleMenu
+                                {
+                                    Role = role,
+                                    Permission = (int)Permission.Full,
+                                    CreatedOnUtc = utcNow
+                                }
+                            },
+                            SubMenus = new List<Menu>
+                            {
+                                new Menu
+                                {
+                                    Title = "User",
+                                    Description = "User",
+                                    Url = "/admin/user",
+                                    Icon = "fa fa-users",
+                                    Priority = 1,
+                                    RoleMenus = new List<ApplicationRoleMenu>
+                                    {
+                                        new ApplicationRoleMenu
+                                        {
+                                            Role = role,
+                                            Permission = (int)Permission.Full,
+                                            CreatedOnUtc = utcNow
+                                        }
+                                    }
+                                },
+                                new Menu
+                                {
+                                    Title = "Role",
+                                    Description = "Role",
+                                    Url = "/admin/role",
+                                    Icon = "fa fa-lock",
+                                    Priority = 2,
+                                    RoleMenus = new List<ApplicationRoleMenu>
+                                    {
+                                        new ApplicationRoleMenu
+                                        {
+                                            Role = role,
+                                            Permission = (int)Permission.Full,
+                                            CreatedOnUtc = utcNow
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new Menu
+                        {
+                            Title = "System",
+                            Description = "System",
+                            Icon = "fa fa-wrench",
+                            Priority = 30,
+                            RoleMenus = new List<ApplicationRoleMenu>
+                            {
+                                new ApplicationRoleMenu
+                                {
+                                    Role = role,
+                                    Permission = (int)Permission.Full,
+                                    CreatedOnUtc = utcNow
+                                }
+                            },
+                            SubMenus = new List<Menu>
+                            {
+                                new Menu
+                                {
+                                    Title = "Email Account",
+                                    Description = "Email Account",
+                                    Url = "/admin/emailaccount",
+                                    Icon = "fa fa-envelope",
+                                    Priority = 1,
+                                    RoleMenus = new List<ApplicationRoleMenu>
+                                    {
+                                        new ApplicationRoleMenu
+                                        {
+                                            Role = role,
+                                            Permission = (int)Permission.Full,
+                                            CreatedOnUtc = utcNow
+                                        }
+                                    }
+                                },
+                                new Menu
+                                {
+                                    Title = "Log",
+                                    Description = "Log",
+                                    Url = "/admin/log",
+                                    Icon = "fa fa-database",
+                                    Priority = 2,
+                                    RoleMenus = new List<ApplicationRoleMenu>
+                                    {
+                                        new ApplicationRoleMenu
+                                        {
+                                            Role = role,
+                                            Permission = (int)Permission.Full,
+                                            CreatedOnUtc = utcNow
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    };
+
+                    await menuDbSet.AddRangeAsync(menus);
 
                     await dbContext.SaveChangesAsync();
                 }

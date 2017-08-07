@@ -25,10 +25,9 @@
 <body class="hold-transition skin-blue-light sidebar-mini fixed">
     <div class="wrapper">
         @{
-            var mainHeaderRender = Html.RenderPartialAsync("~/Areas/Admin/Views/Shared/ViewComponents/_MainHeader.cshtml");
-            var mainSidebarRender = Html.RenderPartialAsync("~/Areas/Admin/Views/Shared/ViewComponents/_MainSidebar.cshtml");
-            Task.WaitAll(mainHeaderRender, mainSidebarRender);
+            await Html.RenderPartialAsync("~/Areas/Admin/Views/Shared/ViewComponents/_MainHeader.cshtml");
         }
+        @await Component.InvokeAsync("MainSidebar");
 
         <div class="content-wrapper">
             <section class="content-header">

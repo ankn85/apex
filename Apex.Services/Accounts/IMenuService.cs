@@ -4,8 +4,8 @@ using Apex.Data.Entities.Accounts;
 
 namespace Apex.Services.Accounts
 {
-    public interface IPermissionRecordService
+    public interface IMenuService : IService<Menu>
     {
-        Task<IEnumerable<PermissionRecord>> GetPermissionRecordsByUser(ApplicationUser user);
+        Task<IList<Menu>> GetReadListAsync(ApplicationUser user);
     }
 }

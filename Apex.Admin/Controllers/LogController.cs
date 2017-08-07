@@ -21,7 +21,7 @@ namespace Apex.Admin.Controllers
 
         public IActionResult Index()
         {
-            PopularLevels();
+            PopulateLevels();
 
             return View();
         }
@@ -57,7 +57,7 @@ namespace Apex.Admin.Controllers
             return Ok(effectedRows);
         }
 
-        private void PopularLevels()
+        private void PopulateLevels()
         {
             IEnumerable<SelectListItem> levels = new List<SelectListItem>
             {

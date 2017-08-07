@@ -29,7 +29,7 @@ namespace Apex.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await PopularRolesAsync();
+            await PopulateRolesAsync();
 
             return View();
         }
@@ -166,7 +166,7 @@ namespace Apex.Admin.Controllers
             return Ok(effectedRows);
         }
 
-        private async Task PopularRolesAsync()
+        private async Task PopulateRolesAsync()
         {
             var roles = await _roleService.GetListAsync();
 

@@ -59,8 +59,6 @@ namespace Apex.Admin.Controllers
 
                 if (result.Succeeded)
                 {
-                    ApplicationUser user = await GetCurrentUserAsync();
-
                     return RedirectToLocal(returnUrl);
                 }
 
@@ -267,11 +265,6 @@ namespace Apex.Admin.Controllers
         #endregion
 
         #region Helpers
-
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
 
         private void AddErrorsToModelState(IdentityResult result)
         {

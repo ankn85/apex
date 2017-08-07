@@ -19,8 +19,8 @@ namespace Apex.Data.Mapping
                     new SettingMap(),
                     new EmailAccountMap(),
                     new QueuedEmailMap(),
-                    new PermissionRecordMap(),
-                    new PermissionRecordRoleMap(),
+                    new MenuMap(),
+                    new ApplicationRoleMenuMap(),
 
                     //new GroupMap(),
                     //new QTagMap(),

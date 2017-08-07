@@ -40,8 +40,7 @@ namespace Apex.Websites.AppStart
             // Accounts.
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IPermissionProvider, StandardPermissionProvider>();
-            //services.AddScoped<IPermissionRecordService, PermissionRecordService>();
+            services.AddScoped<IMenuService, MenuService>();
 
             return services;
         }

@@ -15,6 +15,6 @@ namespace Apex.Data.Entities.Accounts
         {
         }
 
-        public virtual ICollection<PermissionRecordRole> PermissionRecordRoles { get; set; }
+        public virtual ICollection<ApplicationRoleMenu> RoleMenus { get; set; }
     }
 }
