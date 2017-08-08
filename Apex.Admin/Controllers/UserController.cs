@@ -28,7 +28,7 @@ namespace Apex.Admin.Controllers
             _accountService = accountService;
         }
 
-        [AdminPermission(Permission.Read)]
+        //[AdminPermission(Permission.Read)]
         public async Task<IActionResult> Index()
         {
             await PopulateRolesAsync();
@@ -37,7 +37,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost]
-        [AdminPermission(Permission.Read, "index")]
+        //[AdminPermission(Permission.Read)]
         public async Task<IActionResult> Search(AccountSearchViewModel model)
         {
             model.ParseFormData(Request.Form);
@@ -53,7 +53,7 @@ namespace Apex.Admin.Controllers
             return model.CreateResponse(logs.TotalRecords, logs.TotalRecordsFiltered, logs);
         }
 
-        [AdminPermission(Permission.Host)]
+        //[AdminPermission(Permission.Host)]
         public async Task<IActionResult> Create()
         {
             AccountViewModel model = new AccountCreateViewModel();
@@ -63,7 +63,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        [AdminPermission(Permission.Host)]
+        //[AdminPermission(Permission.Host)]
         public async Task<IActionResult> Create(AccountCreateViewModel model)
         {
             if (ModelState.IsValid)
@@ -84,7 +84,7 @@ namespace Apex.Admin.Controllers
             return View(model);
         }
 
-        [AdminPermission(Permission.Host)]
+        //[AdminPermission(Permission.Host)]
         public async Task<IActionResult> Update(int id)
         {
             ApplicationUser entity = await _accountService.FindAsync(id);
@@ -103,7 +103,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        [AdminPermission(Permission.Host)]
+        //[AdminPermission(Permission.Host)]
         public async Task<IActionResult> Update(AccountUpdateViewModel model)
         {
             if (string.IsNullOrEmpty(model.Password))
@@ -161,7 +161,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost]
-        [AdminPermission(Permission.Host)]
+        //[AdminPermission(Permission.Host)]
         public async Task<IActionResult> Delete(int[] ids)
         {
             int effectedRows = 0;

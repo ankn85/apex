@@ -15,6 +15,15 @@ namespace Apex.Services.Accounts
         {
         }
 
+        public async Task<IList<Menu>> GetListAsync()
+        {
+            return await Table
+                .Include(m => m.SubMenus)
+                .OrderBy(m => m.Priority)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<IList<Menu>> GetReadListAsync(ApplicationUser user)
         {
             var roleIds = user.Roles.Select(role => role.RoleId);

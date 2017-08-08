@@ -8,7 +8,7 @@ namespace Apex.Admin.Controllers
 {
     public class DashboardController : AdminController
     {
-        [AdminPermission(Permission.Read)]
+        //[AdminPermission(Permission.Read)]
         public IActionResult Index()
         {
             return View();

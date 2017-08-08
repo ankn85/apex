@@ -27,10 +27,10 @@ namespace Apex.Admin.Attributes
             private readonly string _controller;
             private readonly string _area;
 
-            private readonly IAdminContext _adminContext;
+            //private readonly IAdminContext _adminContext;
 
             public AdminPermissionFilter(
-                IAdminContext adminContext,
+                //IAdminContext adminContext,
                 Permission permission,
                 string action = null,
                 string controller = null,
@@ -41,7 +41,7 @@ namespace Apex.Admin.Attributes
                 _controller = controller;
                 _area = area;
 
-                _adminContext = adminContext;
+                //_adminContext = adminContext;
             }
 
             public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -58,10 +58,10 @@ namespace Apex.Admin.Attributes
                     url += $"/{action}";
                 }
 
-                if (!_adminContext.GetPermission(url).HasFlag(_permission))
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                //if (!_adminContext.GetPermission(url).HasFlag(_permission))
+                //{
+                //    throw new UnauthorizedAccessException();
+                //}
 
                 await next.Invoke();
             }

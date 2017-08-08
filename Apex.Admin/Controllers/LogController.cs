@@ -21,7 +21,7 @@ namespace Apex.Admin.Controllers
             _logService = logService;
         }
 
-        [AdminPermission(Permission.Read)]
+        //[AdminPermission(Permission.Read)]
         public IActionResult Index()
         {
             PopulateLevels();
@@ -30,7 +30,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost]
-        [AdminPermission(Permission.Read, "index")]
+        //[AdminPermission(Permission.Read)]
         public async Task<IActionResult> Search(LogSearchViewModel model)
         {
             model.ParseFormData(Request.Form);
@@ -48,7 +48,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost]
-        [AdminPermission(Permission.Host)]
+        //[AdminPermission(Permission.Host)]
         public async Task<IActionResult> Delete(int[] ids)
         {
             int effectedRows = 0;

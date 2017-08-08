@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Menu";
+
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Menu", string.Empty, "fa-list-ul")
+    });
+}
+@section styles {
+    @*<link rel="stylesheet" href="~/assets/styles/admin/plugins.min.css">
+    <link rel="stylesheet" href="~/assets/styles/admin/datatables.min.css">*@
+}
+<div class="box box-solid">
+    <div class="box-body">
+        <table class="table table-hover">
+
+        </table>
+    </div>
+</div>
