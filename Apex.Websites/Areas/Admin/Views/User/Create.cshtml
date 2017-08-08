@@ -3,10 +3,10 @@
     ViewData["Title"] = "User";
     ViewData["TitleSmall"] = "<a href=\"/admin/user\"><i class=\"fa fa-arrow-circle-left\"></i> Back to Account list</a>";
 
-    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new CrumbViewModel("Account", Url.Action("index", "user"), "fa-users"),
-        new CrumbViewModel("Create", string.Empty, "fa-plus")
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Account", Url.Action("index", "user"), "fa-users"),
+        new Crumb("Create", string.Empty, "fa-plus")
     });
 }
 @section styles {

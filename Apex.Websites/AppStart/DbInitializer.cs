@@ -122,7 +122,7 @@ namespace Apex.Websites.AppStart
                                     Title = "User",
                                     Description = "User",
                                     Url = "/admin/user",
-                                    Icon = "fa fa-users",
+                                    Icon = "fa fa-circle-o",
                                     Priority = 1,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {
@@ -139,7 +139,7 @@ namespace Apex.Websites.AppStart
                                     Title = "Role",
                                     Description = "Role",
                                     Url = "/admin/role",
-                                    Icon = "fa fa-lock",
+                                    Icon = "fa fa-circle-o",
                                     Priority = 2,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {
@@ -157,7 +157,7 @@ namespace Apex.Websites.AppStart
                         {
                             Title = "System",
                             Description = "System",
-                            Icon = "fa fa-wrench",
+                            Icon = "fa fa-gears",
                             Priority = 30,
                             RoleMenus = new List<ApplicationRoleMenu>
                             {
@@ -175,7 +175,7 @@ namespace Apex.Websites.AppStart
                                     Title = "Email Account",
                                     Description = "Email Account",
                                     Url = "/admin/emailaccount",
-                                    Icon = "fa fa-envelope",
+                                    Icon = "fa fa-circle-o",
                                     Priority = 1,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {
@@ -192,7 +192,7 @@ namespace Apex.Websites.AppStart
                                     Title = "Log",
                                     Description = "Log",
                                     Url = "/admin/log",
-                                    Icon = "fa fa-database",
+                                    Icon = "fa fa-circle-o",
                                     Priority = 2,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {

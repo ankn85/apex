@@ -1,9 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Email Account";
 
-    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new CrumbViewModel("Email Account", string.Empty, "fa-envelope")
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Email Account", string.Empty, "fa-envelope")
     });
 }
 @section styles {

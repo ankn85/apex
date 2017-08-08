@@ -1,0 +1,31 @@
+﻿@model MenuItem
+<ul class="treeview-menu">
+    @foreach (var menuItem in Model.SubMenuItems)
+    {
+        bool hasSubMenuItems = menuItem.SubMenuItems.Count > 0;
+        string liClass = hasSubMenuItems ? "treeview " : string.Empty;
+        if (menuItem.Selected)
+        {
+            liClass += "active";
+        }
+        <li @(liClass.Length != 0 ? $"class={liClass}" : string.Empty)>
+            <a href="@menuItem.Url">
+                <i class="@menuItem.Icon"></i> <span>@menuItem.Title</span>
+                @if (hasSubMenuItems)
+                {
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                }
+                else if (!string.IsNullOrEmpty(menuItem.Note))
+                {
+                    <small class="pull-right @menuItem.NoteIcon">@menuItem.Note</small>
+                }
+            </a>
+            @if (hasSubMenuItems)
+            {
+                await Html.RenderPartialAsync("~/Areas/Admin/Views/Shared/Components/MainSidebar/_MenuItem.cshtml", menuItem);
+            }
+        </li>
+    }
+</ul>

@@ -17,7 +17,11 @@ namespace Apex.Data.Mapping.Accounts
 
             builder.Property(p => p.Url).HasMaxLength(256);
 
-            builder.Property(p => p.Url).HasMaxLength(128);
+            builder.Property(p => p.Icon).HasMaxLength(64);
+
+            builder.Property(p => p.Note).HasMaxLength(64);
+
+            builder.Property(p => p.NoteIcon).HasMaxLength(64);
 
             builder
                 .HasMany(m => m.SubMenus)

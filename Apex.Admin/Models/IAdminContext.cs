@@ -7,11 +7,7 @@ namespace Apex.Admin.Models
 {
     public interface IAdminContext
     {
-        int UserId { get; }
-
-        string UserName { get; }
-
-        string Email { get; }
+        string FullName { get; }
 
         MenuItem[] MenuItems { get; }
 

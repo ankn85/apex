@@ -2,9 +2,9 @@
     ViewData["Title"] = "500 Error Page";
     ViewData["TitleSmall"] = "Version 2.4.0";
 
-    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new CrumbViewModel("500 Error Page", string.Empty, "fa-ban")
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("500 Error Page", string.Empty, "fa-ban")
     });
 }
 <div class="error-page">

@@ -2,9 +2,9 @@
     ViewData["Title"] = "404 Page not found";
     ViewData["TitleSmall"] = "Version 2.4.0";
 
-    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new CrumbViewModel("404 Page not found", string.Empty, "fa-question")
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("404 Page not found", string.Empty, "fa-question")
     });
 }
 <div class="error-page">

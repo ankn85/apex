@@ -16,10 +16,10 @@
         iconClass = "fa-pencil";
     }
 
-    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new CrumbViewModel("Email Account", Url.Action("index", "emailaccount"), "fa-envelope"),
-        new CrumbViewModel(action, string.Empty, iconClass)
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Email Account", Url.Action("index", "emailaccount"), "fa-envelope"),
+        new Crumb(action, string.Empty, iconClass)
     });
 }
 @section scripts {

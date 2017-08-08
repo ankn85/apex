@@ -45,7 +45,7 @@ namespace Apex.Websites.AppStart
                 //cookieOpts.CookieName = ".apexIdentity";
                 //cookieOpts.CookiePath = "/";
                 //cookieOpts.DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo("C:\\Github\\Identity\\artifacts"));
-                //cookieOpts.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                cookieOpts.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 cookieOpts.LoginPath = new PathString("/admin/authentication/signin");
                 cookieOpts.LogoutPath = new PathString("/admin/authentication/signout");
                 cookieOpts.AccessDeniedPath = new PathString("/admin/error/forbidden");

@@ -15,18 +15,6 @@ namespace Apex.Services.Accounts
         {
         }
 
-        public async Task<IList<Menu>> GetListAsync(ApplicationUser user)
-        {
-            var roleIds = user.Roles.Select(role => role.RoleId);
-
-            return await Table
-                .Include(m => m.RoleMenus)
-                .Where(m =>
-                    m.RoleMenus.Any(rm => roleIds.Contains(rm.RoleId) &&
-                    ((Permission)rm.Permission).HasFlag(Permission.Read)))
-                .ToListAsync();
-        }
-
         public async Task<IList<Menu>> GetReadListAsync(ApplicationUser user)
         {
             var roleIds = user.Roles.Select(role => role.RoleId);

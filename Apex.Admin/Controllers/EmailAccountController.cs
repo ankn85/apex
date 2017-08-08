@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Apex.Admin.Attributes;
 using Apex.Admin.ViewModels.DataTables;
 using Apex.Admin.ViewModels.Emails;
 using Apex.Data.Entities.Emails;
 using Apex.Services.Emails;
+using Apex.Services.Enums;
 using Apex.Services.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,12 +21,14 @@ namespace Apex.Admin.Controllers
             _emailAccountService = emailAccountService;
         }
 
+        [AdminPermission(Permission.Read)]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
+        [AdminPermission(Permission.Read, "index")]
         public async Task<IActionResult> Search(DataTablesRequest model)
         {
             model.ParseFormData(Request.Form);
@@ -37,12 +41,14 @@ namespace Apex.Admin.Controllers
                 emailAccounts);
         }
 
+        [AdminPermission(Permission.Host)]
         public IActionResult Create()
         {
             return View("CreateOrUpdate", new EmailAccountViewModel());
         }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [AdminPermission(Permission.Host)]
         public async Task<IActionResult> Create(EmailAccountViewModel model)
         {
             if (ModelState.IsValid)
@@ -56,6 +62,7 @@ namespace Apex.Admin.Controllers
             return View("CreateOrUpdate", model);
         }
 
+        [AdminPermission(Permission.Host)]
         public async Task<IActionResult> Update(int id)
         {
             EmailAccount entity = await _emailAccountService.FindAsync(id);
@@ -69,6 +76,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [AdminPermission(Permission.Host)]
         public async Task<IActionResult> Update(EmailAccountViewModel model)
         {
             if (ModelState.IsValid)
@@ -90,6 +98,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost]
+        [AdminPermission(Permission.Host)]
         public async Task<IActionResult> Delete(int[] ids)
         {
             int effectedRows = 0;

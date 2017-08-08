@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using Apex.Admin.Attributes;
 using Apex.Admin.ViewModels.Layouts;
+using Apex.Services.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Apex.Admin.Controllers
 {
     public class DashboardController : AdminController
     {
+        [AdminPermission(Permission.Read)]
         public IActionResult Index()
         {
             return View();

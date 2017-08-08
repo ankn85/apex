@@ -286,7 +286,7 @@ namespace Apex.Admin.Controllers
 
             if (user != null)
             {
-                var menus = await _menuService.GetListAsync(user);
+                var menus = await _menuService.GetReadListAsync(user);
 
                 _adminContext.SetAdminContext(user, menus);
             }

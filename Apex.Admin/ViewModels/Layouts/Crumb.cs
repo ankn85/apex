@@ -1,22 +1,22 @@
 ﻿namespace Apex.Admin.ViewModels.Layouts
 {
-    public class CrumbViewModel
+    public class Crumb
     {
-        public CrumbViewModel()
+        public Crumb()
         {
         }
 
-        public CrumbViewModel(string text)
+        public Crumb(string text)
             : this(text, null, null)
         {
         }
 
-        public CrumbViewModel(string text, string link)
+        public Crumb(string text, string link)
             : this(text, link, null)
         {
         }
 
-        public CrumbViewModel(string text, string link, string icon)
+        public Crumb(string text, string link, string icon)
         {
             Text = text;
             Link = link;

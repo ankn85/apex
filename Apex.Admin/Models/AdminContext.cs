@@ -10,9 +10,7 @@ namespace Apex.Admin.Models
 {
     public sealed class AdminContext : IAdminContext
     {
-        private const string UserIdSessionKey = "UserId";
-        private const string UserNameSessionKey = "UserName";
-        private const string EmailSessionKey = "Email";
+        private const string FullNameSessionKey = "FullName";
         private const string MenuItemsSessionKey = "MenuItems";
 
         private readonly ISession _session;
@@ -22,39 +20,15 @@ namespace Apex.Admin.Models
             _session = httpContextAccessor.HttpContext.Session;
         }
 
-        public int UserId
+        public string FullName
         {
             get
             {
-                return _session.GetInt32(UserIdSessionKey) ?? 0;
+                return _session.GetString(FullNameSessionKey);
             }
             private set
             {
-                _session.SetInt32(UserIdSessionKey, value);
-            }
-        }
-
-        public string UserName
-        {
-            get
-            {
-                return _session.GetString(UserNameSessionKey);
-            }
-            private set
-            {
-                _session.SetString(UserNameSessionKey, value);
-            }
-        }
-
-        public string Email
-        {
-            get
-            {
-                return _session.GetString(EmailSessionKey);
-            }
-            private set
-            {
-                _session.SetString(EmailSessionKey, value);
+                _session.SetString(FullNameSessionKey, value);
             }
         }
 
@@ -89,30 +63,39 @@ namespace Apex.Admin.Models
 
         public void SetAdminContext(ApplicationUser user, IList<Menu> menus)
         {
-            UserId = user.Id;
-            UserName = user.UserName;
-            Email = user.Email;
+            FullName = user.FullName;
 
-            IList<MenuItem> menuItems = new List<MenuItem>();
-            var rootMenus = menus.Where(m => m.ParentId == null || m.ParentId.Value == 0);
-
-            foreach (var item in rootMenus)
-            {
-                MenuItem menuItem = new MenuItem(item);
-                BuildMenuItems(item.ParentId, menuItem, menus);
-
-                menuItems.Add(menuItem);
-            }
+            SetMenuItemsAndPermissions(menus);
         }
 
-        private void BuildMenuItems(int? parentId, MenuItem menuItem, IList<Menu> allMenus)
+        private void SetMenuItemsAndPermissions(IList<Menu> menus)
         {
-            var subMenus = allMenus.Where(m => m.ParentId == parentId);
+            IList<MenuItem> menuItems = new List<MenuItem>();
 
-            foreach (var item in subMenus)
+            foreach (Menu menu in menus)
             {
-                MenuItem subMenuItem = new MenuItem(item);
-                BuildMenuItems(item.ParentId, subMenuItem, allMenus);
+                if (menu.ParentId == null || menu.ParentId.Value == 0)
+                {
+                    BuildMenuItems(menu, menuItems);
+                }
+
+                if (!string.IsNullOrEmpty(menu.Url) && menu.RoleMenus.Any())
+                {
+                    _session.SetInt32(menu.Url, menu.RoleMenus.Max(rm => rm.Permission));
+                }
+            }
+
+            MenuItems = menuItems.ToArray();
+        }
+
+        private void BuildMenuItems(Menu menu, IList<MenuItem> menuItems)
+        {
+            MenuItem menuItem = new MenuItem(menu);
+            menuItems.Add(menuItem);
+
+            foreach (var sub in menu.SubMenus)
+            {
+                BuildMenuItems(sub, menuItem.SubMenuItems);
             }
         }
     }

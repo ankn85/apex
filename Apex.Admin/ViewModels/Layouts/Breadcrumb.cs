@@ -2,9 +2,9 @@
 
 namespace Apex.Admin.ViewModels.Layouts
 {
-    public class BreadcrumbViewModel : List<CrumbViewModel>
+    public class Breadcrumb : List<Crumb>
     {
-        public BreadcrumbViewModel(IEnumerable<CrumbViewModel> crumbs)
+        public Breadcrumb(IEnumerable<Crumb> crumbs)
             : base(crumbs)
         {
         }

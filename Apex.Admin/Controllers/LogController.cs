@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Apex.Admin.Attributes;
 using Apex.Admin.ViewModels.DataTables;
 using Apex.Admin.ViewModels.Logs;
 using Apex.Data.Entities.Logs;
+using Apex.Services.Enums;
 using Apex.Services.Logs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,6 +21,7 @@ namespace Apex.Admin.Controllers
             _logService = logService;
         }
 
+        [AdminPermission(Permission.Read)]
         public IActionResult Index()
         {
             PopulateLevels();
@@ -27,6 +30,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost]
+        [AdminPermission(Permission.Read, "index")]
         public async Task<IActionResult> Search(LogSearchViewModel model)
         {
             model.ParseFormData(Request.Form);
@@ -44,6 +48,7 @@ namespace Apex.Admin.Controllers
         }
 
         [HttpPost]
+        [AdminPermission(Permission.Host)]
         public async Task<IActionResult> Delete(int[] ids)
         {
             int effectedRows = 0;

@@ -2,9 +2,9 @@
 @{
     ViewData["Title"] = "Log";
 
-    ViewData["Breadcrumb"] = new BreadcrumbViewModel(new CrumbViewModel[] {
-        new CrumbViewModel("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new CrumbViewModel("Log", string.Empty, "fa-database")
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Log", string.Empty, "fa-database")
     });
 
     var current = DateTime.UtcNow;
