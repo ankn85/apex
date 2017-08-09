@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Apex.Data.Entities.Accounts;
+@model IList<Menu>
+@{
     ViewData["Title"] = "Menu";
 
     ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
@@ -7,13 +9,89 @@
     });
 }
 @section styles {
-    @*<link rel="stylesheet" href="~/assets/styles/admin/plugins.min.css">
-    <link rel="stylesheet" href="~/assets/styles/admin/datatables.min.css">*@
+    <link rel="stylesheet" href="~/assets/styles/admin/plugins.min.css">
+    <link rel="stylesheet" href="~/assets/styles/admin/datatables.min.css">
 }
 <div class="box box-solid">
+    <div class="box-header">
+        <h3 class="box-title"></h3>
+        <div class="box-tools">
+            <a href="/admin/menu/create" class="btn btn-sm btn-flat btn-success"><i class="fa fa-plus"></i> Create New</a>
+            <button type="button" class="btn btn-sm btn-flat btn-danger disabled" id="btnDelete" disabled="disabled"><i class="fa fa-trash-o"></i> Delete (Selected)</button>
+        </div>
+    </div>
     <div class="box-body">
         <table class="table table-hover">
-
+            <tr>
+                <th><input id="checkbox-all" type="checkbox"></th>
+                <th>Title</th>
+                <th>Url</th>
+                <th>Icon</th>
+                <th>Note</th>
+                <th>Note Icon</th>
+                <th>Priority</th>
+            </tr>
+            @if (Model == null || Model.Count == 0)
+            { 
+                <tr>
+                    <td colspan="6">No data found</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var menu in Model)
+                {
+                    if (menu.ParentId == null || menu.ParentId.Value == 0)
+                    {
+                        @:@Html.Raw(Render(menu))
+                    }
+                }
+            }
         </table>
     </div>
 </div>
+@functions {
+    public string Render(Menu menu)
+    {
+        string html = string.Empty;
+
+        if (menu.ParentId == null || menu.ParentId.Value == 0)
+        {
+            html += "<tr>" +
+                $"<td class=\"checkbox-control\"><input value=\"{menu.Id}\" type=\"checkbox\"></td>" +
+                $"<td>{menu.Title}</td>" +
+                $"<td>{menu.Url}</td>" +
+                (string.IsNullOrEmpty(menu.Icon) ? "<td></td>" : $"<td><i class={menu.Icon}></i></td>") +
+                $"<td>{menu.Note}</td>" +
+                (string.IsNullOrEmpty(menu.NoteIcon) ? "<td></td>" : $"<td><i class={menu.NoteIcon}></i></td>") +
+                $"<td>{menu.Priority}</td>" +
+            "</tr>";
+
+            html += RenderSubMenu(menu);
+        }
+
+        return html;
+    }
+    public string RenderSubMenu(Menu menu, int level = 1)
+    {
+        level++;
+        string html = string.Empty;
+
+        foreach (var subMenu in menu.SubMenus)
+        {
+            html += "<tr>" +
+                $"<td class=\"checkbox-control\"><input value=\"{subMenu.Id}\" type=\"checkbox\"></td>" +
+                $"<td><span class=\"menu-level-{level}\">└──</span> {subMenu.Title}</td>" +
+                $"<td>{subMenu.Url}</td>" +
+                (string.IsNullOrEmpty(subMenu.Icon) ? "<td></td>" : $"<td><i class={subMenu.Icon}></i></td>") +
+                $"<td>{subMenu.Note}</td>" +
+                (string.IsNullOrEmpty(subMenu.NoteIcon) ? "<td></td>" : $"<td><i class={subMenu.NoteIcon}></i></td>") +
+                $"<td>{subMenu.Priority}</td>" +
+            "</tr>";
+
+            html += RenderSubMenu(subMenu, level);
+        }
+
+        return html;
+    }
+}
