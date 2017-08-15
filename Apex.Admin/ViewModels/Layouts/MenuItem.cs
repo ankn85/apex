@@ -15,7 +15,7 @@ namespace Apex.Admin.ViewModels.Layouts
             Url = string.IsNullOrEmpty(menu.Url) ? "javascript:;" : menu.Url;
             Icon = menu.Icon;
             Note = menu.Note;
-            NoteIcon = menu.NoteIcon;
+            NoteBackground = menu.NoteBackground;
             SubMenuItems = new List<MenuItem>();
         }
 
@@ -27,7 +27,7 @@ namespace Apex.Admin.ViewModels.Layouts
 
         public string Note { get; set; }
 
-        public string NoteIcon { get; set; }
+        public string NoteBackground { get; set; }
 
         public bool Selected { get; set; }
 

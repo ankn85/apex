@@ -1,0 +1,105 @@
+﻿@model Apex.Admin.ViewModels.Accounts.MenuViewModel
+@{
+    ViewData["Title"] = "Menu";
+    ViewData["TitleSmall"] = "<a href=\"/admin/menu\"><i class=\"fa fa-arrow-circle-left\"></i> Back to Menu list</a>";
+
+    string action, iconClass;
+
+    if (Model.Id == 0)
+    {
+        action = "Create";
+        iconClass = "fa-plus";
+    }
+    else
+    {
+        action = "Update";
+        iconClass = "fa-pencil";
+    }
+
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Menu", Url.Action("index", "menu"), "fa-list-ul"),
+        new Crumb(action, string.Empty, iconClass)
+    });
+}
+@section styles {
+    <link rel="stylesheet" href="~/assets/styles/admin/plugins.min.css">
+}
+@section scripts {
+    <script src="~/assets/scripts/admin/plugins.min.js"></script>
+    <script src="~/assets/scripts/admin/jquery.val.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#ParentId").select2();
+        });
+    </script>
+}
+<div class="box box-solid">
+    <form class="form-horizontal" asp-controller="menu" asp-action="@action.ToLowerInvariant()" asp-anti-forgery="true" method="post" novalidate>
+        <div class="box-body">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <div asp-validation-summary="@ValidationSummary.ModelOnly" class="text-red"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ParentId" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <select asp-for="ParentId" class="form-control" style="width: 100%"
+                                asp-items="@Model.Menus"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-red"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Url" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Url" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Icon" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Icon" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Note" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Note" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NoteBackground" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="NoteBackground" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Priority" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="Priority" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-flat btn-primary">
+                            <i class="fa @iconClass"></i>&nbsp;@action
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="Id" />
+    </form>
+</div>

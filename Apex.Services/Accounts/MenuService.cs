@@ -17,11 +17,23 @@ namespace Apex.Services.Accounts
 
         public async Task<IList<Menu>> GetListAsync()
         {
-            return await Table
+            var menus = await Table
                 .Include(m => m.SubMenus)
                 .OrderBy(m => m.Priority)
                 .AsNoTracking()
                 .ToListAsync();
+
+            IList<Menu> hierachicalMenus = new List<Menu>();
+
+            foreach (Menu menu in menus)
+            {
+                if (menu.ParentId == null || menu.ParentId.Value == 0)
+                {
+                    hierachicalMenus.Add(menu);
+                }
+            }
+
+            return hierachicalMenus;
         }
 
         public async Task<IList<Menu>> GetReadListAsync(ApplicationUser user)

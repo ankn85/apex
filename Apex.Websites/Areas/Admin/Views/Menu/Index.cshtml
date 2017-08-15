@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="~/assets/styles/admin/plugins.min.css">
     <link rel="stylesheet" href="~/assets/styles/admin/datatables.min.css">
 }
+@section scripts {
+    <script src="~/assets/scripts/admin/menu.list.min.js" asp-append-version="true"></script>
+}
 <div class="box box-solid">
     <div class="box-header">
         <h3 class="box-title"></h3>
@@ -28,23 +31,20 @@
                 <th>Url</th>
                 <th>Icon</th>
                 <th>Note</th>
-                <th>Note Icon</th>
                 <th>Priority</th>
+                <th></th>
             </tr>
             @if (Model == null || Model.Count == 0)
             { 
                 <tr>
-                    <td colspan="6">No data found</td>
+                    <td colspan="7">No data found</td>
                 </tr>
             }
             else
             {
                 foreach (var menu in Model)
                 {
-                    if (menu.ParentId == null || menu.ParentId.Value == 0)
-                    {
-                        @:@Html.Raw(Render(menu))
-                    }
+                    @:@Html.Raw(Render(menu))
                 }
             }
         </table>
@@ -53,45 +53,58 @@
 @functions {
     public string Render(Menu menu)
     {
-        string html = string.Empty;
-
-        if (menu.ParentId == null || menu.ParentId.Value == 0)
-        {
-            html += "<tr>" +
-                $"<td class=\"checkbox-control\"><input value=\"{menu.Id}\" type=\"checkbox\"></td>" +
-                $"<td>{menu.Title}</td>" +
-                $"<td>{menu.Url}</td>" +
-                (string.IsNullOrEmpty(menu.Icon) ? "<td></td>" : $"<td><i class={menu.Icon}></i></td>") +
-                $"<td>{menu.Note}</td>" +
-                (string.IsNullOrEmpty(menu.NoteIcon) ? "<td></td>" : $"<td><i class={menu.NoteIcon}></i></td>") +
-                $"<td>{menu.Priority}</td>" +
-            "</tr>";
-
-            html += RenderSubMenu(menu);
-        }
-
-        return html;
+        return $"{RenderRow(menu, 0)}{RenderSubMenu(menu, 1)}";
     }
-    public string RenderSubMenu(Menu menu, int level = 1)
+    public string RenderSubMenu(Menu parent, int level)
     {
         level++;
         string html = string.Empty;
 
-        foreach (var subMenu in menu.SubMenus)
+        foreach (var menu in parent.SubMenus)
         {
-            html += "<tr>" +
-                $"<td class=\"checkbox-control\"><input value=\"{subMenu.Id}\" type=\"checkbox\"></td>" +
-                $"<td><span class=\"menu-level-{level}\">└──</span> {subMenu.Title}</td>" +
-                $"<td>{subMenu.Url}</td>" +
-                (string.IsNullOrEmpty(subMenu.Icon) ? "<td></td>" : $"<td><i class={subMenu.Icon}></i></td>") +
-                $"<td>{subMenu.Note}</td>" +
-                (string.IsNullOrEmpty(subMenu.NoteIcon) ? "<td></td>" : $"<td><i class={subMenu.NoteIcon}></i></td>") +
-                $"<td>{subMenu.Priority}</td>" +
-            "</tr>";
-
-            html += RenderSubMenu(subMenu, level);
+            html += $"{RenderRow(menu, level)}{RenderSubMenu(menu, level)}";
         }
 
         return html;
+    }
+    public string RenderRow(Menu menu, int level)
+    {
+        return $"<tr>{RenderCheckbox(menu)}{RenderTitle(menu, level)}{RenderUrl(menu)}{RenderIcon(menu)}{RenderNote(menu)}{RenderPriority(menu)}{RenderUpdateControl(menu)}</tr>";
+    }
+    public string RenderCheckbox(Menu menu)
+    {
+        return $"<td class=\"checkbox-control\"><input value=\"{menu.Id}\" type=\"checkbox\"></td>";
+    }
+    public string RenderTitle(Menu menu, int level)
+    {
+        return level > 0 ?
+            $"<td><span class=\"menu-level-{level}\">└──</span> {menu.Title}</td>" :
+            $"<td>{menu.Title}</td>";
+    }
+    public string RenderUrl(Menu menu)
+    {
+        return $"<td>{menu.Url}</td>";
+    }
+    public string RenderIcon(Menu menu)
+    {
+        return string.IsNullOrEmpty(menu.Icon) ?
+            "<td></td>" :
+            $"<td><i class=\"{menu.Icon}\"></i></td>";
+    }
+    public string RenderNote(Menu menu)
+    {
+        string noteIcon = string.IsNullOrEmpty(menu.NoteBackground) ?
+            menu.Note :
+            $"<small class=\"label {menu.NoteBackground}\">{menu.Note}</small>";
+
+        return $"<td>{noteIcon}</td>";
+    }
+    public string RenderPriority(Menu menu)
+    {
+        return $"<td>{menu.Priority}</td>";
+    }
+    public string RenderUpdateControl(Menu menu)
+    {
+        return $"<td class=\"update-control\"><a href=\"/admin/menu/update?id={menu.Id}\" class=\"fa fa-pencil\" title=\"Update\"></a></td>";
     }
 }

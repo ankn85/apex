@@ -90,11 +90,11 @@ namespace Apex.Admin.Filters
             StringBuilder sb = new StringBuilder(256);
             HttpRequest request = httpContext.Request;
 
-            sb.Append("Url: ").Append(request.Path.Value).Append("\r\n");
-            sb.Append("QueryString: ").Append(request.QueryString.ToString()).Append("\r\n");
-            //sb.Append("Form: ").Append(request.Form.ToString()).Append("\r\n");
-            sb.Append("Content Type: ").Append(request.ContentType).Append("\r\n");
-            sb.Append("Content Length: ").Append(request.ContentLength).Append("\r\n");
+            sb.Append("Url: ").Append(request.Path.Value).Append("<br/>");
+            sb.Append("QueryString: ").Append(request.QueryString.ToString()).Append("<br/>");
+            //sb.Append("Form: ").Append(request.Form.ToString()).Append("<br/>");
+            sb.Append("Content Type: ").Append(request.ContentType).Append("<br/>");
+            sb.Append("Content Length: ").Append(request.ContentLength).Append("<br/>");
             sb.Append("Remote IP: ").Append(httpContext.Connection.RemoteIpAddress.ToString());
 
             return sb;
@@ -106,9 +106,8 @@ namespace Apex.Admin.Filters
 
             if (exception != null)
             {
-                sb.Append("Source: ").Append(exception.Source).Append("\r\n");
-                sb.Append("Message: ").Append(exception.Message).Append("\r\n");
-                sb.Append("Detail: ").Append(exception.ToString());
+                sb.Append("Source: ").Append(exception.Source).Append("<br/>")
+                    .Append("Message: ").Append(exception.Message).Append("<br/>");
             }
 
             return sb;

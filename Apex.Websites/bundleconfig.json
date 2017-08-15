@@ -97,5 +97,12 @@
     "inputFiles": [
       "Areas/Admin/Scripts/account.list.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/scripts/admin/menu.list.min.js",
+    "inputFiles": [
+      "wwwroot/assets/lib/bootbox/bootbox.js",
+      "Areas/Admin/Scripts/menu.list.js"
+    ]
   }
 ]

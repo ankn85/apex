@@ -14,7 +14,7 @@ namespace Apex.Data.Entities.Accounts
 
         public string Note { get; set; }
 
-        public string NoteIcon { get; set; }
+        public string NoteBackground { get; set; }
 
         public int Priority { get; set; }
 
