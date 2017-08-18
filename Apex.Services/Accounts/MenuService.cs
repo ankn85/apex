@@ -23,6 +23,25 @@ namespace Apex.Services.Accounts
                 .AsNoTracking()
                 .ToListAsync();
 
+            return GetHierachicalMenus(menus);
+        }
+
+        public async Task<IList<Menu>> GetReadListAsync(IEnumerable<int> roleIds)
+        {
+            var menus = await Table
+                .Include(m => m.SubMenus)
+                .Include(m => m.RoleMenus)
+                .Where(m =>
+                    m.RoleMenus.Any(rm => roleIds.Contains(rm.RoleId) &&
+                    ((Permission)rm.Permission).HasFlag(Permission.Read)))
+                .OrderBy(m => m.Priority)
+                .ToListAsync();
+
+            return GetHierachicalMenus(menus);
+        }
+
+        private IList<Menu> GetHierachicalMenus(IList<Menu> menus)
+        {
             IList<Menu> hierachicalMenus = new List<Menu>();
 
             foreach (Menu menu in menus)
@@ -34,20 +53,6 @@ namespace Apex.Services.Accounts
             }
 
             return hierachicalMenus;
-        }
-
-        public async Task<IList<Menu>> GetReadListAsync(ApplicationUser user)
-        {
-            var roleIds = user.Roles.Select(role => role.RoleId);
-
-            return await Table
-                .Include(m => m.SubMenus)
-                .Include(m => m.RoleMenus)
-                .Where(m =>
-                    m.RoleMenus.Any(rm => roleIds.Contains(rm.RoleId) &&
-                    ((Permission)rm.Permission).HasFlag(Permission.Read)))
-                .OrderBy(m => m.Priority)
-                .ToListAsync();
         }
     }
 }

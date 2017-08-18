@@ -8,6 +8,6 @@ namespace Apex.Services.Accounts
     {
         Task<IList<Menu>> GetListAsync();
 
-        Task<IList<Menu>> GetReadListAsync(ApplicationUser user);
+        Task<IList<Menu>> GetReadListAsync(IEnumerable<int> roleIds);
     }
 }

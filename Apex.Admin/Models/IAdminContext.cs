@@ -7,6 +7,8 @@ namespace Apex.Admin.Models
 {
     public interface IAdminContext
     {
+        bool SessionCompleted { get; }
+
         string FullName { get; }
 
         MenuItem[] MenuItems { get; }
@@ -18,5 +20,7 @@ namespace Apex.Admin.Models
         bool HasHost(string url);
 
         void SetAdminContext(ApplicationUser user, IList<Menu> menus);
+
+        void Clear();
     }
 }

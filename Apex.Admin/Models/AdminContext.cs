@@ -20,6 +20,8 @@ namespace Apex.Admin.Models
             _session = httpContextAccessor.HttpContext.Session;
         }
 
+        public bool SessionCompleted => !string.IsNullOrEmpty(FullName) && MenuItems != null;
+
         public string FullName
         {
             get
@@ -97,6 +99,11 @@ namespace Apex.Admin.Models
             {
                 BuildMenuItems(sub, menuItem.SubMenuItems);
             }
+        }
+
+        public void Clear()
+        {
+            _session.Clear();
         }
     }
 }
