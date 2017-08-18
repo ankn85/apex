@@ -1,0 +1,59 @@
+﻿@model Apex.Admin.ViewModels.Accounts.RoleViewModel
+@{
+    ViewData["Title"] = "Role";
+    ViewData["TitleSmall"] = "<a href=\"/admin/role\"><i class=\"fa fa-arrow-circle-left\"></i> Back to Role list</a>";
+
+    string action, iconClass;
+
+    if (Model.Id == 0)
+    {
+        action = "Create";
+        iconClass = "fa-plus";
+    }
+    else
+    {
+        action = "Update";
+        iconClass = "fa-pencil";
+    }
+
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Role", Url.Action("index", "role"), "fa-envelope"),
+        new Crumb(action, string.Empty, iconClass)
+    });
+}
+@section scripts {
+    <script src="~/assets/scripts/admin/jquery.val.min.js"></script>
+}
+<div class="box box-solid">
+    <form class="form-horizontal" asp-controller="role" asp-action="@action.ToLowerInvariant()" asp-anti-forgery="true" method="post" novalidate>
+        <div class="box-body">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <div asp-validation-summary="@ValidationSummary.ModelOnly" class="text-red"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RoleName" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <input asp-for="RoleName" class="form-control" />
+                        <span asp-validation-for="RoleName" class="text-red"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-flat btn-primary">
+                            <i class="fa @iconClass"></i>&nbsp;@action
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="Id" />
+    </form>
+</div>

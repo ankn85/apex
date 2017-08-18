@@ -31,7 +31,7 @@ namespace Apex.Admin.Controllers
             MenuViewModel model = new MenuViewModel();
             await AssignMenusAsync(model);
 
-            return View("CreateOrUpdate", model);
+            return View("Save", model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -47,7 +47,7 @@ namespace Apex.Admin.Controllers
 
             await AssignMenusAsync(model);
 
-            return View("CreateOrUpdate", model);
+            return View("Save", model);
         }
 
         public async Task<IActionResult> Update(int id)
@@ -62,7 +62,7 @@ namespace Apex.Admin.Controllers
             MenuViewModel model = new MenuViewModel(entity);
             await AssignMenusAsync(model);
 
-            return View("CreateOrUpdate", model);
+            return View("Save", model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -85,7 +85,7 @@ namespace Apex.Admin.Controllers
 
             await AssignMenusAsync(model);
 
-            return View("CreateOrUpdate", model);
+            return View("Save", model);
         }
 
         [HttpPost]

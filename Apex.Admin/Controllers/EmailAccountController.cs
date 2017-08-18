@@ -44,7 +44,7 @@ namespace Apex.Admin.Controllers
         //[AdminPermission(Permission.Host)]
         public IActionResult Create()
         {
-            return View("CreateOrUpdate", new EmailAccountViewModel());
+            return View("Save", new EmailAccountViewModel());
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -59,7 +59,7 @@ namespace Apex.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View("CreateOrUpdate", model);
+            return View("Save", model);
         }
 
         //[AdminPermission(Permission.Host)]
@@ -72,7 +72,7 @@ namespace Apex.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View("CreateOrUpdate", new EmailAccountViewModel(entity));
+            return View("Save", new EmailAccountViewModel(entity));
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -94,7 +94,7 @@ namespace Apex.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View("CreateOrUpdate", model);
+            return View("Save", model);
         }
 
         [HttpPost]

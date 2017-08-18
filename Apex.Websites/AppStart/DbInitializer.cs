@@ -7,6 +7,7 @@ using Apex.Data.Entities.Emails;
 using Apex.Services.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Apex.Websites.AppStart
 {

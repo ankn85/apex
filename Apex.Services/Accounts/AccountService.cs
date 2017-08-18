@@ -116,7 +116,7 @@ namespace Apex.Services.Accounts
             }
             else
             {
-                var allRoles = await _roleService.GetListAsync();
+                var allRoles = await _roleService.GetFromCacheAsync();
                 var rolesExists = roleNames.Intersect(allRoles.Select(r => r.Name));
 
                 if (rolesExists.Any())
@@ -215,7 +215,7 @@ namespace Apex.Services.Accounts
 
         private async Task<IDictionary<int, string>> GetRolesHash()
         {
-            var roles = await _roleService.GetListAsync();
+            var roles = await _roleService.GetFromCacheAsync();
 
             return roles.ToDictionary(r => r.Id, r => r.Name);
         }

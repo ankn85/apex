@@ -109,8 +109,8 @@
     background-color: #f8eb95;
 }
 
-.table .pretty-date {
-    width: 70px;
+.table .checkbox-control {
+    width: 14px;
 }
 
 .table .read-control {
@@ -154,6 +154,10 @@
     font-size: 10px;
     color: #428BCA;
     padding-left: 100px;
+}
+
+.table .pretty-date {
+    width: 70px;
 }
 
 .validation-summary-errors ol, ul {

@@ -3,43 +3,65 @@
   //********** Stylesheets **********
   */
   {
-    "outputFileName": "wwwroot/assets/styles/admin/common.min.css",
+    "outputFileName": "wwwroot/assets/styles/admin/bootstrap-fontawesome.min.css",
     "inputFiles": [
       "wwwroot/assets/lib/bootstrap/dist/css/bootstrap.min.css",
       "wwwroot/assets/lib/font-awesome/css/font-awesome.min.css"
     ]
   },
   {
-    "outputFileName": "wwwroot/assets/styles/admin/datatables.min.css",
+    "outputFileName": "wwwroot/assets/styles/admin/dataTables.bootstrap.min.css",
     "inputFiles": [
-      "wwwroot/assets/lib/datatables.net-bs/css/dataTables.bootstrap.min.css"
+      "wwwroot/assets/lib/datatables.net-bs/css/dataTables.bootstrap.min.css",
+      "Areas/Admin/Styles/table.css"
     ]
   },
   {
-    "outputFileName": "wwwroot/assets/styles/admin/plugins.min.css",
+    "outputFileName": "wwwroot/assets/styles/admin/bootstrap-datepicker.min.css",
     "inputFiles": [
-      "wwwroot/assets/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+      "wwwroot/assets/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/styles/admin/select2.min.css",
+    "inputFiles": [
       "wwwroot/assets/lib/select2/dist/css/select2.min.css"
     ]
   },
   {
-    "outputFileName": "wwwroot/assets/styles/admin/admin.min.css",
+    "outputFileName": "wwwroot/assets/styles/admin/adminlte-skin.min.css",
     "inputFiles": [
       "wwwroot/assets/lib/AdminLTE/dist/css/AdminLTE.min.css",
-      "wwwroot/assets/lib/AdminLTE/dist/css/skins/skin-blue-light.min.css",
-      "Areas/Admin/Styles/admin.css"
+      "wwwroot/assets/lib/AdminLTE/dist/css/skins/skin-blue-light.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/styles/admin/common.min.css",
+    "inputFiles": [
+      "Areas/Admin/Styles/common.css"
     ]
   },
   /*
   //********** Javascripts **********
   */
   {
+    "outputFileName": "wwwroot/assets/scripts/jquery.min.js",
+    "inputFiles": [
+      "wwwroot/assets/lib/jquery/dist/jquery.min.js"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/assets/scripts/admin/common.min.js",
     "inputFiles": [
       "wwwroot/assets/lib/jquery/dist/jquery.min.js",
       "wwwroot/assets/lib/bootstrap/dist/js/bootstrap.min.js",
       "wwwroot/assets/lib/fastclick/lib/fastclick.js",
-      "wwwroot/assets/lib/jquery-slimscroll/jquery.slimscroll.min.js",
+      "wwwroot/assets/lib/jquery-slimscroll/jquery.slimscroll.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/scripts/admin/adminlte.min.js",
+    "inputFiles": [
       "wwwroot/assets/lib/AdminLTE//dist/js/adminlte.min.js",
       "wwwroot/assets/lib/AdminLTE//dist/js/demo.js"
     ]
@@ -54,7 +76,6 @@
   {
     "outputFileName": "wwwroot/assets/scripts/admin/datatables.min.js",
     "inputFiles": [
-      "wwwroot/assets/lib/bootbox/bootbox.js",
       "wwwroot/assets/lib/datatables.net/js/jquery.dataTables.min.js",
       "wwwroot/assets/lib/datatables.net-bs/js/dataTables.bootstrap.min.js",
       "Areas/Admin/Scripts/datatables.wrapper.js",
@@ -62,24 +83,27 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/assets/scripts/admin/plugins.min.js",
+    "outputFileName": "wwwroot/assets/scripts/admin/datepicker.min.js",
     "inputFiles": [
       "wwwroot/assets/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
-      "wwwroot/assets/lib/select2/dist/js/select2.full.min.js",
       "Areas/Admin/Scripts/datepicker.wrapper.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/scripts/admin/select2.full.min.js",
+    "inputFiles": [
+      "wwwroot/assets/lib/select2/dist/js/select2.full.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/scripts/admin/bootbox.min.js",
+    "inputFiles": [
+      "wwwroot/assets/lib/bootbox/bootbox.js"
     ]
   },
   /*
   //********** Admin **********
   */
-  {
-    "outputFileName": "wwwroot/assets/scripts/admin/auth.min.js",
-    "inputFiles": [
-      "wwwroot/assets/lib/jquery/dist/jquery.min.js",
-      "wwwroot/assets/lib/jquery-validation/dist/jquery.validate.min.js",
-      "wwwroot/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
-    ]
-  },
   {
     "outputFileName": "wwwroot/assets/scripts/admin/log.list.min.js",
     "inputFiles": [
@@ -93,16 +117,21 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/assets/scripts/admin/account.list.min.js",
+    "outputFileName": "wwwroot/assets/scripts/admin/user.list.min.js",
     "inputFiles": [
-      "Areas/Admin/Scripts/account.list.js"
+      "Areas/Admin/Scripts/user.list.js"
     ]
   },
   {
     "outputFileName": "wwwroot/assets/scripts/admin/menu.list.min.js",
     "inputFiles": [
-      "wwwroot/assets/lib/bootbox/bootbox.js",
       "Areas/Admin/Scripts/menu.list.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/scripts/admin/role.list.min.js",
+    "inputFiles": [
+      "Areas/Admin/Scripts/role.list.js"
     ]
   }
 ]

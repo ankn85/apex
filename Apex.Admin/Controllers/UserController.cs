@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Apex.Admin.Attributes;
 using Apex.Admin.ViewModels.Accounts;
 using Apex.Admin.ViewModels.DataTables;
 using Apex.Data.Entities.Accounts;
@@ -42,7 +41,7 @@ namespace Apex.Admin.Controllers
         {
             model.ParseFormData(Request.Form);
 
-            var logs = await _accountService.GetListAsync(
+            var users = await _accountService.GetListAsync(
                 model.Email,
                 model.RoleIds,
                 model.SortColumnName,
@@ -50,7 +49,7 @@ namespace Apex.Admin.Controllers
                 model.Start,
                 model.Length);
 
-            return model.CreateResponse(logs.TotalRecords, logs.TotalRecordsFiltered, logs);
+            return model.CreateResponse(users.TotalRecords, users.TotalRecordsFiltered, users);
         }
 
         //[AdminPermission(Permission.Host)]
@@ -133,7 +132,9 @@ namespace Apex.Admin.Controllers
             {
                 if (model.Password.Length < ValidationRules.MinPasswordLength)
                 {
-                    ModelState.TryAddModelError("Password", $"The Password must be at least {ValidationRules.MinPasswordLength} characters long.");
+                    ModelState.TryAddModelError(
+                        nameof(AccountUpdateViewModel.Password),
+                        $"The Password must be at least {ValidationRules.MinPasswordLength} characters long.");
                 }
                 else
                 {
@@ -176,14 +177,14 @@ namespace Apex.Admin.Controllers
 
         private async Task PopulateRolesAsync()
         {
-            var roles = await _roleService.GetListAsync();
+            var roles = await _roleService.GetFromCacheAsync();
 
             ViewData["Roles"] = roles.Select(r => new SelectListItem { Value = r.Id.ToString(), Text = r.Name });
         }
 
         private async Task AssignRolesAndGendersAsync(AccountViewModel model)
         {
-            var roles = await _roleService.GetListAsync();
+            var roles = await _roleService.GetFromCacheAsync();
             model.AllRoles = roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name });
 
             var genders = (Gender[])Enum.GetValues(typeof(Gender));

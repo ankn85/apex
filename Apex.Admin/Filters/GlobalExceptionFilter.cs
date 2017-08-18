@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Text;
 using Apex.Admin.Controllers;
 using Apex.Admin.Extensions;
 using Apex.Services.Models;
@@ -27,7 +26,7 @@ namespace Apex.Admin.Filters
             ApiError apiError = GetApiError(exception);
 
             HttpContext httpContext = context.HttpContext;
-            WriteLog(httpContext, exception, apiError.StatusCode);
+            _logger.LogError(new EventId(apiError.StatusCode), exception, exception.Message);
 
             HttpResponse response = httpContext.Response;
             response.StatusCode = apiError.StatusCode;
@@ -67,50 +66,6 @@ namespace Apex.Admin.Filters
                 exception;
 
             return new ApiError(HttpStatusCode.InternalServerError, "An unhandled error occurred.");
-        }
-
-        private void WriteLog(HttpContext httpContext, Exception exception, int eventId)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            try
-            {
-                sb = LogHttpContext(httpContext)
-                    .Append(GetExceptionDetail(exception));
-            }
-            catch (Exception)
-            {
-            }
-
-            _logger.LogError(new EventId(eventId), exception, sb.ToString());
-        }
-
-        private StringBuilder LogHttpContext(HttpContext httpContext)
-        {
-            StringBuilder sb = new StringBuilder(256);
-            HttpRequest request = httpContext.Request;
-
-            sb.Append("Url: ").Append(request.Path.Value).Append("<br/>");
-            sb.Append("QueryString: ").Append(request.QueryString.ToString()).Append("<br/>");
-            //sb.Append("Form: ").Append(request.Form.ToString()).Append("<br/>");
-            sb.Append("Content Type: ").Append(request.ContentType).Append("<br/>");
-            sb.Append("Content Length: ").Append(request.ContentLength).Append("<br/>");
-            sb.Append("Remote IP: ").Append(httpContext.Connection.RemoteIpAddress.ToString());
-
-            return sb;
-        }
-
-        private StringBuilder GetExceptionDetail(Exception exception)
-        {
-            StringBuilder sb = new StringBuilder(256);
-
-            if (exception != null)
-            {
-                sb.Append("Source: ").Append(exception.Source).Append("<br/>")
-                    .Append("Message: ").Append(exception.Message).Append("<br/>");
-            }
-
-            return sb;
         }
     }
 }

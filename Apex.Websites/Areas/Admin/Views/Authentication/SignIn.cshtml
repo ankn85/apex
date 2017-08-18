@@ -1,14 +1,12 @@
-﻿@{
+﻿@model Apex.Admin.ViewModels.Authentication.SignInViewModel
+@{
     Layout = "~/Areas/Admin/Views/Authentication/_AuthenticationLayout.cshtml";
     ViewData["Title"] = "Sign In";
 }
-
-@model Apex.Admin.ViewModels.Authentication.SignInViewModel
-
 @section scripts {
-    <script src="~/assets/scripts/admin/auth.min.js"></script>
+    <script src="~/assets/scripts/jquery.min.js"></script>
+    <script src="~/assets/scripts/admin/jquery.val.min.js"></script>
 }
-
 <p class="login-box-msg">Sign in to start your session</p>
 <form asp-controller="authentication" asp-action="signin" asp-anti-forgery="true" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" novalidate>
     <div class="form-group">

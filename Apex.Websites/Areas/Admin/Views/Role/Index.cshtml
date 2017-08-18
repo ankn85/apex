@@ -1,9 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "Email Account";
+    ViewData["Title"] = "Role";
 
     ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
         new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
-        new Crumb("Email Account", string.Empty, "fa-envelope")
+        new Crumb("Role", string.Empty, "fa-lock")
     });
 }
 @section styles {
@@ -12,18 +12,12 @@
 @section scripts {
     <script type="text/javascript">
         var resources = {
-            email: "Email",
-            displayName: "Display Name",
-            enableSsl: "EnableSsl",
-            useDefaultCredentials: "Use Default Credentials",
-            defaultEmailAccount: "Default Email Account",
-            host: "Host",
-            port: "Port",
-            userName: "User Name"
+            roleName: "Role Name",
+            normalizedName: "Normalized Name"
         };
     </script>
     <script src="~/assets/scripts/admin/datatables.min.js"></script>
-    <script src="~/assets/scripts/admin/emailAccount.list.min.js" asp-append-version="true"></script>
+    <script src="~/assets/scripts/admin/role.list.min.js" asp-append-version="true"></script>
 }
 <div class="box box-solid">
     <div class="box-body">
