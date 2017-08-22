@@ -1,4 +1,4 @@
-﻿using Apex.Data.Entities.Accounts;
+﻿using Apex.Data.Entities.Menus;
 using Microsoft.EntityFrameworkCore;
 
 namespace Apex.Data.Mapping.Accounts
@@ -12,8 +12,6 @@ namespace Apex.Data.Mapping.Accounts
             builder.ToTable("Menus", "dbo").HasKey(p => p.Id);
 
             builder.Property(p => p.Title).IsRequired().HasMaxLength(256);
-
-            builder.Property(p => p.Description).HasMaxLength(512);
 
             builder.Property(p => p.Url).HasMaxLength(256);
 

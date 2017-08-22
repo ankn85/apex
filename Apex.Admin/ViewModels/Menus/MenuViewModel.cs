@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Apex.Data.Entities.Accounts;
+using Apex.Data.Entities.Menus;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Apex.Admin.ViewModels.Accounts
+namespace Apex.Admin.ViewModels.Menus
 {
     public sealed class MenuViewModel
     {
@@ -22,6 +22,7 @@ namespace Apex.Admin.ViewModels.Accounts
             Note = entity.Note;
             NoteBackground = entity.NoteBackground;
             Priority = entity.Priority;
+            Active = entity.Active;
         }
 
         [HiddenInput]
@@ -43,6 +44,8 @@ namespace Apex.Admin.ViewModels.Accounts
         public string NoteBackground { get; set; }
 
         public int Priority { get; set; }
+
+        public bool Active { get; set; }
 
         public IEnumerable<SelectListItem> Menus { get; set; }
     }

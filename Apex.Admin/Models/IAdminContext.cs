@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Apex.Admin.ViewModels.Layouts;
 using Apex.Data.Entities.Accounts;
+using Apex.Data.Entities.Menus;
 using Apex.Services.Enums;
 
 namespace Apex.Admin.Models

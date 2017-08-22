@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Apex.Data.Entities.Accounts;
+using Apex.Data.Entities.Menus;
 
-namespace Apex.Services.Accounts
+namespace Apex.Services.Menus
 {
     public interface IMenuService : IService<Menu>
     {

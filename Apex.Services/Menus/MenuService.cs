@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Apex.Data;
-using Apex.Data.Entities.Accounts;
+using Apex.Data.Entities.Menus;
 using Apex.Services.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace Apex.Services.Accounts
+namespace Apex.Services.Menus
 {
     public class MenuService : BaseService<Menu>, IMenuService
     {
@@ -28,7 +28,7 @@ namespace Apex.Services.Accounts
 
         public async Task<IList<Menu>> GetReadListAsync(IEnumerable<int> roleIds)
         {
-            var menus = await Table
+            return await Table
                 .Include(m => m.SubMenus)
                 .Include(m => m.RoleMenus)
                 .Where(m =>
@@ -36,8 +36,6 @@ namespace Apex.Services.Accounts
                     ((Permission)rm.Permission).HasFlag(Permission.Read)))
                 .OrderBy(m => m.Priority)
                 .ToListAsync();
-
-            return GetHierachicalMenus(menus);
         }
 
         private IList<Menu> GetHierachicalMenus(IList<Menu> menus)

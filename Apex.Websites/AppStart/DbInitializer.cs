@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Apex.Data;
 using Apex.Data.Entities.Accounts;
 using Apex.Data.Entities.Emails;
+using Apex.Data.Entities.Menus;
 using Apex.Services.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Apex.Websites.AppStart
 {
@@ -87,10 +87,10 @@ namespace Apex.Websites.AppStart
                         new Menu
                         {
                             Title = "Dashboard",
-                            Description = "Dashboard",
                             Url = "/admin/dashboard",
                             Icon = "fa fa-dashboard",
                             Priority = 1,
+                            Active = true,
                             RoleMenus = new List<ApplicationRoleMenu>
                             {
                                 new ApplicationRoleMenu
@@ -103,10 +103,10 @@ namespace Apex.Websites.AppStart
                         },
                         new Menu
                         {
-                            Title = "Users & Roles",
-                            Description = "Users & Roles",
+                            Title = "Users",
                             Icon = "fa fa-users",
                             Priority = 10,
+                            Active = true,
                             RoleMenus = new List<ApplicationRoleMenu>
                             {
                                 new ApplicationRoleMenu
@@ -120,11 +120,11 @@ namespace Apex.Websites.AppStart
                             {
                                 new Menu
                                 {
-                                    Title = "User",
-                                    Description = "User",
+                                    Title = "Users",
                                     Url = "/admin/user",
                                     Icon = "fa fa-circle-o",
                                     Priority = 1,
+                                    Active = true,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {
                                         new ApplicationRoleMenu
@@ -137,11 +137,64 @@ namespace Apex.Websites.AppStart
                                 },
                                 new Menu
                                 {
-                                    Title = "Role",
-                                    Description = "Role",
+                                    Title = "User Roles",
                                     Url = "/admin/role",
                                     Icon = "fa fa-circle-o",
                                     Priority = 2,
+                                    Active = true,
+                                    RoleMenus = new List<ApplicationRoleMenu>
+                                    {
+                                        new ApplicationRoleMenu
+                                        {
+                                            Role = role,
+                                            Permission = (int)Permission.Full,
+                                            CreatedOnUtc = utcNow
+                                        }
+                                    }
+                                },
+                                new Menu
+                                {
+                                    Title = "Access Control List",
+                                    Url = "/admin/acl",
+                                    Icon = "fa fa-circle-o",
+                                    Priority = 3,
+                                    Active = true,
+                                    RoleMenus = new List<ApplicationRoleMenu>
+                                    {
+                                        new ApplicationRoleMenu
+                                        {
+                                            Role = role,
+                                            Permission = (int)Permission.Full,
+                                            CreatedOnUtc = utcNow
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new Menu
+                        {
+                            Title = "Configuration",
+                            Icon = "fa fa-gears",
+                            Priority = 30,
+                            Active = true,
+                            RoleMenus = new List<ApplicationRoleMenu>
+                            {
+                                new ApplicationRoleMenu
+                                {
+                                    Role = role,
+                                    Permission = (int)Permission.Full,
+                                    CreatedOnUtc = utcNow
+                                }
+                            },
+                            SubMenus = new List<Menu>
+                            {
+                                new Menu
+                                {
+                                    Title = "Email Accounts",
+                                    Url = "/admin/emailaccount",
+                                    Icon = "fa fa-circle-o",
+                                    Priority = 1,
+                                    Active = true,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {
                                         new ApplicationRoleMenu
@@ -157,9 +210,9 @@ namespace Apex.Websites.AppStart
                         new Menu
                         {
                             Title = "System",
-                            Description = "System",
-                            Icon = "fa fa-gears",
-                            Priority = 30,
+                            Icon = "fa fa-cubes",
+                            Priority = 40,
+                            Active = true,
                             RoleMenus = new List<ApplicationRoleMenu>
                             {
                                 new ApplicationRoleMenu
@@ -173,11 +226,11 @@ namespace Apex.Websites.AppStart
                             {
                                 new Menu
                                 {
-                                    Title = "Email Account",
-                                    Description = "Email Account",
-                                    Url = "/admin/emailaccount",
+                                    Title = "Menus",
+                                    Url = "/admin/menu",
                                     Icon = "fa fa-circle-o",
                                     Priority = 1,
+                                    Active = true,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {
                                         new ApplicationRoleMenu
@@ -191,10 +244,10 @@ namespace Apex.Websites.AppStart
                                 new Menu
                                 {
                                     Title = "Log",
-                                    Description = "Log",
                                     Url = "/admin/log",
                                     Icon = "fa fa-circle-o",
                                     Priority = 2,
+                                    Active = true,
                                     RoleMenus = new List<ApplicationRoleMenu>
                                     {
                                         new ApplicationRoleMenu

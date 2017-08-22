@@ -1,4 +1,4 @@
-﻿@using Apex.Data.Entities.Accounts;
+﻿@using Apex.Data.Entities.Menus;
 @model IList<Menu>
 @{
     ViewData["Title"] = "Menu";
@@ -28,12 +28,13 @@
                 <th>Icon</th>
                 <th>Note</th>
                 <th>Priority</th>
+                <th>Active</th>
                 <th></th>
             </tr>
             @if (Model == null || Model.Count == 0)
             { 
                 <tr>
-                    <td colspan="7">No data found</td>
+                    <td colspan="8">No data found</td>
                 </tr>
             }
             else
@@ -65,7 +66,7 @@
     }
     public string RenderRow(Menu menu, int level)
     {
-        return $"<tr>{RenderCheckbox(menu)}{RenderTitle(menu, level)}{RenderUrl(menu)}{RenderIcon(menu)}{RenderNote(menu)}{RenderPriority(menu)}{RenderUpdateControl(menu)}</tr>";
+        return $"<tr>{RenderCheckbox(menu)}{RenderTitle(menu, level)}{RenderUrl(menu)}{RenderIcon(menu)}{RenderNote(menu)}{RenderPriority(menu)}{RenderActive(menu)}{RenderUpdateControl(menu)}</tr>";
     }
     public string RenderCheckbox(Menu menu)
     {
@@ -98,6 +99,14 @@
     public string RenderPriority(Menu menu)
     {
         return $"<td>{menu.Priority}</td>";
+    }
+    public string RenderActive(Menu menu)
+    {
+        string status = menu.Active ?
+            "<i class=\"fa fa-check text-green\"></i>" :
+            "<i class=\"fa fa-times text-red\"></i>";
+
+        return $"<td>{status}</td>";
     }
     public string RenderUpdateControl(Menu menu)
     {

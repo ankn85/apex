@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Apex.Admin.ViewModels.Accounts;
-using Apex.Data.Entities.Accounts;
-using Apex.Services.Accounts;
+using Apex.Admin.ViewModels.Menus;
+using Apex.Data.Entities.Menus;
 using Apex.Services.Extensions;
+using Apex.Services.Menus;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -28,7 +28,11 @@ namespace Apex.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-            MenuViewModel model = new MenuViewModel();
+            MenuViewModel model = new MenuViewModel
+            {
+                Active = true
+            };
+
             await AssignMenusAsync(model);
 
             return View("Save", model);
@@ -147,7 +151,8 @@ namespace Apex.Admin.Controllers
             entity.Note = model.Note.TrimNull();
             entity.NoteBackground = model.NoteBackground.TrimNull();
             entity.Priority = model.Priority;
-            
+            entity.Active = model.Active;
+
             return entity;
         }
     }

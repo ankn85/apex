@@ -1,4 +1,5 @@
 ﻿using System;
+using Apex.Data.Entities.Menus;
 
 namespace Apex.Data.Entities.Accounts
 {

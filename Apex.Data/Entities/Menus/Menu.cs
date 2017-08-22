@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
+using Apex.Data.Entities.Accounts;
 
-namespace Apex.Data.Entities.Accounts
+namespace Apex.Data.Entities.Menus
 {
     public class Menu : BaseEntity
     {
         public string Title { get; set; }
-
-        public string Description { get; set; }
 
         public string Url { get; set; }
 
@@ -17,6 +16,8 @@ namespace Apex.Data.Entities.Accounts
         public string NoteBackground { get; set; }
 
         public int Priority { get; set; }
+
+        public bool Active { get; set; }
 
         public ICollection<Menu> SubMenus { get; set; }
 

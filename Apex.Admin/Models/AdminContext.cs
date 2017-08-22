@@ -3,6 +3,7 @@ using System.Linq;
 using Apex.Admin.Extensions;
 using Apex.Admin.ViewModels.Layouts;
 using Apex.Data.Entities.Accounts;
+using Apex.Data.Entities.Menus;
 using Apex.Services.Enums;
 using Microsoft.AspNetCore.Http;
 
@@ -95,9 +96,12 @@ namespace Apex.Admin.Models
             MenuItem menuItem = new MenuItem(menu);
             menuItems.Add(menuItem);
 
-            foreach (var sub in menu.SubMenus)
+            if (menu.SubMenus != null)
             {
-                BuildMenuItems(sub, menuItem.SubMenuItems);
+                foreach (var sub in menu.SubMenus)
+                {
+                    BuildMenuItems(sub, menuItem.SubMenuItems);
+                }
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Apex.Data.Entities.Accounts;
+using Apex.Data.Entities.Menus;
 
 namespace Apex.Admin.ViewModels.Layouts
 {
