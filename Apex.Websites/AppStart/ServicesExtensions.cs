@@ -3,6 +3,7 @@ using Apex.Services.Accounts;
 using Apex.Services.Caching;
 using Apex.Services.Emails;
 using Apex.Services.Logs;
+using Apex.Services.Menus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
