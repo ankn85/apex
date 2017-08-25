@@ -1,0 +1,87 @@
+﻿@using Apex.Data.Entities.Menus
+@using Apex.Services.Models.Accounts
+@model ACLDto
+@{
+    ViewData["Title"] = "Access Control List";
+
+    ViewData["Breadcrumb"] = new Breadcrumb(new Crumb[] {
+        new Crumb("Dashboard", Url.Action("index", "dashboard"), "fa-dashboard"),
+        new Crumb("Access Control List", string.Empty, "fa-lock")
+    });
+}
+@section scripts {
+    <script src="~/assets/scripts/admin/bootbox.min.js"></script>
+    <script src="~/assets/scripts/admin/acl.list.min.js" asp-append-version="true"></script>
+}
+<div class="box box-solid">
+    <div class="box-header">
+        <h3 class="box-title"></h3>
+        <div class="box-tools">
+            <a href="/admin/menu/create" class="btn btn-sm btn-flat btn-success"><i class="fa fa-plus"></i> Create New</a>
+            <button type="button" class="btn btn-sm btn-flat btn-danger disabled" id="btnDelete" disabled="disabled"><i class="fa fa-trash-o"></i> Delete (Selected)</button>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="jDataTable" class="table table-hover">
+            <tr class="no-hover">
+                <th>
+                    <div class="checkbox">
+                        <label>Title</label>
+                    </div>
+                </th>
+                @foreach (var role in Model.Roles)
+                {
+                    <th>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="checkbox-all-@role.Id" name="allow_@role.Id" /> @role.Name
+                            </label>
+                        </div>
+                    </th>
+                }
+            </tr>
+            @if (!Model.Menus.Any())
+            { 
+                <tr>
+                    <td colspan="@(Model.Roles.Count() + 1)">No data found</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var menu in Model.Menus)
+                {
+                    @:@Html.Raw(Render(menu))
+                }
+            }
+        </table>
+    </div>
+</div>
+@functions {
+    public string Render(Menu menu)
+    {
+        return $"{RenderRow(menu, 0)}{RenderSubMenu(menu, 0)}";
+    }
+    public string RenderSubMenu(Menu parent, int level)
+    {
+        level++;
+        string html = string.Empty;
+        var subMenus = parent.SubMenus.OrderBy(m => m.Priority);
+
+        foreach (var menu in subMenus)
+        {
+            html += $"{RenderRow(menu, level)}{RenderSubMenu(menu, level)}";
+        }
+
+        return html;
+    }
+    public string RenderRow(Menu menu, int level)
+    {
+        return $"<tr>{RenderTitle(menu, level)}</tr>";
+    }
+    public string RenderTitle(Menu menu, int level)
+    {
+        return level > 0 ?
+            $"<td><span class=\"menu-level-{level}\">└──</span> {menu.Title}</td>" :
+            $"<td>{menu.Title}</td>";
+    }
+}

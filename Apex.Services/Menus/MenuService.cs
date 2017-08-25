@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Apex.Data;
+﻿using Apex.Data;
 using Apex.Data.Entities.Menus;
 using Apex.Services.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Apex.Services.Menus
 {
@@ -15,7 +15,7 @@ namespace Apex.Services.Menus
         {
         }
 
-        public async Task<IList<Menu>> GetListAsync()
+        public async Task<IEnumerable<Menu>> GetListAsync()
         {
             var menus = await Table
                 .Include(m => m.SubMenus)
@@ -23,7 +23,7 @@ namespace Apex.Services.Menus
                 .AsNoTracking()
                 .ToListAsync();
 
-            return GetHierachicalMenus(menus);
+            return menus.Where(m => m.ParentId == null || m.ParentId == 0);
         }
 
         public async Task<IList<Menu>> GetReadListAsync(IEnumerable<int> roleIds)
@@ -38,19 +38,61 @@ namespace Apex.Services.Menus
                 .ToListAsync();
         }
 
-        private IList<Menu> GetHierachicalMenus(IList<Menu> menus)
+        public override async Task<Menu> CreateAsync(Menu entity)
         {
-            IList<Menu> hierachicalMenus = new List<Menu>();
+            await UpdateActiveDependOnParentAsync(entity);
 
-            foreach (Menu menu in menus)
+            return await base.CreateAsync(entity);
+        }
+
+        public async Task<int> UpdateAsync(Menu entity)
+        {
+            await Task.WhenAll(
+                UpdateActiveDependOnParentAsync(entity),
+                UpdateInactiveAllSubMenusAsync(entity));
+
+            return await CommitAsync();
+        }
+
+        private async Task<Menu> UpdateActiveDependOnParentAsync(Menu entity)
+        {
+            if (entity.ParentId != null && entity.Active)
             {
-                if (menu.ParentId == null || menu.ParentId.Value == 0)
+                Menu parent = await FindAsync(entity.ParentId.Value);
+
+                if (parent != null)
                 {
-                    hierachicalMenus.Add(menu);
+                    entity.Active = parent.Active;
                 }
             }
 
-            return hierachicalMenus;
+            return entity;
+        }
+
+        private async Task UpdateInactiveAllSubMenusAsync(Menu entity)
+        {
+            if (!entity.Active)
+            {
+                var subMenus = await Table
+                    .Include(m => m.SubMenus)
+                    .Where(m => m.ParentId == entity.Id)
+                    .ToListAsync();
+
+                UpdateInactiveAllSubMenusAsync(subMenus);
+            }
+        }
+
+        private void UpdateInactiveAllSubMenusAsync(ICollection<Menu> menus)
+        {
+            foreach (var menu in menus)
+            {
+                menu.Active = false;
+
+                if (menu.SubMenus?.Count > 0)
+                {
+                    UpdateInactiveAllSubMenusAsync(menu.SubMenus);
+                }
+            }
         }
     }
 }

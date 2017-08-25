@@ -117,6 +117,12 @@
     ]
   },
   {
+    "outputFileName": "wwwroot/assets/scripts/admin/role.list.min.js",
+    "inputFiles": [
+      "Areas/Admin/Scripts/role.list.js"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/assets/scripts/admin/user.list.min.js",
     "inputFiles": [
       "Areas/Admin/Scripts/user.list.js"
@@ -129,9 +135,9 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/assets/scripts/admin/role.list.min.js",
+    "outputFileName": "wwwroot/assets/scripts/admin/acl.list.min.js",
     "inputFiles": [
-      "Areas/Admin/Scripts/role.list.js"
+      "Areas/Admin/Scripts/acl.list.js"
     ]
   }
 ]

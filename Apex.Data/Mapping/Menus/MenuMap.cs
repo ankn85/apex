@@ -1,7 +1,7 @@
 ﻿using Apex.Data.Entities.Menus;
 using Microsoft.EntityFrameworkCore;
 
-namespace Apex.Data.Mapping.Accounts
+namespace Apex.Data.Mapping.Menus
 {
     public sealed class MenuMap : IEntityMap
     {

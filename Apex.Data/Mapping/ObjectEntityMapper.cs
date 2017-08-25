@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using Apex.Data.Mapping.Accounts;
+﻿using Apex.Data.Mapping.Accounts;
 using Apex.Data.Mapping.Emails;
 using Apex.Data.Mapping.Logs;
+using Apex.Data.Mapping.Menus;
 using Apex.Data.Mapping.Settings;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Apex.Data.Mapping
 {

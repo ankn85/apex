@@ -1,5 +1,5 @@
 ﻿@using Apex.Data.Entities.Menus;
-@model IList<Menu>
+@model IEnumerable<Menu>
 @{
     ViewData["Title"] = "Menu";
 
@@ -9,6 +9,7 @@
     });
 }
 @section scripts {
+    <script src="~/assets/scripts/admin/bootbox.min.js"></script>
     <script src="~/assets/scripts/admin/menu.list.min.js" asp-append-version="true"></script>
 }
 <div class="box box-solid">
@@ -20,8 +21,8 @@
         </div>
     </div>
     <div class="box-body">
-        <table class="table table-hover">
-            <tr>
+        <table id="jDataTable" class="table table-hover">
+            <tr class="no-hover">
                 <th><input id="checkbox-all" type="checkbox"></th>
                 <th>Title</th>
                 <th>Url</th>
@@ -31,7 +32,7 @@
                 <th>Active</th>
                 <th></th>
             </tr>
-            @if (Model == null || Model.Count == 0)
+            @if (!Model.Any())
             { 
                 <tr>
                     <td colspan="8">No data found</td>
@@ -50,14 +51,15 @@
 @functions {
     public string Render(Menu menu)
     {
-        return $"{RenderRow(menu, 0)}{RenderSubMenu(menu, 1)}";
+        return $"{RenderRow(menu, 0)}{RenderSubMenu(menu, 0)}";
     }
     public string RenderSubMenu(Menu parent, int level)
     {
         level++;
         string html = string.Empty;
+        var subMenus = parent.SubMenus.OrderBy(m => m.Priority);
 
-        foreach (var menu in parent.SubMenus)
+        foreach (var menu in subMenus)
         {
             html += $"{RenderRow(menu, level)}{RenderSubMenu(menu, level)}";
         }
@@ -70,7 +72,7 @@
     }
     public string RenderCheckbox(Menu menu)
     {
-        return $"<td class=\"checkbox-control\"><input value=\"{menu.Id}\" type=\"checkbox\"></td>";
+        return $"<td class=\"checkbox-control\"><input value=\"{menu.Id}\" type=\"checkbox\" data-parentid=\"{menu.ParentId}\"></td>";
     }
     public string RenderTitle(Menu menu, int level)
     {

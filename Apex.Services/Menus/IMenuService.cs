@@ -6,8 +6,10 @@ namespace Apex.Services.Menus
 {
     public interface IMenuService : IService<Menu>
     {
-        Task<IList<Menu>> GetListAsync();
+        Task<IEnumerable<Menu>> GetListAsync();
 
         Task<IList<Menu>> GetReadListAsync(IEnumerable<int> roleIds);
+
+        Task<int> UpdateAsync(Menu entity);
     }
 }

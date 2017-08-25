@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Apex.Data;
+﻿using Apex.Data;
 using Apex.Data.Entities.Accounts;
 using Apex.Data.Entities.Emails;
 using Apex.Data.Entities.Menus;
 using Apex.Services.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Apex.Websites.AppStart
 {

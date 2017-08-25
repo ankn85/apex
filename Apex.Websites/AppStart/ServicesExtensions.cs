@@ -39,10 +39,13 @@ namespace Apex.Websites.AppStart
             services.AddScoped<IQueuedEmailService, QueuedEmailService>();
             //services.AddScoped<IEmailSender, MailKitEmailSender>();
 
+            // Menus.
+            services.AddScoped<IMenuService, MenuService>();
+
             // Accounts.
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IACLService, ACLService>();
 
             // Admin Context.
             services.AddScoped<IAdminContext, AdminContext>();

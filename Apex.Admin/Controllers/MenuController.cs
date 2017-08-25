@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Apex.Admin.ViewModels.Menus;
+﻿using Apex.Admin.ViewModels.Menus;
 using Apex.Data.Entities.Menus;
 using Apex.Services.Extensions;
 using Apex.Services.Menus;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Apex.Admin.Controllers
 {
@@ -82,7 +82,7 @@ namespace Apex.Admin.Controllers
                 }
 
                 entity = ParseMenu(model, entity);
-                await _menuService.CommitAsync();
+                await _menuService.UpdateAsync(entity);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -108,35 +108,36 @@ namespace Apex.Admin.Controllers
 
         private async Task AssignMenusAsync(MenuViewModel model)
         {
-            var menus = await _menuService.GetListAsync();
-
             IList<SelectListItem> menuItems = new List<SelectListItem>
             {
                 new SelectListItem { Value = "0", Text = "None" }
             };
 
+            var menus = await _menuService.GetListAsync();
+
             foreach (Menu menu in menus)
             {
                 menuItems.Add(new SelectListItem { Value = menu.Id.ToString(), Text = menu.Title });
-                BuildMenuItems(menu, menuItems, 0);
+                BuildMenuItems(menu, menuItems, menu.Title);
             }
 
             model.Menus = menuItems;
         }
 
-        private void BuildMenuItems(Menu parent, IList<SelectListItem> menuItems, int level)
+        private void BuildMenuItems(Menu parent, IList<SelectListItem> menuItems, string parentName)
         {
-            level++;
+            parentName += " » ";
+            var subMenus = parent.SubMenus.OrderBy(m => m.Priority);
 
-            foreach (var menu in parent.SubMenus)
+            foreach (var menu in subMenus)
             {
                 menuItems.Add(new SelectListItem
                 {
                     Value = menu.Id.ToString(),
-                    Text = $"└{menu.Title.PadLeft((level * 2) + menu.Title.Length, '─')}"
+                    Text = parentName + menu.Title
                 });
 
-                BuildMenuItems(menu, menuItems, level);
+                BuildMenuItems(menu, menuItems, parentName + menu.Title);
             }
         }
 
